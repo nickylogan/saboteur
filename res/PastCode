@@ -1,0 +1,62 @@
+	/**
+	 * BOARD'S METHOD
+	 * Place a card on the cells according to the given position
+	 * @param card the card to be placed on the cells
+	 * @param x the x position where the card will be placed
+	 * @param y the y position where the card will be placed
+	 * @throws Exception when trying to put a card on an already-filled cell
+	 */
+	public void placeCard(CardPath card, int x, int y) throws Exception
+	{
+		cells[x][y].putCard(card);
+		updateCells(card, x, y);
+		updateAvailableCells(card, x, y);
+	}
+	
+	
+	//if any goal card is reached and not yet opened
+	if(isGoalReached[TOP_GOAL] && !cells[WIDTH-1][0].getCard().isOpened())				
+		if(checkConnectedPath(cells[WIDTH-1][0]))
+		{
+			cells[WIDTH-1][0].openCard();
+			try {
+				if(peekGoal(TOP_GOAL))
+				{
+					setChanged();
+					notifyObservers(true);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	else if(isGoalReached[MIDDLE_GOAL] && !cells[WIDTH-1][2].getCard().isOpened())			
+		if(checkConnectedPath(cells[WIDTH-1][2]))
+		{
+			cells[WIDTH-1][2].openCard();
+			try {
+				if(peekGoal(MIDDLE_GOAL))
+				{
+					setChanged();
+					notifyObservers(true);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	else if(isGoalReached[BOTTOM_GOAL] && !cells[WIDTH-1][4].getCard().isOpened())
+		if(checkConnectedPath(cells[WIDTH-1][4]))
+		{
+			cells[WIDTH-1][4].openCard();
+			try {
+				if(peekGoal(BOTTOM_GOAL))
+				{
+					setChanged();
+					notifyObservers(true);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}

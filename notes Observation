@@ -1,0 +1,31 @@
+SelectableObject
+	-setSelectable	--> null
+Player:
+	-setAI 			--> this (player)
+	-applyCard		--> this (player)
+	-addCard 		--> card (argument)
+	-removeCard		--> card (argument)
+	-setGoal		--> this (player)
+Cell:
+	-putCard		--> card (argument)			Board, PnlCell, PnlBoard
+	
+Card:
+	-open			--> null
+	-close			--> null
+	-rotate			--> null
+	-setSelected	--> null (?)
+CardPath:
+	-rotate			--> null
+
+ 
+
+Board:
+	
+
+GameModel:
+
+ 
+ Controller:
+ 	-PnlPlayer		-> apply an action card
+ 	-PnlCell		-> put a board card in the cell
+ 	-PnlCardPlayer	-> select a card
