@@ -9,7 +9,8 @@ import java.util.HashSet;
 /**
  * The {@link Player} class represents a player in the game.
  */
-public abstract class Player implements GameObserver {
+@SuppressWarnings({"WeakerAccess", "unused"})
+public abstract class Player extends GameObserver {
   /** The {@link Player.Role} enum represents the two roles in the game */
   public enum Role {SABOTEUR, GOLD_MINER}
 
@@ -23,8 +24,6 @@ public abstract class Player implements GameObserver {
   private HashSet<Tool> sabotaged;
   /** Discarded cards of the player */
   private ArrayList<Card> discarded;
-  /** A reference to the game state */
-  private GameState state;
 
   /**
    * Creates a {@link Player} object based on the specified name
@@ -138,13 +137,6 @@ public abstract class Player implements GameObserver {
   final void addDiscard(Card card) { if (card != null) this.discarded.add(card); }
 
   /**
-   * Sets the game state reference of the player
-   *
-   * @param state the game state
-   */
-  final void setState(GameState state) { this.state = state; }
-
-  /**
    * Checks if the player is sabotaged
    *
    * @return a boolean marking the player is sabotaged
@@ -173,12 +165,21 @@ public abstract class Player implements GameObserver {
    *
    * @return the player's hand
    */
-  protected ArrayList<Card> hand() { return cards; }
+  protected final ArrayList<Card> hand() { return cards; }
 
   /**
-   * Returns the game state reference
+   * Returns the role of the player
    *
-   * @return the game state
+   * @return the player's role
    */
-  protected GameState state() { return this.state; }
+  protected final Role role() {
+    return this.role;
+  }
+
+  /**
+   * Returns the player's discarded cards
+   *
+   * @return the player's discarded cards
+   */
+  protected final ArrayList<Card> discarded() { return this.discarded; }
 }

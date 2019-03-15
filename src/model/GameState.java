@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  * The {@link GameState} class represents a game.
  * It contains all necessary methods to control the game flow and logic.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class GameState {
   /** The default minimum players allowed in the game rules */
   private static final int MIN_PLAYER = 4;
@@ -68,8 +69,8 @@ public class GameState {
   private Stack<Card> deck;
   /** The current turn */
   private int currentPlayerIndex;
-  /** The move history */
-  protected final History history;
+  /** The non player observers of the game */
+  private ArrayList<GameObserver> nonPlayerObservers;
 
   /**
    * Creates a {@link GameState} object from the available players
@@ -86,7 +87,7 @@ public class GameState {
     this.numPlayers = players.length;
     this.players = (ArrayList<Player>) Arrays.asList(players);
     this.deck = new Stack<>();
-    this.history = new History();
+    this.nonPlayerObservers = new ArrayList<>();
   }
 
   /**
@@ -99,8 +100,6 @@ public class GameState {
       throw new GameException("Cannot reinitialize a running game");
     }
 
-    // Clear history
-    history.clear();
     // Create new board and initialize goals
     this.board = new Board();
     List<GoalType> goals = Arrays.asList(GoalType.GOLD, GoalType.ROCK, GoalType.ROCK);
@@ -140,6 +139,8 @@ public class GameState {
     }
     currentPlayerIndex = new Random().nextInt(numPlayers);
     started = true;
+    broadcastGameStarted();
+    currentPlayer().notifyPromptMovement();
   }
 
   /**
@@ -150,9 +151,12 @@ public class GameState {
     if (winner != null) {
       finished = true;
       started = false;
+      broadcastGameFinished(winner);
       return;
     }
     currentPlayerIndex = (currentPlayerIndex + 1) % numPlayers;
+    broadcastStateChanged();
+    currentPlayer().notifyPromptMovement();
   }
 
   /**
@@ -165,11 +169,11 @@ public class GameState {
   public final MoveResult playMove(@NotNull Move move) throws GameException {
     if (move.type() == Move.Type.DISCARD) {
       discardCard(move.playerIndex(), move.handIndex(), true);
-      history.appendMove(move);
+      broadcastPlayerMove(move);
       return null;
     }
     MoveResult result = playCard(move); // Move.Type.PLAY
-    history.appendMove(move);
+    broadcastPlayerMove(move);
     return result;
   }
 
@@ -319,6 +323,25 @@ public class GameState {
   }
 
   /**
+   * Adds a game observer
+   *
+   * @param observer the observer to be added
+   */
+  public void addObserver(@NotNull GameObserver observer) {
+    observer.setState(this);
+    nonPlayerObservers.add(observer);
+  }
+
+  /**
+   * Removes a game observer
+   *
+   * @param observer the observer to be removed
+   */
+  public void removeObserver(@NotNull GameObserver observer) {
+    nonPlayerObservers.remove(observer);
+  }
+
+  /**
    * Returns the current player index
    *
    * @return the current player index
@@ -326,6 +349,45 @@ public class GameState {
   public final int currentPlayerIndex() {
     return this.currentPlayerIndex;
   }
+
+  /**
+   * Broadcast to all players and observers of a new player move
+   */
+  private void broadcastPlayerMove(Move move) {
+    players.forEach(p -> p.notifyPlayerMove(move));
+    nonPlayerObservers.forEach(o -> o.notifyPlayerMove(move));
+  }
+
+  /**
+   * Broadcast to all players and observers that the game state has updated
+   */
+  private void broadcastStateChanged() {
+    players.forEach(GameObserver::notifyGameStateChanged);
+    nonPlayerObservers.forEach(GameObserver::notifyGameStateChanged);
+  }
+
+  /**
+   * Broadcast to all players and observers that the game has finished
+   */
+  private void broadcastGameFinished(Player.Role role) {
+    players.forEach(p -> p.notifyGameFinished(role, currentPlayerIndex));
+    nonPlayerObservers.forEach(o -> o.notifyGameFinished(role, currentPlayerIndex));
+  }
+
+  /**
+   * Broadcast to all players and observers that
+   */
+  private void broadcastGameStarted() {
+    players.forEach(GameObserver::notifyGameStarted);
+    nonPlayerObservers.forEach(GameObserver::notifyGameStarted);
+  }
+
+  /**
+   * Returns a reference to the current {@link Player}
+   *
+   * @return the current player
+   */
+  private Player currentPlayer() { return players.get(currentPlayerIndex); }
 
   /**
    * Returns the game's started flag

@@ -4,6 +4,7 @@ import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class History {
   private final ArrayList<Move> moves;
 
