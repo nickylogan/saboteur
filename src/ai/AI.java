@@ -56,6 +56,7 @@ public abstract class AI extends Player {
   public final void onMovementPrompt() {
     FutureTask<Move> task = new FutureTask<>(this::makeDecision);
     try {
+      new Thread(task).start();
       Move move = task.get(5, TimeUnit.SECONDS);
       state().playMove(move);
     } catch (InterruptedException e) {

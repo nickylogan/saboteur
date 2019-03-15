@@ -38,19 +38,7 @@ public class ExampleAI extends AI {
   }
 
   private Move makeDecision() {
-    //
-  }
-
-  // Open javadoc for this method for more information
-  @Override
-  public void onMovementPrompt() { 
-    Move move = makeDecision();
-    try {
-      // Play the decided move to the game
-      state().playMove(move);
-    } catch (GameException e) {
-      System.out.println(e.getMessage());
-    }
+    // 
   }
 }
 ```
