@@ -1,9 +1,9 @@
 package model;
 
-public class GameException extends Exception {
-  public GameException(String message) {
+class GameException extends Exception {
+  GameException(String message) {
     super(message);
   }
 
-  public GameException(String format, Object... args) { this(String.format(format, args)); }
+  GameException(String format, Object... args) { this(String.format(format, args)); }
 }

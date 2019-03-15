@@ -5,6 +5,7 @@ import model.cards.Card;
 /**
  * The {@link Move} class represents a player movement.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class Move {
   /**
    * The {@link Move.Type} enum represents all valid player movement types
@@ -27,7 +28,7 @@ public class Move {
    * <li>When a block/repair card is played, <code>args</code> contains the target player index</li>
    * </ul>
    */
-  private int args[];
+  private int[] args;
   /** The played card, if any */
   private Card card;
 

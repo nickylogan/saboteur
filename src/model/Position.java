@@ -9,6 +9,7 @@ import java.util.Objects;
  * and <code>y</code> increases to the bottom
  * </p>
  */
+@SuppressWarnings("WeakerAccess")
 public class Position {
   int x, y;
 

@@ -4,6 +4,7 @@ package model.cards;
  * The {@link PathCard} class represents a path card that can be played in the game.
  * Instances of this class are to be placed on the board.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class PathCard extends Card {
   /** The {@link PathCard.Type} enum represents every valid path type in the game */
   public enum Type {

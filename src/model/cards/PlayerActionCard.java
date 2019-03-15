@@ -6,6 +6,7 @@ import model.Tool;
  * The {@link PlayerActionCard} class represents a player-action card that can be played in the game.
  * Instances of this class are to be played on a player.
  */
+@SuppressWarnings("unused")
 public class PlayerActionCard extends Card {
   /**
    * The {@link PlayerActionCard.Type} enum represents every valid player-action

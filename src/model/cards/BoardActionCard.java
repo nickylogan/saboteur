@@ -4,6 +4,7 @@ package model.cards;
  * The {@link BoardActionCard} class represents a board-action card that can be played in the game.
  * Instances of this class are to be played on the board.
  */
+@SuppressWarnings("unused")
 public class BoardActionCard extends Card {
   /**
    * The {@link BoardActionCard.Type} enum represents every valid board-action

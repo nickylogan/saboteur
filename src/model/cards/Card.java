@@ -5,6 +5,7 @@ package model.cards;
  * handed out to players when a game round starts. Card should NOT include
  * start, goal, and gold cards
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class Card {
   /** The general type of the card */
   public enum Type {

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /** The {@link Cell} class represents a game board cell */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class Cell implements Cloneable {
   /** The {@link Cell.Side} enum represents every possible side of a cell */
   public enum Side {

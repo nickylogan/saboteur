@@ -10,6 +10,7 @@ import java.util.Stack;
  * The {@link Board} class represents a Saboteur game board.
  * It contains all the necessary methods for game board logic.
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Board {
   /** The {@link GoalPosition} enum represents every valid goal position in the game */
   public enum GoalPosition {TOP, MIDDLE, BOTTOM}
