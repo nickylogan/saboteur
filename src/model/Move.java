@@ -1,0 +1,147 @@
+package model;
+
+import model.cards.Card;
+
+/**
+ * The {@link Move} class represents a player movement.
+ */
+public class Move {
+  /**
+   * The {@link Move.Type} enum represents all valid player movement types
+   */
+  public enum Type {PLAY, DISCARD}
+
+  /** The movement type */
+  private final Type type;
+  /** The playing player */
+  private final int playerIndex;
+  /** The played card index */
+  private final int handIndex;
+  /**
+   * <code>args</code> depends on the player movement:
+   * <ul>
+   * <li>When a card is discarded, <code>args</code> is empty</li>
+   * <li>When a path card is played, <code>args</code> contains the <code>x, y</code> position</li>
+   * <li>When a map card is played, <code>args</code> only contains the goal position <code>(0, 1, or 2)</code></li>
+   * <li>When a rockfall card is played, <code>args</code> contains the target <code>x, y</code> position</li>
+   * <li>When a block/repair card is played, <code>args</code> contains the target player index</li>
+   * </ul>
+   */
+  private int args[];
+  /** The played card, if any */
+  private Card card;
+
+  /**
+   * Creates a {@link Move} object based on the specified parameters. Do not use this constructor
+   * to create a Move object. Instead, use either {@link Move#NewPathMove}, {@link Move#NewMapMove},
+   * {@link Move#NewRockfallMove}, {@link Move#NewPlayerActionMove}, or {@link Move#NewDiscardMove}.
+   *
+   * @param type        the move type
+   * @param playerIndex the playing player index
+   * @param handIndex   the played card index
+   * @param args        see {@link Move#args}
+   */
+  private Move(Type type, int playerIndex, int handIndex, int... args) {
+    this.type = type;
+    this.playerIndex = playerIndex;
+    this.handIndex = handIndex;
+    this.args = args;
+  }
+
+  /**
+   * Creates a {@link Move} object representing a path card move
+   *
+   * @param playerIndex the playing player index
+   * @param handIndex   the index from the player's hand
+   * @param x           the target x position
+   * @param y           the target y position
+   * @return a {@link Move} object representing the move
+   */
+  public static Move NewPathMove(int playerIndex, int handIndex, int x, int y) {
+    return new Move(Type.PLAY, playerIndex, handIndex, x, y);
+  }
+
+  /**
+   * Creates a {@link Move} object representing a map card move
+   *
+   * @param playerIndex the playing player index
+   * @param handIndex   the index from the player's hand
+   * @param goalPos     the target goal position, which is either <code>0</code>, <code>1</code>,
+   *                    or <code>2</code>
+   * @return a {@link Move} object representing the move
+   */
+  public static Move NewMapMove(int playerIndex, int handIndex, Board.GoalPosition goalPos) {
+    return new Move(Type.PLAY, playerIndex, handIndex, goalPos.ordinal());
+  }
+
+  /**
+   * Creates a {@link Move} object representing a rockfall card move
+   *
+   * @param playerIndex the playing player index
+   * @param handIndex   the index from the player's hand
+   * @param x           the target x position
+   * @param y           the target y position
+   * @return a {@link Move} object representing the move
+   */
+  public static Move NewRockfallMove(int playerIndex, int handIndex, int x, int y) {
+    return new Move(Type.PLAY, playerIndex, handIndex, x, y);
+  }
+
+  /**
+   * Creates a {@link Move} object representing a player-action card move
+   *
+   * @param playerIndex       the playing player index
+   * @param handIndex         the index from the player's hand
+   * @param targetPlayerIndex the targeted player index
+   * @return a {@link Move} object representing the move
+   */
+  public static Move NewPlayerActionMove(int playerIndex, int handIndex, int targetPlayerIndex) {
+    return new Move(Type.PLAY, playerIndex, handIndex, targetPlayerIndex);
+  }
+
+  /**
+   * Creates a {@link Move} object representing a discard move
+   *
+   * @param playerIndex the playing player index
+   * @param handIndex   the index from the player's hand
+   * @return a {@link Move} object representing the move
+   */
+  public static Move NewDiscardMove(int playerIndex, int handIndex) {
+    return new Move(Type.DISCARD, playerIndex, handIndex);
+  }
+
+  /**
+   * Sets the referenced card
+   */
+  final void setCard(Card card) { this.card = card.copy(); }
+
+  /**
+   * Returns the movement type
+   * @return the movement type
+   */
+  public final Type type() { return this.type; }
+
+  /**
+   * Returns the playing player index
+   * @return the playing player index
+   */
+  public final int playerIndex() { return this.playerIndex; }
+
+  /**
+   * Returns the player hand index
+   * @return the player hand index
+   */
+  public final int handIndex() { return this.handIndex; }
+
+  /**
+   * Returns the movement args
+   * @return the movement args
+   */
+  public final int[] args() { return this.args.clone(); }
+
+  /**
+   * Returns the played card
+   * @return the played card
+   */
+  public final Card card() { return this.card; }
+}
