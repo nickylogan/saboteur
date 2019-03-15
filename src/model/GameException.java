@@ -1,6 +1,6 @@
 package model;
 
-class GameException extends Exception {
+public class GameException extends Exception {
   GameException(String message) {
     super(message);
   }

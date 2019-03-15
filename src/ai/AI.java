@@ -1,6 +1,14 @@
 package ai;
 
+import com.sun.istack.internal.NotNull;
+import model.GameException;
+import model.Move;
 import model.Player;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * The {@link AI} class represents an AI class. Extend this to implement
@@ -19,21 +27,10 @@ import model.Player;
  *     super(name);
  *   }
  *
+ *   &#64;Override
  *   private Move makeDecision() {
  *     //
  *   }
- *
- *   &#64;Override
- *   public void onMovementPrompt() {
- *     Move move = makeDecision();
- *     try {
- *       // Play the decided move to the game
- *       state().playMove(move);
- *     } catch (GameException e) {
- *       System.out.println(e.getMessage());
- *     }
- *   }
- * }
  * </code></pre>
  */
 @SuppressWarnings("unused")
@@ -44,5 +41,29 @@ public abstract class AI extends Player {
    * @param name the {@link Player}'s name
    * @see Player
    */
-  public AI(String name) { super(name); }
+  public AI(String name) {
+    super(name);
+  }
+
+  /**
+   * Implement this method to get a decision
+   *
+   * @return Move decided move
+   */
+  abstract Move makeDecision();
+
+  @Override
+  public final void onMovementPrompt() {
+    FutureTask<Move> task = new FutureTask<>(this::makeDecision);
+    try {
+      Move move = task.get(5, TimeUnit.SECONDS);
+      state().playMove(move);
+    } catch (InterruptedException e) {
+      System.out.println("Decision making interrupted");
+    } catch (TimeoutException e) {
+      System.out.println("Decision timeout");
+    } catch (GameException | ExecutionException e) {
+      System.out.println(e.getMessage());
+    }
+  }
 }
