@@ -125,7 +125,7 @@ public class GameState {
     for (int i = 0; i < cardsPerPlayer; ++i)
       cardDistribution.get(i).add(deck.pop());
     for (int i = 0; i < numPlayers; ++i)
-      players.get(i).initialize(roles.get(i), cardDistribution.get(i));
+      players.get(i).initialize(i, roles.get(i), cardDistribution.get(i));
   }
 
   /**
@@ -170,7 +170,7 @@ public class GameState {
     if (move.type() == Move.Type.DISCARD) {
       discardCard(move.playerIndex(), move.handIndex(), true);
       broadcastPlayerMove(move);
-      return null;
+      return new MoveResult(true);
     }
     MoveResult result = playCard(move); // Move.Type.PLAY
     broadcastPlayerMove(move);
@@ -216,7 +216,7 @@ public class GameState {
     }
     // Get player's card
     Card card = players.get(playerIndex).peekCardAt(handIndex);
-    MoveResult result = null;
+    MoveResult result = new MoveResult(true);
     if (card instanceof PathCard) {
       playPathCard(playerIndex, (PathCard) card, args[0], args[1]);
     } else if (card instanceof PlayerActionCard) {
@@ -404,11 +404,35 @@ public class GameState {
   public final boolean finished() { return this.finished; }
 
   /**
+   * Returns the total number of players in the current game
+   *
+   * @return number of players in the current game
+   */
+  public final int numPlayers() { return this.numPlayers; }
+
+  /**
    * Returns the total number of saboteurs in the current game
    *
    * @return number of saboteurs in the current game
    */
   public final int numSaboteurs() { return deriveNumSaboteurs(this.numPlayers); }
+
+  /**
+   * Returns a player of the specified index
+   *
+   * @param index the specified index
+   * @return the requested player
+   */
+  public final Player playerAt(int index) {
+    return players.get(index);
+  }
+
+  /**
+   * Returns the current game board
+   *
+   * @return the current game board
+   */
+  public final Board board() { return board; }
 
   /**
    * Get the total number of cards per player for a given total players

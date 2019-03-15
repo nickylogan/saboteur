@@ -2,7 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2095cddd-ee7f-4fe7-8ebd-5cebe15ec9c4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/example/ExampleAI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Nicky.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Nicky.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ai/AI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ai/AI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/GameObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/GameObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/GameState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/GameState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/MoveResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/MoveResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Position.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -13,31 +25,294 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/model/GameState.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="379">
+              <caret line="434" column="15" selection-start-line="434" selection-start-column="15" selection-end-line="434" selection-end-column="15" />
+              <folding>
+                <element signature="docComment;class#GameState#0" />
+                <element signature="docComment;field#MIN_PLAYER#0;class#GameState#0" />
+                <element signature="docComment;field#MAX_PLAYER#0;class#GameState#0" />
+                <element signature="docComment;field#CARD_COMPOSITION#0;class#GameState#0" />
+                <element signature="initializer##0;class#GameState#0" />
+                <element signature="docComment;field#numPlayers#0;class#GameState#0" />
+                <element signature="docComment;field#players#0;class#GameState#0" />
+                <element signature="docComment;field#board#0;class#GameState#0" />
+                <element signature="docComment;field#started#0;class#GameState#0" />
+                <element signature="docComment;field#finished#0;class#GameState#0" />
+                <element signature="docComment;field#deck#0;class#GameState#0" />
+                <element signature="docComment;field#currentPlayerIndex#0;class#GameState#0" />
+                <element signature="docComment;field#nonPlayerObservers#0;class#GameState#0" />
+                <element signature="docComment;method#GameState#0;class#GameState#0" />
+                <element signature="method#GameState#0;class#GameState#0" />
+                <element signature="e#3671#3844#1" />
+                <element signature="docComment;method#initializeRound#0;class#GameState#0" />
+                <element signature="method#initializeRound#0;class#GameState#0" />
+                <element signature="e#4205#4281#1" />
+                <element signature="docComment;method#startRound#0;class#GameState#0" />
+                <element signature="method#startRound#0;class#GameState#0" />
+                <element signature="e#5636#5698#1" />
+                <element signature="docComment;method#finalizeTurn#0;class#GameState#0" />
+                <element signature="method#finalizeTurn#0;class#GameState#0" />
+                <element signature="e#6005#6109#1" />
+                <element signature="docComment;method#playMove#0;class#GameState#0" />
+                <element signature="method#playMove#0;class#GameState#0" />
+                <element signature="e#6623#6761#1" />
+                <element signature="docComment;method#discardCard#0;class#GameState#0" />
+                <element signature="method#discardCard#0;class#GameState#0" />
+                <element signature="e#7371#7491#1" />
+                <element signature="docComment;method#playCard#0;class#GameState#0" />
+                <element signature="method#playCard#0;class#GameState#0" />
+                <element signature="e#8135#8255#1" />
+                <element signature="e#8425#8551#1" />
+                <element signature="e#8595#8677#1" />
+                <element signature="e#8717#8826#1" />
+                <element signature="e#8871#8920#1" />
+                <element signature="e#8926#8998#1" />
+                <element signature="docComment;method#playPathCard#0;class#GameState#0" />
+                <element signature="method#playPathCard#0;class#GameState#0" />
+                <element signature="e#9644#9766#1" />
+                <element signature="docComment;method#playPlayerActionCard#0;class#GameState#0" />
+                <element signature="method#playPlayerActionCard#0;class#GameState#0" />
+                <element signature="e#10294#10447#1" />
+                <element signature="e#10334#10400#1" />
+                <element signature="e#10490#10533#1" />
+                <element signature="docComment;method#playMapCard#0;class#GameState#0" />
+                <element signature="method#playMapCard#0;class#GameState#0" />
+                <element signature="docComment;method#playRockfallCard#0;class#GameState#0" />
+                <element signature="method#playRockfallCard#0;class#GameState#0" />
+                <element signature="docComment;method#checkEndGame#0;class#GameState#0" />
+                <element signature="method#checkEndGame#0;class#GameState#0" />
+                <element signature="docComment;method#takeCardFromDeck#0;class#GameState#0" />
+                <element signature="docComment;method#addObserver#0;class#GameState#0" />
+                <element signature="method#addObserver#0;class#GameState#0" />
+                <element signature="docComment;method#removeObserver#0;class#GameState#0" />
+                <element signature="method#removeObserver#0;class#GameState#0" />
+                <element signature="docComment;method#currentPlayerIndex#0;class#GameState#0" />
+                <element signature="docComment;method#broadcastPlayerMove#0;class#GameState#0" />
+                <element signature="method#broadcastPlayerMove#0;class#GameState#0" />
+                <element signature="docComment;method#broadcastStateChanged#0;class#GameState#0" />
+                <element signature="method#broadcastStateChanged#0;class#GameState#0" />
+                <element signature="docComment;method#broadcastGameFinished#0;class#GameState#0" />
+                <element signature="method#broadcastGameFinished#0;class#GameState#0" />
+                <element signature="docComment;method#broadcastGameStarted#0;class#GameState#0" />
+                <element signature="method#broadcastGameStarted#0;class#GameState#0" />
+                <element signature="docComment;method#currentPlayer#0;class#GameState#0" />
+                <element signature="method#currentPlayer#0;class#GameState#0" />
+                <element signature="docComment;method#started#0;class#GameState#0" />
+                <element signature="method#started#0;class#GameState#0" />
+                <element signature="docComment;method#finished#0;class#GameState#0" />
+                <element signature="method#finished#0;class#GameState#0" />
+                <element signature="docComment;method#numPlayers#0;class#GameState#0" />
+                <element signature="method#numPlayers#0;class#GameState#0" />
+                <element signature="docComment;method#numSaboteurs#0;class#GameState#0" />
+                <element signature="method#numSaboteurs#0;class#GameState#0" />
+                <element signature="docComment;method#getPlayer#0;class#GameState#0" />
+                <element signature="docComment;method#board#0;class#GameState#0" />
+                <element signature="method#board#0;class#GameState#0" />
+                <element signature="docComment;method#deriveNumCardsPerPlayer#0;class#GameState#0" />
+                <element signature="method#deriveNumCardsPerPlayer#0;class#GameState#0" />
+                <element signature="docComment;method#deriveNumSaboteurs#0;class#GameState#0" />
+                <element signature="method#deriveNumSaboteurs#0;class#GameState#0" />
+                <element signature="docComment;method#generateDeck#0;class#GameState#0" />
+                <element signature="method#generateDeck#0;class#GameState#0" />
+                <element signature="e#16122#16658#0" />
+                <element signature="e#16175#16652#1" />
+                <element signature="e#16215#16319#1" />
+                <element signature="e#16362#16480#1" />
+                <element signature="e#16524#16644#1" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="792">
-                <caret line="43" column="27" lean-forward="true" selection-start-line="43" selection-start-column="27" selection-end-line="43" selection-end-column="27" />
-                <folding>
-                  <element signature="imports" expanded="true" />
-                  <element signature="e#148#149#0" expanded="true" />
-                  <element signature="e#169#170#0" expanded="true" />
-                </folding>
-              </first_editor>
-              <second_editor />
+        <entry file="file://$PROJECT_DIR$/src/example/ExampleAI.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="181">
+              <caret line="44" column="13" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ai/AI.java">
+        <entry file="file://$PROJECT_DIR$/src/model/Position.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="35" column="4" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="35" selection-end-column="4" />
+            <state relative-caret-position="55">
+              <caret line="13" column="15" selection-start-line="13" selection-start-column="15" selection-end-line="13" selection-end-column="15" />
               <folding>
-                <element signature="docComment;method#AI#0;class#AI#0" />
-                <element signature="method#AI#0;class#AI#0" />
+                <element signature="docComment;method#top#0;class#Position#0" />
+                <element signature="docComment;method#right#0;class#Position#0" />
+                <element signature="docComment;method#bottom#0;class#Position#0" />
+                <element signature="docComment;method#left#0;class#Position#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/model/Move.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="18">
+              <caret line="24" column="94" selection-start-line="24" selection-start-column="94" selection-end-line="24" selection-end-column="94" />
+              <folding>
+                <element signature="docComment;class#Move#0" />
+                <element signature="e#106#151#0" expanded="true" />
+                <element signature="docComment;class#Type#0;class#Move#0" />
+                <element signature="class#Type#0;class#Move#0" />
+                <element signature="docComment;field#type#0;class#Move#0" />
+                <element signature="docComment;field#playerIndex#0;class#Move#0" />
+                <element signature="docComment;field#handIndex#0;class#Move#0" />
+                <element signature="docComment;field#card#0;class#Move#0" />
+                <element signature="docComment;method#Move#0;class#Move#0" />
+                <element signature="method#Move#0;class#Move#0" />
+                <element signature="docComment;method#NewPathMove#0;class#Move#0" />
+                <element signature="docComment;method#NewMapMove#0;class#Move#0" />
+                <element signature="method#NewMapMove#0;class#Move#0" />
+                <element signature="docComment;method#NewRockfallMove#0;class#Move#0" />
+                <element signature="method#NewRockfallMove#0;class#Move#0" />
+                <element signature="docComment;method#NewPlayerActionMove#0;class#Move#0" />
+                <element signature="method#NewPlayerActionMove#0;class#Move#0" />
+                <element signature="docComment;method#NewDiscardMove#0;class#Move#0" />
+                <element signature="method#NewDiscardMove#0;class#Move#0" />
+                <element signature="docComment;method#setCard#0;class#Move#0" />
+                <element signature="method#setCard#0;class#Move#0" />
+                <element signature="docComment;method#type#0;class#Move#0" />
+                <element signature="method#type#0;class#Move#0" />
+                <element signature="docComment;method#playerIndex#0;class#Move#0" />
+                <element signature="method#playerIndex#0;class#Move#0" />
+                <element signature="docComment;method#handIndex#0;class#Move#0" />
+                <element signature="method#handIndex#0;class#Move#0" />
+                <element signature="docComment;method#args#0;class#Move#0" />
+                <element signature="method#args#0;class#Move#0" />
+                <element signature="docComment;method#card#0;class#Move#0" />
+                <element signature="method#card#0;class#Move#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/model/Board.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="298" column="46" selection-start-line="298" selection-start-column="46" selection-end-line="298" selection-end-column="46" />
+              <folding>
+                <element signature="docComment;class#Board#0" />
+                <element signature="docComment;class#GoalPosition#0;class#Board#0" />
+                <element signature="class#GoalPosition#0;class#Board#0" />
+                <element signature="docComment;field#DEFAULT_WIDTH#0;class#Board#0" />
+                <element signature="docComment;field#DEFAULT_HEIGHT#0;class#Board#0" />
+                <element signature="docComment;field#width#0;class#Board#0" />
+                <element signature="docComment;field#height#0;class#Board#0" />
+                <element signature="docComment;field#cells#0;class#Board#0" />
+                <element signature="docComment;field#topGoal#0;class#Board#0" />
+                <element signature="docComment;field#middleGoal#0;class#Board#0" />
+                <element signature="docComment;field#bottomGoal#0;class#Board#0" />
+                <element signature="docComment;method#Board#0;class#Board#0" />
+                <element signature="method#Board#0;class#Board#0" />
+                <element signature="e#1492#1586#1" />
+                <element signature="e#1533#1580#1" />
+                <element signature="docComment;method#initialize#0;class#Board#0" />
+                <element signature="method#initialize#0;class#Board#0" />
+                <element signature="docComment;method#placePathCardAt#0;class#Board#0" />
+                <element signature="method#placePathCardAt#0;class#Board#0" />
+                <element signature="e#2706#2824#1" />
+                <element signature="e#2865#2991#1" />
+                <element signature="docComment;method#placePathCardAt#1;class#Board#0" />
+                <element signature="method#placePathCardAt#1;class#Board#0" />
+                <element signature="docComment;method#removeCardAt#0;class#Board#0" />
+                <element signature="method#removeCardAt#0;class#Board#0" />
+                <element signature="docComment;method#removeCardAt#1;class#Board#0" />
+                <element signature="method#removeCardAt#1;class#Board#0" />
+                <element signature="e#4180#4312#1" />
+                <element signature="e#4389#4458#1" />
+                <element signature="e#4647#4724#1" />
+                <element signature="e#4790#4913#1" />
+                <element signature="docComment;method#isInBoard#0;class#Board#0" />
+                <element signature="method#isInBoard#0;class#Board#0" />
+                <element signature="docComment;method#isInBoard#1;class#Board#0" />
+                <element signature="method#isInBoard#1;class#Board#0" />
+                <element signature="docComment;method#isGoldReached#0;class#Board#0" />
+                <element signature="method#isGoldReached#0;class#Board#0" />
+                <element signature="docComment;method#isReachable#0;class#Board#0" />
+                <element signature="docComment;method#isReachable#1;class#Board#0" />
+                <element signature="method#isReachable#1;class#Board#0" />
+                <element signature="docComment;method#isCardPlaceableAt#0;class#Board#0" />
+                <element signature="method#isCardPlaceableAt#0;class#Board#0" />
+                <element signature="docComment;method#isCardPlaceableAt#1;class#Board#0" />
+                <element signature="method#isCardPlaceableAt#1;class#Board#0" />
+                <element signature="docComment;method#getReachable#0;class#Board#0" />
+                <element signature="method#getReachable#0;class#Board#0" />
+                <element signature="e#9623#10283#1" />
+                <element signature="e#9830#9867#1" />
+                <element signature="e#9944#9983#1" />
+                <element signature="e#10062#10102#1" />
+                <element signature="e#10177#10215#1" />
+                <element signature="docComment;method#getPlaceable#0;class#Board#0" />
+                <element signature="method#getPlaceable#0;class#Board#0" />
+                <element signature="docComment;method#getDestroyable#0;class#Board#0" />
+                <element signature="method#getDestroyable#0;class#Board#0" />
+                <element signature="e#9907#10255#1" />
+                <element signature="e#9948#10249#1" />
+                <element signature="docComment;method#checkTouchingSides#0;class#Board#0" />
+                <element signature="method#checkTouchingSides#0;class#Board#0" />
+                <element signature="docComment;method#startPosition#0;class#Board#0" />
+                <element signature="method#startPosition#0;class#Board#0" />
+                <element signature="docComment;method#topGoalPosition#0;class#Board#0" />
+                <element signature="method#topGoalPosition#0;class#Board#0" />
+                <element signature="docComment;method#middleGoalPosition#0;class#Board#0" />
+                <element signature="method#middleGoalPosition#0;class#Board#0" />
+                <element signature="docComment;method#bottomGoalPosition#0;class#Board#0" />
+                <element signature="method#bottomGoalPosition#0;class#Board#0" />
+                <element signature="docComment;method#cellAt#0;class#Board#0" />
+                <element signature="method#cellAt#0;class#Board#0" />
+                <element signature="docComment;method#cellAt#1;class#Board#0" />
+                <element signature="method#cellAt#1;class#Board#0" />
+                <element signature="docComment;method#cells#0;class#Board#0" />
+                <element signature="method#cells#0;class#Board#0" />
+                <element signature="e#11817#11915#1" />
+                <element signature="e#11858#11909#1" />
+                <element signature="docComment;method#width#0;class#Board#0" />
+                <element signature="method#width#0;class#Board#0" />
+                <element signature="docComment;method#height#0;class#Board#0" />
+                <element signature="method#height#0;class#Board#0" />
+                <element signature="docComment;method#peekGoal#0;class#Board#0" />
+                <element signature="method#peekGoal#0;class#Board#0" />
+                <element signature="e#12438#12613#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/model/GameObserver.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="18">
+              <caret line="31" column="12" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="12" />
+              <folding>
+                <element signature="docComment;class#GameObserver#0" />
+                <element signature="docComment;field#state#0;class#GameObserver#0" />
+                <element signature="docComment;field#history#0;class#GameObserver#0" />
+                <element signature="docComment;method#setState#0;class#GameObserver#0" />
+                <element signature="method#setState#0;class#GameObserver#0" />
+                <element signature="docComment;method#state#0;class#GameObserver#0" />
+                <element signature="method#state#0;class#GameObserver#0" />
+                <element signature="docComment;method#onMovementPrompt#0;class#GameObserver#0" />
+                <element signature="docComment;method#onGameFinished#0;class#GameObserver#0" />
+                <element signature="docComment;method#onGameStart#0;class#GameObserver#0" />
+                <element signature="docComment;method#onGameStateChanged#0;class#GameObserver#0" />
+                <element signature="docComment;method#onPlayerMove#0;class#GameObserver#0" />
+                <element signature="docComment;method#notifyPromptMovement#0;class#GameObserver#0" />
+                <element signature="docComment;method#notifyGameStarted#0;class#GameObserver#0" />
+                <element signature="method#notifyGameStarted#0;class#GameObserver#0" />
+                <element signature="docComment;method#notifyGameFinished#0;class#GameObserver#0" />
+                <element signature="method#notifyPlayerMove#0;class#GameObserver#0" />
+                <element signature="docComment;method#notifyGameStateChanged#0;class#GameObserver#0" />
               </folding>
             </state>
           </provider>
@@ -88,7 +363,6 @@
         <option value="$PROJECT_DIR$/src/model/BoardActionCard.java" />
         <option value="$PROJECT_DIR$/src/model/Card.java" />
         <option value="$PROJECT_DIR$/src/model/cards/GeneralType.java" />
-        <option value="$PROJECT_DIR$/src/main/Main.java" />
         <option value="$PROJECT_DIR$/src/model/cards/Resource.java" />
         <option value="$PROJECT_DIR$/src/model/Resource.java" />
         <option value="$PROJECT_DIR$/src/model/GoalType.java" />
@@ -96,35 +370,40 @@
         <option value="$PROJECT_DIR$/src/model/GameLogic.java" />
         <option value="$PROJECT_DIR$/src/MoveResult.java" />
         <option value="$PROJECT_DIR$/src/model/GameController.java" />
-        <option value="$PROJECT_DIR$/src/AI.java" />
         <option value="$PROJECT_DIR$/src/.gitignore" />
-        <option value="$PROJECT_DIR$/src/ai/ExampleAI.java" />
-        <option value="$PROJECT_DIR$/src/model/GameState.java" />
-        <option value="$PROJECT_DIR$/src/model/GameObserver.java" />
-        <option value="$PROJECT_DIR$/src/ai/AI.java" />
-        <option value="$PROJECT_DIR$/src/model/Player.java" />
-        <option value="$PROJECT_DIR$/src/model/Position.java" />
-        <option value="$PROJECT_DIR$/src/model/MoveResult.java" />
         <option value="$PROJECT_DIR$/src/model/cards/Card.java" />
         <option value="$PROJECT_DIR$/src/model/cards/PathCard.java" />
         <option value="$PROJECT_DIR$/src/model/cards/PlayerActionCard.java" />
         <option value="$PROJECT_DIR$/src/model/cards/BoardActionCard.java" />
-        <option value="$PROJECT_DIR$/src/model/Board.java" />
         <option value="$PROJECT_DIR$/src/model/Cell.java" />
-        <option value="$PROJECT_DIR$/src/model/GameException.java" />
-        <option value="$PROJECT_DIR$/src/model/Move.java" />
         <option value="$PROJECT_DIR$/src/model/History.java" />
+        <option value="$PROJECT_DIR$/src/model/GameException.java" />
+        <option value="$PROJECT_DIR$/src/ai/AIObserver.java" />
+        <option value="$PROJECT_DIR$/src/main/Main.java" />
+        <option value="$PROJECT_DIR$/src/model/GameObserver.java" />
+        <option value="$PROJECT_DIR$/src/ai/ExampleAI.java" />
+        <option value="$PROJECT_DIR$/src/ExampleAI.java" />
+        <option value="$PROJECT_DIR$/src/AI.java" />
+        <option value="$PROJECT_DIR$/src/model/Player.java" />
+        <option value="$PROJECT_DIR$/src/main/ExampleAI.java" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/ai/AI.java" />
+        <option value="$PROJECT_DIR$/src/model/MoveResult.java" />
+        <option value="$PROJECT_DIR$/src/model/Move.java" />
+        <option value="$PROJECT_DIR$/src/model/GameState.java" />
+        <option value="$PROJECT_DIR$/src/model/Position.java" />
+        <option value="$PROJECT_DIR$/src/model/Board.java" />
+        <option value="$PROJECT_DIR$/src/example/ExampleAI.java" />
       </list>
     </option>
   </component>
   <component name="PhpServers">
     <servers />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-12" />
-    <option name="width" value="981" />
-    <option name="height" value="1032" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="949" />
+    <option name="width" value="980" />
+    <option name="height" value="1031" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -150,6 +429,24 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="ai" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="saboteur" type="b2602c69:ProjectViewProjectNode" />
+              <item name="saboteur" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="example" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="saboteur" type="b2602c69:ProjectViewProjectNode" />
+              <item name="saboteur" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="saboteur" type="b2602c69:ProjectViewProjectNode" />
+              <item name="saboteur" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -161,7 +458,8 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552651745326" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552672597282" />
+    <property name="extract.method.default.visibility" value="private" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="C:/Program Files/nodejs/node" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -192,6 +490,20 @@
   <component name="RunManager">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="main.Main" />
+      <module name="saboteur" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -227,6 +539,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -240,12 +557,12 @@
       <updated>1552454971075</updated>
       <workItem from="1552454973937" duration="38631000" />
       <workItem from="1552558460797" duration="4368000" />
-      <workItem from="1552628172806" duration="10128000" />
+      <workItem from="1552628172806" duration="22336000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="53127000" />
+    <option name="totallyTimeSpent" value="65335000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
@@ -256,17 +573,18 @@
       <window_info id="Capture Tool" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
-      <window_info content_ui="combo" id="Project" order="5" weight="0.2574899" />
+      <window_info active="true" content_ui="combo" id="Project" order="5" visible="true" weight="0.24615385" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Messages" />
       <window_info anchor="bottom" id="Version Control" order="0" />
-      <window_info anchor="bottom" id="Terminal" order="1" visible="true" weight="0.11310592" />
+      <window_info anchor="bottom" id="Terminal" order="1" weight="0.32675046" />
       <window_info anchor="bottom" id="Database Changes" order="2" />
       <window_info anchor="bottom" id="Event Log" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Sequence" order="4" />
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" weight="0.32854578" />
-      <window_info anchor="bottom" id="Run" order="8" />
+      <window_info anchor="bottom" id="Run" order="8" weight="0.32854578" />
       <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
@@ -287,21 +605,22 @@
       <window_info id="Capture Tool" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
-      <window_info active="true" content_ui="combo" id="Project" order="5" visible="true" weight="0.2574899" />
+      <window_info active="true" content_ui="combo" id="Project" order="5" visible="true" weight="0.24615385" />
       <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" order="0" />
-      <window_info anchor="bottom" id="Terminal" order="1" weight="0.32854578" />
-      <window_info anchor="bottom" id="Database Changes" order="2" />
-      <window_info anchor="bottom" id="Event Log" order="3" side_tool="true" />
-      <window_info anchor="bottom" id="Sequence" order="4" />
-      <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Message" order="6" />
-      <window_info anchor="bottom" id="Find" order="7" weight="0.32854578" />
-      <window_info anchor="bottom" id="Run" order="8" />
-      <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="12" />
+      <window_info anchor="bottom" id="Messages" order="0" />
+      <window_info anchor="bottom" id="Version Control" order="1" />
+      <window_info anchor="bottom" id="Terminal" order="2" weight="0.32675046" />
+      <window_info anchor="bottom" id="Database Changes" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
+      <window_info anchor="bottom" id="Sequence" order="5" />
+      <window_info anchor="bottom" id="Docker" order="6" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Message" order="7" />
+      <window_info anchor="bottom" id="Find" order="8" weight="0.32854578" />
+      <window_info anchor="bottom" id="Run" order="9" weight="0.32854578" />
+      <window_info anchor="bottom" id="Debug" order="10" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="11" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="12" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="13" />
       <window_info anchor="right" id="Theme Preview" order="0" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Palette&#9;" order="2" />
@@ -330,33 +649,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/model/PlayableCard.java" />
     <entry file="file://$PROJECT_DIR$/src/model/cards/GeneralType.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="3" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
-          <folding>
-            <element signature="e#89#90#0" expanded="true" />
-            <element signature="e#110#111#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-69">
           <caret line="48" lean-forward="true" selection-start-line="48" selection-end-line="48" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ai/ExampleAI.java">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/model/cards/Card.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -454,75 +752,56 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/Board.java">
+    <entry file="file://$PROJECT_DIR$/src/model/History.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="190" column="5" lean-forward="true" selection-start-line="190" selection-start-column="5" selection-end-line="190" selection-end-column="5" />
+        <state relative-caret-position="180">
+          <caret line="10" column="4" lean-forward="true" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
           <folding>
-            <element signature="docComment;class#Board#0" />
-            <element signature="docComment;class#GoalPosition#0;class#Board#0" />
-            <element signature="class#GoalPosition#0;class#Board#0" />
-            <element signature="docComment;field#DEFAULT_WIDTH#0;class#Board#0" />
-            <element signature="docComment;field#DEFAULT_HEIGHT#0;class#Board#0" />
-            <element signature="docComment;field#width#0;class#Board#0" />
-            <element signature="docComment;field#height#0;class#Board#0" />
-            <element signature="docComment;field#cells#0;class#Board#0" />
-            <element signature="docComment;field#topGoal#0;class#Board#0" />
-            <element signature="docComment;field#middleGoal#0;class#Board#0" />
-            <element signature="docComment;field#bottomGoal#0;class#Board#0" />
-            <element signature="docComment;method#Board#0;class#Board#0" />
-            <element signature="method#Board#0;class#Board#0" />
-            <element signature="docComment;method#initialize#0;class#Board#0" />
-            <element signature="method#initialize#0;class#Board#0" />
-            <element signature="docComment;method#placePathCardAt#0;class#Board#0" />
-            <element signature="method#placePathCardAt#0;class#Board#0" />
-            <element signature="docComment;method#placePathCardAt#1;class#Board#0" />
-            <element signature="method#placePathCardAt#1;class#Board#0" />
-            <element signature="docComment;method#removeCardAt#0;class#Board#0" />
-            <element signature="method#removeCardAt#0;class#Board#0" />
-            <element signature="docComment;method#removeCardAt#1;class#Board#0" />
-            <element signature="method#removeCardAt#1;class#Board#0" />
-            <element signature="docComment;method#isInBoard#0;class#Board#0" />
-            <element signature="method#isInBoard#0;class#Board#0" />
-            <element signature="docComment;method#isInBoard#1;class#Board#0" />
-            <element signature="method#isInBoard#1;class#Board#0" />
-            <element signature="docComment;method#isGoldReached#0;class#Board#0" />
-            <element signature="method#isGoldReached#0;class#Board#0" />
-            <element signature="docComment;method#isReachable#0;class#Board#0" />
-            <element signature="docComment;method#isReachable#1;class#Board#0" />
-            <element signature="method#isReachable#1;class#Board#0" />
-            <element signature="docComment;method#isCardPlaceableAt#0;class#Board#0" />
-            <element signature="method#isCardPlaceableAt#0;class#Board#0" />
-            <element signature="docComment;method#isCardPlaceableAt#1;class#Board#0" />
-            <element signature="method#isCardPlaceableAt#1;class#Board#0" />
-            <element signature="docComment;method#startPosition#0;class#Board#0" />
-            <element signature="method#startPosition#0;class#Board#0" />
-            <element signature="docComment;method#topGoalPosition#0;class#Board#0" />
-            <element signature="method#topGoalPosition#0;class#Board#0" />
-            <element signature="docComment;method#middleGoalPosition#0;class#Board#0" />
-            <element signature="method#middleGoalPosition#0;class#Board#0" />
-            <element signature="docComment;method#bottomGoalPosition#0;class#Board#0" />
-            <element signature="method#bottomGoalPosition#0;class#Board#0" />
-            <element signature="docComment;method#cellAt#0;class#Board#0" />
-            <element signature="method#cellAt#0;class#Board#0" />
-            <element signature="docComment;method#cellAt#1;class#Board#0" />
-            <element signature="method#cellAt#1;class#Board#0" />
-            <element signature="docComment;method#cells#0;class#Board#0" />
-            <element signature="method#cells#0;class#Board#0" />
-            <element signature="docComment;method#width#0;class#Board#0" />
-            <element signature="method#width#0;class#Board#0" />
-            <element signature="docComment;method#height#0;class#Board#0" />
-            <element signature="method#height#0;class#Board#0" />
-            <element signature="docComment;method#peekGoal#0;class#Board#0" />
-            <element signature="method#peekGoal#0;class#Board#0" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#86#131#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ai/AIObserver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="18" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model/GameException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="21" column="4" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="3" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
+          <folding>
+            <element signature="e#89#90#0" expanded="true" />
+            <element signature="e#110#111#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/model/Cell.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="111" column="24" selection-start-line="111" selection-start-column="24" selection-end-line="111" selection-end-column="24" />
+        <state relative-caret-position="306">
+          <caret line="61" column="51" selection-start-line="61" selection-start-column="51" selection-end-line="61" selection-end-column="51" />
           <folding>
             <element signature="docComment;class#Cell#0" />
             <element signature="docComment;class#Side#0;class#Cell#0" />
@@ -539,6 +818,9 @@
             <element signature="method#Cell#1;class#Cell#0" />
             <element signature="docComment;method#placePathCard#0;class#Cell#0" />
             <element signature="method#placePathCard#0;class#Cell#0" />
+            <element signature="e#1753#1919#1" />
+            <element signature="e#1925#2108#1" />
+            <element signature="e#2137#2183#1" />
             <element signature="docComment;method#openAllSides#0;class#Cell#0" />
             <element signature="docComment;method#removeCard#0;class#Cell#0" />
             <element signature="method#removeCard#0;class#Cell#0" />
@@ -567,90 +849,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/GameException.java">
+    <entry file="file://$PROJECT_DIR$/src/model/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="7" column="2" selection-start-line="7" selection-start-column="2" selection-end-line="7" selection-end-column="2" />
+        <state relative-caret-position="3564">
+          <caret line="212" column="46" lean-forward="true" selection-start-line="212" selection-start-column="46" selection-end-line="212" selection-end-column="46" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/GameState.java">
+    <entry file="file://$PROJECT_DIR$/src/ai/AI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="667">
-          <caret line="339" column="61" selection-start-line="339" selection-start-column="61" selection-end-line="339" selection-end-column="61" />
+        <state relative-caret-position="162">
+          <caret line="46" column="16" lean-forward="true" selection-start-line="46" selection-start-column="16" selection-end-line="46" selection-end-column="16" />
           <folding>
-            <element signature="docComment;class#GameState#0" />
-            <element signature="docComment;field#MIN_PLAYER#0;class#GameState#0" />
-            <element signature="docComment;field#MAX_PLAYER#0;class#GameState#0" />
-            <element signature="docComment;field#CARD_COMPOSITION#0;class#GameState#0" />
-            <element signature="initializer##0;class#GameState#0" />
-            <element signature="docComment;field#numPlayers#0;class#GameState#0" />
-            <element signature="docComment;field#players#0;class#GameState#0" />
-            <element signature="docComment;field#board#0;class#GameState#0" />
-            <element signature="docComment;field#started#0;class#GameState#0" />
-            <element signature="docComment;field#finished#0;class#GameState#0" />
-            <element signature="docComment;field#deck#0;class#GameState#0" />
-            <element signature="docComment;field#currentPlayerIndex#0;class#GameState#0" />
-            <element signature="docComment;field#nonPlayerObservers#0;class#GameState#0" />
-            <element signature="docComment;method#GameState#0;class#GameState#0" />
-            <element signature="method#GameState#0;class#GameState#0" />
-            <element signature="docComment;method#initializeRound#0;class#GameState#0" />
-            <element signature="method#initializeRound#0;class#GameState#0" />
-            <element signature="docComment;method#startRound#0;class#GameState#0" />
-            <element signature="method#startRound#0;class#GameState#0" />
-            <element signature="docComment;method#finalizeTurn#0;class#GameState#0" />
-            <element signature="method#finalizeTurn#0;class#GameState#0" />
-            <element signature="docComment;method#playMove#0;class#GameState#0" />
-            <element signature="method#playMove#0;class#GameState#0" />
-            <element signature="docComment;method#discardCard#0;class#GameState#0" />
-            <element signature="method#discardCard#0;class#GameState#0" />
-            <element signature="docComment;method#playCard#0;class#GameState#0" />
-            <element signature="method#playCard#0;class#GameState#0" />
-            <element signature="docComment;method#playPathCard#0;class#GameState#0" />
-            <element signature="method#playPathCard#0;class#GameState#0" />
-            <element signature="docComment;method#playPlayerActionCard#0;class#GameState#0" />
-            <element signature="method#playPlayerActionCard#0;class#GameState#0" />
-            <element signature="docComment;method#playMapCard#0;class#GameState#0" />
-            <element signature="method#playMapCard#0;class#GameState#0" />
-            <element signature="docComment;method#playRockfallCard#0;class#GameState#0" />
-            <element signature="method#playRockfallCard#0;class#GameState#0" />
-            <element signature="docComment;method#checkEndGame#0;class#GameState#0" />
-            <element signature="method#checkEndGame#0;class#GameState#0" />
-            <element signature="docComment;method#takeCardFromDeck#0;class#GameState#0" />
-            <element signature="docComment;method#addObserver#0;class#GameState#0" />
-            <element signature="method#addObserver#0;class#GameState#0" />
-            <element signature="docComment;method#removeObserver#0;class#GameState#0" />
-            <element signature="method#removeObserver#0;class#GameState#0" />
-            <element signature="docComment;method#currentPlayerIndex#0;class#GameState#0" />
-            <element signature="method#broadcastPlayerMove#0;class#GameState#0" />
-            <element signature="docComment;method#broadcastStateChanged#0;class#GameState#0" />
-            <element signature="method#broadcastStateChanged#0;class#GameState#0" />
-            <element signature="docComment;method#broadcastGameFinished#0;class#GameState#0" />
-            <element signature="method#broadcastGameFinished#0;class#GameState#0" />
-            <element signature="docComment;method#broadcastGameStarted#0;class#GameState#0" />
-            <element signature="method#broadcastGameStarted#0;class#GameState#0" />
-            <element signature="docComment;method#currentPlayer#0;class#GameState#0" />
-            <element signature="method#currentPlayer#0;class#GameState#0" />
-            <element signature="docComment;method#started#0;class#GameState#0" />
-            <element signature="method#started#0;class#GameState#0" />
-            <element signature="docComment;method#finished#0;class#GameState#0" />
-            <element signature="method#finished#0;class#GameState#0" />
-            <element signature="docComment;method#numSaboteurs#0;class#GameState#0" />
-            <element signature="method#numSaboteurs#0;class#GameState#0" />
-            <element signature="docComment;method#deriveNumCardsPerPlayer#0;class#GameState#0" />
-            <element signature="method#deriveNumCardsPerPlayer#0;class#GameState#0" />
-            <element signature="docComment;method#deriveNumSaboteurs#0;class#GameState#0" />
-            <element signature="method#deriveNumSaboteurs#0;class#GameState#0" />
-            <element signature="docComment;method#generateDeck#0;class#GameState#0" />
-            <element signature="method#generateDeck#0;class#GameState#0" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="291">
+            <caret line="28" column="64" lean-forward="true" selection-start-line="28" selection-start-column="64" selection-end-line="28" selection-end-column="64" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model/MoveResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="47" selection-start-line="6" selection-start-column="47" selection-end-line="6" selection-end-column="47" />
+          <folding>
+            <element signature="e#218#245#0" expanded="true" />
+            <element signature="docComment;method#MoveResult#0;class#MoveResult#0" />
+            <element signature="method#MoveResult#0;class#MoveResult#0" />
+            <element signature="docComment;method#result#0;class#MoveResult#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/model/GameObserver.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="26" column="23" selection-start-line="26" selection-start-column="23" selection-end-line="26" selection-end-column="23" />
+        <state relative-caret-position="18">
+          <caret line="31" column="12" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="12" />
           <folding>
             <element signature="docComment;class#GameObserver#0" />
             <element signature="docComment;field#state#0;class#GameObserver#0" />
@@ -674,75 +916,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/Player.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="184" column="1" lean-forward="true" selection-start-line="184" selection-start-column="1" selection-end-line="184" selection-end-column="1" />
-          <folding>
-            <element signature="docComment;class#Player#0" />
-            <element signature="docComment;class#Role#0;class#Player#0" />
-            <element signature="class#Role#0;class#Player#0" />
-            <element signature="docComment;field#name#0;class#Player#0" />
-            <element signature="docComment;field#cards#0;class#Player#0" />
-            <element signature="docComment;field#role#0;class#Player#0" />
-            <element signature="docComment;field#sabotaged#0;class#Player#0" />
-            <element signature="docComment;field#discarded#0;class#Player#0" />
-            <element signature="docComment;method#Player#0;class#Player#0" />
-            <element signature="docComment;method#initialize#0;class#Player#0" />
-            <element signature="method#initialize#0;class#Player#0" />
-            <element signature="docComment;method#giveCard#0;class#Player#0" />
-            <element signature="docComment;method#takeCardAt#0;class#Player#0" />
-            <element signature="method#takeCardAt#0;class#Player#0" />
-            <element signature="docComment;method#peekCardAt#0;class#Player#0" />
-            <element signature="docComment;method#sabotageTool#0;class#Player#0" />
-            <element signature="method#sabotageTool#0;class#Player#0" />
-            <element signature="docComment;method#repairTool#0;class#Player#0" />
-            <element signature="method#repairTool#0;class#Player#0" />
-            <element signature="docComment;method#addDiscard#0;class#Player#0" />
-            <element signature="method#addDiscard#0;class#Player#0" />
-            <element signature="docComment;method#isSabotaged#0;class#Player#0" />
-            <element signature="method#isSabotaged#0;class#Player#0" />
-            <element signature="docComment;method#isSabotaged#1;class#Player#0" />
-            <element signature="docComment;method#name#0;class#Player#0" />
-            <element signature="method#name#0;class#Player#0" />
-            <element signature="docComment;method#hand#0;class#Player#0" />
-            <element signature="method#hand#0;class#Player#0" />
-            <element signature="docComment;method#role#0;class#Player#0" />
-            <element signature="docComment;method#discarded#0;class#Player#0" />
-            <element signature="method#discarded#0;class#Player#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/MoveResult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="8" column="15" lean-forward="true" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
-          <folding>
-            <element signature="docComment;class#MoveResult#0" />
-            <element signature="docComment;field#result#0;class#MoveResult#0" />
-            <element signature="docComment;method#MoveResult#0;class#MoveResult#0" />
-            <element signature="method#MoveResult#0;class#MoveResult#0" />
-            <element signature="docComment;method#result#0;class#MoveResult#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/History.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="4" lean-forward="true" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#86#131#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/model/Move.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="31" column="32" lean-forward="true" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
+        <state relative-caret-position="18">
+          <caret line="24" column="94" selection-start-line="24" selection-start-column="94" selection-end-line="24" selection-end-column="94" />
           <folding>
             <element signature="docComment;class#Move#0" />
             <element signature="e#106#151#0" expanded="true" />
@@ -751,12 +928,10 @@
             <element signature="docComment;field#type#0;class#Move#0" />
             <element signature="docComment;field#playerIndex#0;class#Move#0" />
             <element signature="docComment;field#handIndex#0;class#Move#0" />
-            <element signature="docComment;field#args#0;class#Move#0" />
             <element signature="docComment;field#card#0;class#Move#0" />
             <element signature="docComment;method#Move#0;class#Move#0" />
             <element signature="method#Move#0;class#Move#0" />
             <element signature="docComment;method#NewPathMove#0;class#Move#0" />
-            <element signature="method#NewPathMove#0;class#Move#0" />
             <element signature="docComment;method#NewMapMove#0;class#Move#0" />
             <element signature="method#NewMapMove#0;class#Move#0" />
             <element signature="docComment;method#NewRockfallMove#0;class#Move#0" />
@@ -781,10 +956,110 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/model/GameState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="379">
+          <caret line="434" column="15" selection-start-line="434" selection-start-column="15" selection-end-line="434" selection-end-column="15" />
+          <folding>
+            <element signature="docComment;class#GameState#0" />
+            <element signature="docComment;field#MIN_PLAYER#0;class#GameState#0" />
+            <element signature="docComment;field#MAX_PLAYER#0;class#GameState#0" />
+            <element signature="docComment;field#CARD_COMPOSITION#0;class#GameState#0" />
+            <element signature="initializer##0;class#GameState#0" />
+            <element signature="docComment;field#numPlayers#0;class#GameState#0" />
+            <element signature="docComment;field#players#0;class#GameState#0" />
+            <element signature="docComment;field#board#0;class#GameState#0" />
+            <element signature="docComment;field#started#0;class#GameState#0" />
+            <element signature="docComment;field#finished#0;class#GameState#0" />
+            <element signature="docComment;field#deck#0;class#GameState#0" />
+            <element signature="docComment;field#currentPlayerIndex#0;class#GameState#0" />
+            <element signature="docComment;field#nonPlayerObservers#0;class#GameState#0" />
+            <element signature="docComment;method#GameState#0;class#GameState#0" />
+            <element signature="method#GameState#0;class#GameState#0" />
+            <element signature="e#3671#3844#1" />
+            <element signature="docComment;method#initializeRound#0;class#GameState#0" />
+            <element signature="method#initializeRound#0;class#GameState#0" />
+            <element signature="e#4205#4281#1" />
+            <element signature="docComment;method#startRound#0;class#GameState#0" />
+            <element signature="method#startRound#0;class#GameState#0" />
+            <element signature="e#5636#5698#1" />
+            <element signature="docComment;method#finalizeTurn#0;class#GameState#0" />
+            <element signature="method#finalizeTurn#0;class#GameState#0" />
+            <element signature="e#6005#6109#1" />
+            <element signature="docComment;method#playMove#0;class#GameState#0" />
+            <element signature="method#playMove#0;class#GameState#0" />
+            <element signature="e#6623#6761#1" />
+            <element signature="docComment;method#discardCard#0;class#GameState#0" />
+            <element signature="method#discardCard#0;class#GameState#0" />
+            <element signature="e#7371#7491#1" />
+            <element signature="docComment;method#playCard#0;class#GameState#0" />
+            <element signature="method#playCard#0;class#GameState#0" />
+            <element signature="e#8135#8255#1" />
+            <element signature="e#8425#8551#1" />
+            <element signature="e#8595#8677#1" />
+            <element signature="e#8717#8826#1" />
+            <element signature="e#8871#8920#1" />
+            <element signature="e#8926#8998#1" />
+            <element signature="docComment;method#playPathCard#0;class#GameState#0" />
+            <element signature="method#playPathCard#0;class#GameState#0" />
+            <element signature="e#9644#9766#1" />
+            <element signature="docComment;method#playPlayerActionCard#0;class#GameState#0" />
+            <element signature="method#playPlayerActionCard#0;class#GameState#0" />
+            <element signature="e#10294#10447#1" />
+            <element signature="e#10334#10400#1" />
+            <element signature="e#10490#10533#1" />
+            <element signature="docComment;method#playMapCard#0;class#GameState#0" />
+            <element signature="method#playMapCard#0;class#GameState#0" />
+            <element signature="docComment;method#playRockfallCard#0;class#GameState#0" />
+            <element signature="method#playRockfallCard#0;class#GameState#0" />
+            <element signature="docComment;method#checkEndGame#0;class#GameState#0" />
+            <element signature="method#checkEndGame#0;class#GameState#0" />
+            <element signature="docComment;method#takeCardFromDeck#0;class#GameState#0" />
+            <element signature="docComment;method#addObserver#0;class#GameState#0" />
+            <element signature="method#addObserver#0;class#GameState#0" />
+            <element signature="docComment;method#removeObserver#0;class#GameState#0" />
+            <element signature="method#removeObserver#0;class#GameState#0" />
+            <element signature="docComment;method#currentPlayerIndex#0;class#GameState#0" />
+            <element signature="docComment;method#broadcastPlayerMove#0;class#GameState#0" />
+            <element signature="method#broadcastPlayerMove#0;class#GameState#0" />
+            <element signature="docComment;method#broadcastStateChanged#0;class#GameState#0" />
+            <element signature="method#broadcastStateChanged#0;class#GameState#0" />
+            <element signature="docComment;method#broadcastGameFinished#0;class#GameState#0" />
+            <element signature="method#broadcastGameFinished#0;class#GameState#0" />
+            <element signature="docComment;method#broadcastGameStarted#0;class#GameState#0" />
+            <element signature="method#broadcastGameStarted#0;class#GameState#0" />
+            <element signature="docComment;method#currentPlayer#0;class#GameState#0" />
+            <element signature="method#currentPlayer#0;class#GameState#0" />
+            <element signature="docComment;method#started#0;class#GameState#0" />
+            <element signature="method#started#0;class#GameState#0" />
+            <element signature="docComment;method#finished#0;class#GameState#0" />
+            <element signature="method#finished#0;class#GameState#0" />
+            <element signature="docComment;method#numPlayers#0;class#GameState#0" />
+            <element signature="method#numPlayers#0;class#GameState#0" />
+            <element signature="docComment;method#numSaboteurs#0;class#GameState#0" />
+            <element signature="method#numSaboteurs#0;class#GameState#0" />
+            <element signature="docComment;method#getPlayer#0;class#GameState#0" />
+            <element signature="docComment;method#board#0;class#GameState#0" />
+            <element signature="method#board#0;class#GameState#0" />
+            <element signature="docComment;method#deriveNumCardsPerPlayer#0;class#GameState#0" />
+            <element signature="method#deriveNumCardsPerPlayer#0;class#GameState#0" />
+            <element signature="docComment;method#deriveNumSaboteurs#0;class#GameState#0" />
+            <element signature="method#deriveNumSaboteurs#0;class#GameState#0" />
+            <element signature="docComment;method#generateDeck#0;class#GameState#0" />
+            <element signature="method#generateDeck#0;class#GameState#0" />
+            <element signature="e#16122#16658#0" />
+            <element signature="e#16175#16652#1" />
+            <element signature="e#16215#16319#1" />
+            <element signature="e#16362#16480#1" />
+            <element signature="e#16524#16644#1" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/model/Position.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="22" column="7" lean-forward="true" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+        <state relative-caret-position="55">
+          <caret line="13" column="15" selection-start-line="13" selection-start-column="15" selection-end-line="13" selection-end-column="15" />
           <folding>
             <element signature="docComment;method#top#0;class#Position#0" />
             <element signature="docComment;method#right#0;class#Position#0" />
@@ -794,29 +1069,104 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ai/AI.java">
+    <entry file="file://$PROJECT_DIR$/src/model/Board.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="35" column="4" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="35" selection-end-column="4" />
+        <state relative-caret-position="289">
+          <caret line="298" column="46" selection-start-line="298" selection-start-column="46" selection-end-line="298" selection-end-column="46" />
           <folding>
-            <element signature="docComment;method#AI#0;class#AI#0" />
-            <element signature="method#AI#0;class#AI#0" />
+            <element signature="docComment;class#Board#0" />
+            <element signature="docComment;class#GoalPosition#0;class#Board#0" />
+            <element signature="class#GoalPosition#0;class#Board#0" />
+            <element signature="docComment;field#DEFAULT_WIDTH#0;class#Board#0" />
+            <element signature="docComment;field#DEFAULT_HEIGHT#0;class#Board#0" />
+            <element signature="docComment;field#width#0;class#Board#0" />
+            <element signature="docComment;field#height#0;class#Board#0" />
+            <element signature="docComment;field#cells#0;class#Board#0" />
+            <element signature="docComment;field#topGoal#0;class#Board#0" />
+            <element signature="docComment;field#middleGoal#0;class#Board#0" />
+            <element signature="docComment;field#bottomGoal#0;class#Board#0" />
+            <element signature="docComment;method#Board#0;class#Board#0" />
+            <element signature="method#Board#0;class#Board#0" />
+            <element signature="e#1492#1586#1" />
+            <element signature="e#1533#1580#1" />
+            <element signature="docComment;method#initialize#0;class#Board#0" />
+            <element signature="method#initialize#0;class#Board#0" />
+            <element signature="docComment;method#placePathCardAt#0;class#Board#0" />
+            <element signature="method#placePathCardAt#0;class#Board#0" />
+            <element signature="e#2706#2824#1" />
+            <element signature="e#2865#2991#1" />
+            <element signature="docComment;method#placePathCardAt#1;class#Board#0" />
+            <element signature="method#placePathCardAt#1;class#Board#0" />
+            <element signature="docComment;method#removeCardAt#0;class#Board#0" />
+            <element signature="method#removeCardAt#0;class#Board#0" />
+            <element signature="docComment;method#removeCardAt#1;class#Board#0" />
+            <element signature="method#removeCardAt#1;class#Board#0" />
+            <element signature="e#4180#4312#1" />
+            <element signature="e#4389#4458#1" />
+            <element signature="e#4647#4724#1" />
+            <element signature="e#4790#4913#1" />
+            <element signature="docComment;method#isInBoard#0;class#Board#0" />
+            <element signature="method#isInBoard#0;class#Board#0" />
+            <element signature="docComment;method#isInBoard#1;class#Board#0" />
+            <element signature="method#isInBoard#1;class#Board#0" />
+            <element signature="docComment;method#isGoldReached#0;class#Board#0" />
+            <element signature="method#isGoldReached#0;class#Board#0" />
+            <element signature="docComment;method#isReachable#0;class#Board#0" />
+            <element signature="docComment;method#isReachable#1;class#Board#0" />
+            <element signature="method#isReachable#1;class#Board#0" />
+            <element signature="docComment;method#isCardPlaceableAt#0;class#Board#0" />
+            <element signature="method#isCardPlaceableAt#0;class#Board#0" />
+            <element signature="docComment;method#isCardPlaceableAt#1;class#Board#0" />
+            <element signature="method#isCardPlaceableAt#1;class#Board#0" />
+            <element signature="docComment;method#getReachable#0;class#Board#0" />
+            <element signature="method#getReachable#0;class#Board#0" />
+            <element signature="e#9623#10283#1" />
+            <element signature="e#9830#9867#1" />
+            <element signature="e#9944#9983#1" />
+            <element signature="e#10062#10102#1" />
+            <element signature="e#10177#10215#1" />
+            <element signature="docComment;method#getPlaceable#0;class#Board#0" />
+            <element signature="method#getPlaceable#0;class#Board#0" />
+            <element signature="docComment;method#getDestroyable#0;class#Board#0" />
+            <element signature="method#getDestroyable#0;class#Board#0" />
+            <element signature="e#9907#10255#1" />
+            <element signature="e#9948#10249#1" />
+            <element signature="docComment;method#checkTouchingSides#0;class#Board#0" />
+            <element signature="method#checkTouchingSides#0;class#Board#0" />
+            <element signature="docComment;method#startPosition#0;class#Board#0" />
+            <element signature="method#startPosition#0;class#Board#0" />
+            <element signature="docComment;method#topGoalPosition#0;class#Board#0" />
+            <element signature="method#topGoalPosition#0;class#Board#0" />
+            <element signature="docComment;method#middleGoalPosition#0;class#Board#0" />
+            <element signature="method#middleGoalPosition#0;class#Board#0" />
+            <element signature="docComment;method#bottomGoalPosition#0;class#Board#0" />
+            <element signature="method#bottomGoalPosition#0;class#Board#0" />
+            <element signature="docComment;method#cellAt#0;class#Board#0" />
+            <element signature="method#cellAt#0;class#Board#0" />
+            <element signature="docComment;method#cellAt#1;class#Board#0" />
+            <element signature="method#cellAt#1;class#Board#0" />
+            <element signature="docComment;method#cells#0;class#Board#0" />
+            <element signature="method#cells#0;class#Board#0" />
+            <element signature="e#11817#11915#1" />
+            <element signature="e#11858#11909#1" />
+            <element signature="docComment;method#width#0;class#Board#0" />
+            <element signature="method#width#0;class#Board#0" />
+            <element signature="docComment;method#height#0;class#Board#0" />
+            <element signature="method#height#0;class#Board#0" />
+            <element signature="docComment;method#peekGoal#0;class#Board#0" />
+            <element signature="method#peekGoal#0;class#Board#0" />
+            <element signature="e#12438#12613#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="792">
-            <caret line="43" column="27" lean-forward="true" selection-start-line="43" selection-start-column="27" selection-end-line="43" selection-end-column="27" />
-            <folding>
-              <element signature="imports" expanded="true" />
-              <element signature="e#148#149#0" expanded="true" />
-              <element signature="e#169#170#0" expanded="true" />
-            </folding>
-          </first_editor>
-          <second_editor />
+    <entry file="file://$PROJECT_DIR$/src/example/ExampleAI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="44" column="13" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

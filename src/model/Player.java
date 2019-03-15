@@ -16,6 +16,8 @@ public abstract class Player extends GameObserver {
 
   /** The player's name */
   private final String name;
+  /** The player's index */
+  private int index;
   /** The player's hand */
   private ArrayList<Card> cards;
   /** The player's role */
@@ -40,7 +42,8 @@ public abstract class Player extends GameObserver {
    * @param role  the player's role
    * @param cards the supposed card at hand
    */
-  final void initialize(Role role, ArrayList<Card> cards) {
+  final void initialize(int index, Role role, ArrayList<Card> cards) {
+    this.index = index;
     this.role = role;
     this.cards = cards;
     this.sabotaged = new HashSet<>();
@@ -89,7 +92,7 @@ public abstract class Player extends GameObserver {
    */
   final void sabotageTool(Tool tool) throws GameException {
     // Prevent the same tool from being sabotaged again
-    if (sabotaged.contains(tool)) {
+    if (!isSabotageable(tool)) {
       String msgFormat = "%s's %s is already sabotaged";
       throw new GameException(msgFormat, name, tool);
     }
@@ -106,9 +109,7 @@ public abstract class Player extends GameObserver {
    */
   final void repairTool(Tool... tools) throws GameException {
     // Prevent repairing intact tools
-    boolean intact = true;
-    for (Tool tool : tools) intact = intact && !isSabotaged(tool);
-    if (intact) {
+    if (!isRepairable(tools)) {
       String msgFormat = "%s's %s " + (tools.length > 1 ? "are" : "is") + " still intact";
       String toolSentence;
       if (tools.length == 1) {
@@ -154,11 +155,39 @@ public abstract class Player extends GameObserver {
   }
 
   /**
+   * Checks if the specified tool is able to be sabotaged
+   *
+   * @param tool the tool to be sabotaged
+   * @return <code>true</code> if tool is sabotageable
+   */
+  public final boolean isSabotageable(Tool tool) { return !isSabotaged(tool); }
+
+  /**
+   * Checks if the specified tools are repairable. Returns <code>false</code>
+   * if none of the specified tools are sabotaged
+   *
+   * @param tools tools to be repaired
+   * @return <code>false</code> if none of the specified tools are sabotaged
+   */
+  public final boolean isRepairable(Tool... tools) {
+    boolean intact = true;
+    for (Tool tool : tools) intact = intact && !isSabotaged(tool);
+    return !intact;
+  }
+
+  /**
    * Returns the name of the player
    *
    * @return the player's name
    */
   public final String name() { return this.name; }
+
+  /**
+   * Returns the index of the player
+   *
+   * @return the player's index
+   */
+  public final int index() { return this.index; }
 
   /**
    * Returns all the cards at the player's hand

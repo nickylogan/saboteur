@@ -5,6 +5,7 @@
       <w>pickaxe</w>
       <w>placeability</w>
       <w>placeable</w>
+      <w>sabotageable</w>
     </words>
   </dictionary>
 </component>

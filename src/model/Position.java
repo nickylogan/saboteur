@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 @SuppressWarnings("WeakerAccess")
 public class Position {
-  int x, y;
+  public final int x, y;
 
   /**
    * Creates a <code>Position</code> object representing the specified

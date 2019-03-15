@@ -27,9 +27,16 @@ public abstract class GameObserver {
   protected GameState state() { return this.state; }
 
   /**
+   * Returns the game move history
+   *
+   * @return the game move history
+   */
+  protected History history() { return this.history; }
+
+  /**
    * Implement this to do something when prompted with movement
    */
-  public void onMovementPrompt() {}
+  protected void onMovementPrompt() {}
 
   /**
    * Implement this to do something when the game finishes
@@ -37,24 +44,24 @@ public abstract class GameObserver {
    * @param role       the winning role
    * @param lastPlayer the last player to move
    */
-  public void onGameFinished(Player.Role role, int lastPlayer) {}
+  protected void onGameFinished(Player.Role role, int lastPlayer) {}
 
   /**
    * Implement this to do something when the game starts
    */
-  public void onGameStart() {}
+  protected void onGameStart() {}
 
   /**
    * Implement this to do something when the game state changes
    */
-  public void onGameStateChanged() {}
+  protected void onGameStateChanged() {}
 
   /**
    * Implement this to do something when a player moves
    *
    * @param move the player move
    */
-  public void onPlayerMove(@NotNull Move move) {}
+  protected void onPlayerMove(@NotNull Move move) {}
 
   /**
    * Notifies the observer of a movement prompt

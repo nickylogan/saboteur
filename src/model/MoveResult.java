@@ -4,7 +4,7 @@ import model.cards.BoardActionCard.Type;
 
 /**
  * The {@link MoveResult} class represents the result from a player move. This is
- * usually when applying a {@link Move} containing a {@link Type#MAP}
+ * usually when applying a {@link Move} of type {@link Type#MAP}
  */
 @SuppressWarnings("unused")
 public class MoveResult {

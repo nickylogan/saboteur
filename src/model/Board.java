@@ -4,7 +4,9 @@ import com.sun.istack.internal.NotNull;
 import model.cards.PathCard;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 /**
  * The {@link Board} class represents a Saboteur game board.
@@ -206,30 +208,8 @@ public class Board {
     // Check is position is in board
     if (!isInBoard(target)) return false;
 
-    // Do depth-first search from start position
-    HashSet<Position> visited = new HashSet<>();
-    Position start = startPosition();
-    Stack<Position> s = new Stack<>();
-    s.push(start);
-    while (!s.empty()) {
-      Position curr = s.pop();
-      if (visited.contains(curr)) continue;
-      visited.add(curr);
-      Cell currCell = cellAt(curr);
-
-      if (!currCell.hasCard()) continue;
-
-      if (isInBoard(curr.top()) && currCell.topSide() == Cell.Side.PATH) {
-        s.push(curr.top());
-      } else if (isInBoard(curr.right()) && currCell.rightSide() == Cell.Side.PATH) {
-        s.push(curr.right());
-      } else if (isInBoard(curr.bottom()) && currCell.bottomSide() == Cell.Side.PATH) {
-        s.push(curr.bottom());
-      } else if (isInBoard(curr.left()) && currCell.leftSide() == Cell.Side.PATH) {
-        s.push(curr.left());
-      }
-    }
-    return visited.contains(target);
+    Set<Position> reachable = getReachable();
+    return reachable.contains(target);
   }
 
   /**
@@ -252,7 +232,6 @@ public class Board {
    * @param target the target position
    * @return a boolean representing a card's placeability
    */
-  @SuppressWarnings("RedundantIfStatement")
   public final boolean isCardPlaceableAt(@NotNull PathCard card, Position target) {
     // Check target is not null
     if (target == null) return false;
@@ -263,6 +242,90 @@ public class Board {
     // Check if reachable
     if (!isReachable(target)) return false;
 
+    return checkTouchingSides(card, target);
+  }
+
+  /**
+   * Gets all reachable positions from the starting cell
+   *
+   * @return a set containing all reachable positions
+   */
+  public final Set<Position> getReachable() {
+    // Do depth-first search from start position
+    Set<Position> visited = new HashSet<>();
+    Set<Position> reachable = new HashSet<>();
+    Position start = startPosition();
+    Stack<Position> s = new Stack<>();
+    s.push(start);
+    while (!s.empty()) {
+      Position curr = s.pop();
+      if (visited.contains(curr)) continue;
+      visited.add(curr);
+      Cell currCell = cellAt(curr);
+
+      if (!currCell.hasCard()) { reachable.add(curr); }
+
+      if (isInBoard(curr.top()) && currCell.topSide() == Cell.Side.PATH) {
+        s.push(curr.top());
+      } else if (isInBoard(curr.right()) && currCell.rightSide() == Cell.Side.PATH) {
+        s.push(curr.right());
+      } else if (isInBoard(curr.bottom()) && currCell.bottomSide() == Cell.Side.PATH) {
+        s.push(curr.bottom());
+      } else if (isInBoard(curr.left()) && currCell.leftSide() == Cell.Side.PATH) {
+        s.push(curr.left());
+      }
+    }
+    return reachable;
+  }
+
+  /**
+   * Gets all placeable positions of the specified path card
+   *
+   * @param card the path card to be placed
+   * @return a set containing all placeable positions
+   */
+  public final Set<Position> getPlaceable(PathCard card) {
+    Set<Position> reachable = getReachable();
+    return getReachable().stream()
+      .filter(target -> checkTouchingSides(card, target))
+      .collect(Collectors.toSet());
+  }
+
+  /**
+   * Gets all destroyable path cards on the board
+   *
+   * @return a set containing all destroyable positions
+   */
+  public final Set<Position> getDestroyable() {
+    Set<Position> destroyable = new HashSet<>();
+    for (int x = 0; x < width; ++x) {
+      for (int y = 0; y < height; ++y) {
+        Position p = new Position(x, y);
+        if (p.equals(startPosition())
+            || p.equals(topGoalPosition())
+            || p.equals(middleGoalPosition())
+            || p.equals(bottomGoalPosition())
+            || !cellAt(p).hasCard()
+        ) continue;
+        destroyable.add(p);
+      }
+    }
+    return destroyable;
+  }
+
+  /**
+   * Checks the touching sides of the specified path card on the specified target
+   *
+   * @param card   the checked path card
+   * @param target the target position
+   * @return a boolean representing a card's placeability
+   */
+  @SuppressWarnings("RedundantIfStatement")
+  private boolean checkTouchingSides(PathCard card, Position target) {
+    // Check target is not null
+    if (target == null) return false;
+    // Check if target is in board
+    if (!isInBoard(target)) return false;
     // Check touching sides
     if (
       isInBoard(target.top())

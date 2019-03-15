@@ -22,26 +22,13 @@ Final project for Game Theory/AI course.
 
 ### Making your own AI class
 
-Create a new AI class by extending the `AI` class in the `src/ai` directory.
+Create a new package for your AI class. The package **must** contain at least one class, which is your custom AI. 
 
-Here is an example code
-```java
-package ai;
+Your AI class must extend `AI`, and you only need to implement the `makeDecision` method, which will be called automatically when the game prompts you to move. 
 
-import model.GameException;
-import model.Move;
-import model.Player;
+> The `makeDecision` method is set to timeout after `5` seconds.
 
-public class ExampleAI extends AI {
-  public ExampleAI(String name) {
-    super(name);
-  }
-
-  private Move makeDecision() {
-    // 
-  }
-}
-```
+See [src/example/ExampleAI.java](https://github.com/nickylogan/saboteur/blob/master/src/example/ExampleAI.java) for an example implementation.
 
 ## Documentation
 

@@ -3,6 +3,7 @@ package ai;
 import com.sun.istack.internal.NotNull;
 import model.GameException;
 import model.Move;
+import model.MoveResult;
 import model.Player;
 
 import java.util.concurrent.ExecutionException;
@@ -35,6 +36,8 @@ import java.util.concurrent.TimeoutException;
  */
 @SuppressWarnings("unused")
 public abstract class AI extends Player {
+  /** The result of the last move */
+  protected MoveResult lastResult;
   /**
    * Creates an {@link AI} object representing an AI for the game
    *
@@ -46,19 +49,19 @@ public abstract class AI extends Player {
   }
 
   /**
-   * Implement this method to get a decision
+   * Creates a decision based on the game state.
    *
-   * @return Move decided move
+   * @return a {@link Move} representing the AI's decision
    */
-  abstract Move makeDecision();
+  protected abstract Move makeDecision();
 
   @Override
-  public final void onMovementPrompt() {
+  protected final void onMovementPrompt() {
     FutureTask<Move> task = new FutureTask<>(this::makeDecision);
     try {
       new Thread(task).start();
       Move move = task.get(5, TimeUnit.SECONDS);
-      state().playMove(move);
+      lastResult = state().playMove(move);
     } catch (InterruptedException e) {
       System.out.println("Decision making interrupted");
     } catch (TimeoutException e) {
