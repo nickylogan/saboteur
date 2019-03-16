@@ -166,7 +166,7 @@ public class GameLogicController {
       broadcastPlayerMove(move);
       return new MoveResult(true);
     }
-    MoveResult result = playCard(move); // Move.Type.PLAY
+    MoveResult result = playCard(move);
     broadcastPlayerMove(move);
     return result;
   }
@@ -182,11 +182,11 @@ public class GameLogicController {
   private void discardCard(int playerIndex, int handIndex, boolean move) throws GameException {
     // Check if invoker is correct
     if (playerIndex != game.currentPlayerIndex()) {
-      String name = game.players().get(playerIndex).name();
+      String name = game.playerAt(playerIndex).name();
       throw new GameException("It is not %s's turn", name);
     }
     // Take and give card from player
-    Player p = game.players().get(playerIndex);
+    Player p = game.playerAt(playerIndex);
     Card discarded = p.takeCardAt(handIndex);
     if (move) p.addDiscard(discarded);
     p.giveCard(takeCardFromDeck());
@@ -211,18 +211,35 @@ public class GameLogicController {
     // Get player's card
     Card card = playerAt(playerIndex).peekCardAt(handIndex);
     MoveResult result = new MoveResult(true);
-    if (card instanceof PathCard) {
-      ((PathCard) card).setRotated(args[2] == 1);
-      playPathCard(playerIndex, (PathCard) card, args[0], args[1]);
-    } else if (card instanceof PlayerActionCard) {
-      playPlayerActionCard(playerIndex, (PlayerActionCard) card, args[0]);
-    } else if (card.type() == Card.Type.MAP) {
-      Board.GoalPosition pos = Board.GoalPosition.values()[args[0]];
-      result = playMapCard(pos);
-    } else if (card.type() == Card.Type.ROCKFALL) {
-      playRockfallCard(args[0], args[1]);
-    } else {
-      throw new GameException("Unknown type of card: %s", card);
+    switch (move.type()) {
+      case PLAY_PATH:
+        if (!(card instanceof PathCard)) {
+          throw new GameException("Cannot create a path with a non path card");
+        }
+        ((PathCard) card).setRotated(args[2] == 1);
+        playPathCard(playerIndex, (PathCard) card, args[0], args[1]);
+        break;
+      case PLAY_PLAYER:
+        if (!(card instanceof PlayerActionCard)) {
+          throw new GameException("Cannot block/repair another player with a non player-action card");
+        }
+        playPlayerActionCard(playerIndex, (PlayerActionCard) card, args[0]);
+        break;
+      case PLAY_MAP:
+        if (card.type() != Card.Type.MAP) {
+          throw new GameException("Cannot open a goal card with a non map card");
+        }
+        Board.GoalPosition pos = Board.GoalPosition.values()[args[0]];
+        result = playMapCard(pos);
+        break;
+      case PLAY_ROCKFALL:
+        if (card.type() != Card.Type.ROCKFALL) {
+          throw new GameException("Cannot destroy a path with a non rockfall card");
+        }
+        playRockfallCard(args[0], args[1]);
+        break;
+      default:
+        throw new GameException("Unknown move type");
     }
     // Set move card reference
     move.setCard(card.copy());
@@ -260,7 +277,7 @@ public class GameLogicController {
    */
   private void playPlayerActionCard(int playerIndex, PlayerActionCard card, int targetIndex)
     throws GameException {
-    Player p = game.players().get(playerIndex);
+    Player p = game.players().get(targetIndex);
     if (card.type() == Card.Type.BLOCK) {
       if (playerIndex == targetIndex) {
         throw new GameException("Cannot sabotage self");

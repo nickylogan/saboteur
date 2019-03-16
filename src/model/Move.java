@@ -12,7 +12,13 @@ public class Move {
   /**
    * The {@link Move.Type} enum represents all valid player movement types
    */
-  public enum Type {PLAY, DISCARD}
+  public enum Type {
+    PLAY_PATH,
+    PLAY_MAP,
+    PLAY_ROCKFALL,
+    PLAY_PLAYER,
+    DISCARD
+  }
 
   /** The movement type */
   private final Type type;
@@ -63,7 +69,7 @@ public class Move {
    * @return a {@link Move} object representing the move
    */
   public static Move NewPathMove(int playerIndex, int handIndex, int x, int y, boolean rotated) {
-    return new Move(Type.PLAY, playerIndex, handIndex, x, y, rotated ? 1 : 0);
+    return new Move(Type.PLAY_PATH, playerIndex, handIndex, x, y, rotated ? 1 : 0);
   }
 
   /**
@@ -76,7 +82,7 @@ public class Move {
    * @return a {@link Move} object representing the move
    */
   public static Move NewMapMove(int playerIndex, int handIndex, Board.GoalPosition goalPos) {
-    return new Move(Type.PLAY, playerIndex, handIndex, goalPos.ordinal());
+    return new Move(Type.PLAY_MAP, playerIndex, handIndex, goalPos.ordinal());
   }
 
   /**
@@ -89,7 +95,7 @@ public class Move {
    * @return a {@link Move} object representing the move
    */
   public static Move NewRockfallMove(int playerIndex, int handIndex, int x, int y) {
-    return new Move(Type.PLAY, playerIndex, handIndex, x, y);
+    return new Move(Type.PLAY_ROCKFALL, playerIndex, handIndex, x, y);
   }
 
   /**
@@ -101,7 +107,7 @@ public class Move {
    * @return a {@link Move} object representing the move
    */
   public static Move NewPlayerActionMove(int playerIndex, int handIndex, int targetPlayerIndex) {
-    return new Move(Type.PLAY, playerIndex, handIndex, targetPlayerIndex);
+    return new Move(Type.PLAY_PLAYER, playerIndex, handIndex, targetPlayerIndex);
   }
 
   /**

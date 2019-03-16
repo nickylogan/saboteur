@@ -5,6 +5,7 @@ import model.cards.Card;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The {@link Player} class represents a player in the game.
@@ -23,7 +24,7 @@ public abstract class Player extends GameObserver {
   /** The player's role */
   private Role role;
   /** Sabotaged tools of the player */
-  private HashSet<Tool> sabotaged;
+  private Set<Tool> sabotaged;
   /** Discarded cards of the player */
   private ArrayList<Card> discarded;
 
@@ -136,6 +137,15 @@ public abstract class Player extends GameObserver {
    * @param card the discarded card
    */
   final void addDiscard(Card card) { if (card != null) this.discarded.add(card); }
+
+  /**
+   * Returns the sabotaged tools of the player
+   *
+   * @return player's sabotaged tools
+   */
+  public final Tool[] sabotaged() {
+    return sabotaged.toArray(new Tool[0]);
+  }
 
   /**
    * Checks if the player is sabotaged

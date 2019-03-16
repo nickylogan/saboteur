@@ -2,6 +2,7 @@ package main;
 
 import model.*;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main extends GameObserver {
@@ -16,6 +17,9 @@ public class Main extends GameObserver {
   protected void onPlayerMove(Move move) {
     System.out.println(move);
     System.out.println(state().board().getReachable());
+    for (int i = 0; i < 5; ++i) {
+      System.out.println(i + ": " + Arrays.toString(state().playerAt(i).sabotaged()));
+    }
     System.out.print("Press ENTER to continue...");
     sc.nextLine();
   }
@@ -27,6 +31,7 @@ public class Main extends GameObserver {
 
   public static void main(String[] args) throws GameException {
     MockGame game = MockGame.CreateMockGame(new Main());
-    game.addMove(Move.NewPathMove(game.currentPlayerIndex(), 0, 7, 2, false));
+    game.addMove(Move.NewPlayerActionMove(game.currentPlayerIndex(), 2, 2));
+    game.addMove(Move.NewPathMove(game.currentPlayerIndex(), 0, 0, 0, false));
   }
 }
