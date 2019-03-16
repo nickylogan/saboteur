@@ -2,6 +2,8 @@ package model;
 
 import model.cards.Card;
 
+import java.util.Arrays;
+
 /**
  * The {@link Move} class represents a player movement.
  */
@@ -22,7 +24,8 @@ public class Move {
    * <code>args</code> depends on the player movement:
    * <ul>
    * <li>When a card is discarded, <code>args</code> is empty</li>
-   * <li>When a path card is played, <code>args</code> contains the <code>x, y</code> position</li>
+   * <li>When a path card is played, <code>args</code> contains the <code>x, y</code> position</li>,
+   * along with <code> 0</code> or <code>1</code>, marking if the card is rotated
    * <li>When a map card is played, <code>args</code> only contains the goal position <code>(0, 1, or 2)</code></li>
    * <li>When a rockfall card is played, <code>args</code> contains the target <code>x, y</code> position</li>
    * <li>When a block/repair card is played, <code>args</code> contains the target player index</li>
@@ -56,10 +59,11 @@ public class Move {
    * @param handIndex   the index from the player's hand
    * @param x           the target x position
    * @param y           the target y position
+   * @param rotated     flag marking card is supposed to be rotated
    * @return a {@link Move} object representing the move
    */
-  public static Move NewPathMove(int playerIndex, int handIndex, int x, int y) {
-    return new Move(Type.PLAY, playerIndex, handIndex, x, y);
+  public static Move NewPathMove(int playerIndex, int handIndex, int x, int y, boolean rotated) {
+    return new Move(Type.PLAY, playerIndex, handIndex, x, y, rotated ? 1 : 0);
   }
 
   /**
@@ -118,31 +122,47 @@ public class Move {
 
   /**
    * Returns the movement type
+   *
    * @return the movement type
    */
   public final Type type() { return this.type; }
 
   /**
    * Returns the playing player index
+   *
    * @return the playing player index
    */
   public final int playerIndex() { return this.playerIndex; }
 
   /**
    * Returns the player hand index
+   *
    * @return the player hand index
    */
   public final int handIndex() { return this.handIndex; }
 
   /**
    * Returns the movement args
+   *
    * @return the movement args
    */
   public final int[] args() { return this.args.clone(); }
 
   /**
    * Returns the played card
+   *
    * @return the played card
    */
   public final Card card() { return this.card; }
+
+  @Override
+  public String toString() {
+    return "Move{" +
+           "type=" + type +
+           ", playerIndex=" + playerIndex +
+           ", handIndex=" + handIndex +
+           ", args=" + Arrays.toString(args) +
+           ", card=" + card +
+           '}';
+  }
 }

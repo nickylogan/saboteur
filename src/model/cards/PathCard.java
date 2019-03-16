@@ -108,6 +108,15 @@ public class PathCard extends Card {
   public final void rotate() { rotated = !rotated; }
 
   /**
+   * Sets the rotation flag of the path card
+   *
+   * @param rotated <code>true</code> if card is rotated from its default position
+   */
+  public final void setRotated(boolean rotated) {
+    this.rotated = rotated;
+  }
+
+  /**
    * Returns the path type of the card
    *
    * @return the card's path type

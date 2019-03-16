@@ -8,7 +8,7 @@ import com.sun.istack.internal.NotNull;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class GameObserver {
   /** A reference to the game state */
-  private GameState state;
+  private GameLogicController state;
   /** The move history */
   private final History history = new History();
 
@@ -17,14 +17,14 @@ public abstract class GameObserver {
    *
    * @param state the game state
    */
-  final void setState(GameState state) { this.state = state; }
+  final void setState(GameLogicController state) { this.state = state; }
 
   /**
    * Returns the game state reference
    *
    * @return the game state
    */
-  protected GameState state() { return this.state; }
+  protected GameLogicController state() { return this.state; }
 
   /**
    * Returns the game move history

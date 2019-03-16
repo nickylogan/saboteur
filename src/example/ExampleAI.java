@@ -42,7 +42,7 @@ public class ExampleAI extends AI {
     ArrayList<Card> cards = hand();
 
     // state() is used to get the game state
-    GameState state = state();
+    GameLogicController state = state();
 
     // Iterate through hand
     for (int cardIndex = 0; cardIndex < cards.size(); ++cardIndex) {
@@ -55,7 +55,7 @@ public class ExampleAI extends AI {
         pCard.rotate();
         Set<Position> placeable = state.board().getPlaceable(pCard);
         Position target = placeable.toArray(new Position[0])[0];
-        move = Move.NewPathMove(myIndex, cardIndex, target.x, target.y);
+        move = Move.NewPathMove(myIndex, cardIndex, target.x, target.y, true);
         break;
       }
 
@@ -93,7 +93,7 @@ public class ExampleAI extends AI {
       if (card.type() == Card.Type.ROCKFALL) {
         Set<Position> destroyable = state.board().getDestroyable();
         Position target = destroyable.toArray(new Position[0])[1];
-        move = Move.NewPathMove(myIndex, cardIndex, target.x, target.y);
+        move = Move.NewRockfallMove(myIndex, cardIndex, target.x, target.y);
         break;
       }
 

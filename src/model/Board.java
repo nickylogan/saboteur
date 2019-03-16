@@ -253,7 +253,6 @@ public class Board {
   public final Set<Position> getReachable() {
     // Do depth-first search from start position
     Set<Position> visited = new HashSet<>();
-    Set<Position> reachable = new HashSet<>();
     Position start = startPosition();
     Stack<Position> s = new Stack<>();
     s.push(start);
@@ -263,19 +262,22 @@ public class Board {
       visited.add(curr);
       Cell currCell = cellAt(curr);
 
-      if (!currCell.hasCard()) { reachable.add(curr); }
+      if (!currCell.hasCard()) { continue; }
 
       if (isInBoard(curr.top()) && currCell.topSide() == Cell.Side.PATH) {
         s.push(curr.top());
-      } else if (isInBoard(curr.right()) && currCell.rightSide() == Cell.Side.PATH) {
+      }
+      if (isInBoard(curr.right()) && currCell.rightSide() == Cell.Side.PATH) {
         s.push(curr.right());
-      } else if (isInBoard(curr.bottom()) && currCell.bottomSide() == Cell.Side.PATH) {
+      }
+      if (isInBoard(curr.bottom()) && currCell.bottomSide() == Cell.Side.PATH) {
         s.push(curr.bottom());
-      } else if (isInBoard(curr.left()) && currCell.leftSide() == Cell.Side.PATH) {
+      }
+      if (isInBoard(curr.left()) && currCell.leftSide() == Cell.Side.PATH) {
         s.push(curr.left());
       }
     }
-    return reachable;
+    return visited;
   }
 
   /**

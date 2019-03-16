@@ -71,10 +71,7 @@ public class Cell implements Cloneable {
         .map(val -> val == PathCard.Side.DEADEND ? Side.DEADEND : Side.ROCK)
         .collect(Collectors.toList());
     }
-    if (cardCopy.rotated()) {
-      Collections.rotate(newSides, 2);
-    }
-    this.sides = (Side[]) newSides.toArray();
+    this.sides = newSides.toArray(new Side[0]);
   }
 
   /**

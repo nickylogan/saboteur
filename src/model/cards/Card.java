@@ -47,7 +47,13 @@ public abstract class Card {
 
   /**
    * Creates a deep copy {@link Card} object of the current card
+   *
    * @return the card copy
    */
   public abstract Card copy();
+
+  @Override
+  public String toString() {
+    return "Card{" + name() + '}';
+  }
 }
