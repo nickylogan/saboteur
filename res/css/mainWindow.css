@@ -1,0 +1,64 @@
+@font-face {
+    src: url('fonts/morpheus.ttf');
+}
+
+.root {
+    -fx-font-size: 12px;
+}
+
+.main {
+    -fx-background-image: url('img/background.png');
+    -fx-background-repeat: repeat;
+    -fx-background-size: contain;
+    /*-fx-font-family: Consolas;*/
+}
+
+.status {
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+.nextButton {
+    -fx-text-fill: white;
+    -fx-font-size: 1.5em;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url('img/button.png');
+    -fx-background-size: cover;
+    -fx-background-radius: 10px;
+    -fx-border-width: 1;
+    -fx-border-color: #555;
+    -fx-border-radius: 10px;
+    -fx-padding: .75em;
+    -fx-font-family: "Morpheus";
+}
+
+.nextButton:hover {
+    -fx-opacity: 80%;
+}
+
+.playerScroll, .playerScroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.logScroll, .logScroll .viewport {
+    -fx-background-color: rgba(0, 0, 0, .25);
+}
+
+.collapseLogButton {
+    -fx-background-color: rgba(255, 255, 255, .75);
+    -fx-font-size: 2em;
+    -fx-font-weight: bold;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-font-family: Consolas;
+}
+
+.card {
+    -fx-background-radius: 10px;
+}
+
+.collapseLogButton:hover {
+    -fx-background-color: rgba(255, 255, 255, .5);
+}

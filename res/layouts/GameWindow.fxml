@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="576.0" prefWidth="1024.0" styleClass="main" stylesheets="@../css/mainWindow.css" type="BorderPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <right>
+      <VBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="576.0" prefWidth="331.0" BorderPane.alignment="CENTER">
+         <children>
+            <ScrollPane fx:id="playerScroll" styleClass="playerScroll" VBox.vgrow="ALWAYS">
+               <content>
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" />
+               </content>
+            </ScrollPane>
+            <Button fx:id="nextButton" alignment="CENTER_RIGHT" mnemonicParsing="false" styleClass="nextButton" text="NEXT TURN" textAlignment="CENTER">
+               <VBox.margin>
+                  <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="AdrianeText" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+   </right>
+   <left>
+      <HBox BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <children>
+            <ScrollPane fx:id="logScroll" minWidth="-Infinity" prefHeight="510.0" prefWidth="240.0" styleClass="logScroll">
+               <content>
+                  <VBox maxWidth="1.7976931348623157E308" />
+               </content>
+               <HBox.margin>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </HBox.margin>
+            </ScrollPane>
+            <Button fx:id="collapseLogButton" alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="collapseLogButton" text="←" textAlignment="CENTER">
+               <HBox.margin>
+                  <Insets bottom="8.0" right="8.0" top="8.0" />
+               </HBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </HBox>
+   </left>
+</fx:root>

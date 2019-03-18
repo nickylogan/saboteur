@@ -1,11 +1,12 @@
 package ai;
 
-import com.sun.istack.internal.NotNull;
 import model.GameException;
 import model.Move;
 import model.MoveResult;
 import model.Player;
+import model.cards.Card;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +39,7 @@ import java.util.concurrent.TimeoutException;
 public abstract class AI extends Player {
   /** The result of the last move */
   protected MoveResult lastResult;
+
   /**
    * Creates an {@link AI} object representing an AI for the game
    *
@@ -70,4 +72,13 @@ public abstract class AI extends Player {
       System.out.println(e.getMessage());
     }
   }
+
+  @Override
+  protected final void onPlayerMove(Move move, Card newCard) {}
+
+  @Override
+  protected final void onGameStart() { }
+
+  @Override
+  protected final void onNextTurn(int player, ArrayList<Card> hand) { }
 }

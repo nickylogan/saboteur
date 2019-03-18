@@ -1,6 +1,10 @@
 package model;
 
 import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
+import model.cards.Card;
+
+import java.util.ArrayList;
 
 /**
  * The {@link GameObserver} interface represents an observer for
@@ -61,7 +65,15 @@ public abstract class GameObserver {
    *
    * @param move the player move
    */
-  protected void onPlayerMove(@NotNull Move move) {}
+  protected void onPlayerMove(@NotNull Move move, @Nullable Card newCard) {}
+
+  /**
+   * Implement this to do something when it is the next turn
+   *
+   * @param player the next player
+   * @param hand   the next player's hand
+   */
+  protected void onNextTurn(int player, ArrayList<Card> hand) { }
 
   /**
    * Notifies the observer of a movement prompt
@@ -81,11 +93,12 @@ public abstract class GameObserver {
   /**
    * Notifies the observer of a new player move
    *
-   * @param move the player move
+   * @param move    the player move
+   * @param newCard the player's new card
    */
-  final void notifyPlayerMove(@NotNull Move move) {
+  final void notifyPlayerMove(@NotNull Move move, @Nullable Card newCard) {
     history.appendMove(move);
-    onPlayerMove(move);
+    onPlayerMove(move, newCard);
   }
 
   /**
@@ -94,4 +107,9 @@ public abstract class GameObserver {
   final void notifyGameStateChanged() {
     onGameStateChanged();
   }
+
+  /**
+   * Notifies the observer that it is the next player's turn
+   */
+  final void notifyNextPlayer(int player, ArrayList<Card> hand) { onNextTurn(player, hand); }
 }

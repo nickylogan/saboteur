@@ -3,6 +3,7 @@ package model;
 import com.sun.istack.internal.NotNull;
 import model.cards.PathCard;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
@@ -34,6 +35,8 @@ public class Board {
   private GoalType middleGoal;
   /** The bottom goal card */
   private GoalType bottomGoal;
+  /** Marks the top goal as opened */
+  private boolean topGoalOpened;
 
   /**
    * Creates a {@link Board} object.
@@ -289,7 +292,13 @@ public class Board {
   public final Set<Position> getPlaceable(PathCard card) {
     Set<Position> reachable = getReachable();
     return getReachable().stream()
-      .filter(target -> checkTouchingSides(card, target))
+      .filter(p ->
+        !(p.equals(startPosition())
+          || p.equals(topGoalPosition())
+          || p.equals(middleGoalPosition())
+          || p.equals(bottomGoalPosition())
+          || cellAt(p).hasCard())
+        && checkTouchingSides(card, p))
       .collect(Collectors.toSet());
   }
 

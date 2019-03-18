@@ -1,6 +1,7 @@
 package model;
 
 import com.sun.istack.internal.NotNull;
+import javafx.util.Pair;
 import model.cards.BoardActionCard;
 import model.cards.Card;
 import model.cards.PathCard;
@@ -133,6 +134,7 @@ public class GameLogicController {
     game.setCurrentPlayerIndex(new Random().nextInt(numPlayers));
     game.setStarted(true);
     broadcastGameStarted();
+    broadcastNextTurn();
     currentPlayer().notifyPromptMovement();
   }
 
@@ -149,6 +151,7 @@ public class GameLogicController {
     }
     game.incrementPlayerIndex();
     broadcastStateChanged();
+    broadcastNextTurn();
     currentPlayer().notifyPromptMovement();
   }
 
@@ -162,13 +165,13 @@ public class GameLogicController {
   public final MoveResult playMove(@NotNull Move move) throws GameException {
     if (move == null) return null;
     if (move.type() == Move.Type.DISCARD) {
-      discardCard(move.playerIndex(), move.handIndex(), true);
-      broadcastPlayerMove(move);
+      Card card = discardCard(move.playerIndex(), move.handIndex(), true);
+      broadcastPlayerMove(move, card);
       return new MoveResult(true);
     }
-    MoveResult result = playCard(move);
-    broadcastPlayerMove(move);
-    return result;
+    Pair<MoveResult, Card> res = playCard(move);
+    broadcastPlayerMove(move, res.getValue());
+    return res.getKey();
   }
 
   /**
@@ -178,8 +181,9 @@ public class GameLogicController {
    * @param handIndex   the player hand index
    * @param move        marks whether it is purely the move
    * @throws GameException when an invalid discard is invoked
+   * @return the new added card
    */
-  private void discardCard(int playerIndex, int handIndex, boolean move) throws GameException {
+  private Card discardCard(int playerIndex, int handIndex, boolean move) throws GameException {
     // Check if invoker is correct
     if (playerIndex != game.currentPlayerIndex()) {
       String name = game.playerAt(playerIndex).name();
@@ -189,17 +193,19 @@ public class GameLogicController {
     Player p = game.playerAt(playerIndex);
     Card discarded = p.takeCardAt(handIndex);
     if (move) p.addDiscard(discarded);
-    p.giveCard(takeCardFromDeck());
+    Card card = takeCardFromDeck();
+    p.giveCard(card);
+    return card;
   }
 
   /**
    * Plays a card
    *
    * @param move the move to be played
-   * @return result if any, e.g. peeking a goal card
+   * @return result if any, e.g. peeking a goal card + the new card
    * @throws GameException when an invalid move is applied
    */
-  private MoveResult playCard(Move move) throws GameException {
+  private Pair<MoveResult, Card> playCard(Move move) throws GameException {
     int playerIndex = move.playerIndex();
     int handIndex = move.handIndex();
     int[] args = move.args();
@@ -244,9 +250,9 @@ public class GameLogicController {
     // Set move card reference
     move.setCard(card.copy());
     // Discard the played card
-    discardCard(playerIndex, handIndex, false);
+    Card newCard = discardCard(playerIndex, handIndex, false);
 
-    return result;
+    return new Pair<>(result, newCard);
   }
 
   /**
@@ -380,11 +386,19 @@ public class GameLogicController {
   }
 
   /**
+   * Broadcast to all observers that it is the next turn
+   */
+  private void broadcastNextTurn() {
+    ArrayList<Card> hand = new ArrayList<>(currentPlayer().hand());
+    nonPlayerObservers.forEach(o -> o.notifyNextPlayer(currentPlayerIndex(), hand));
+  }
+
+  /**
    * Broadcast to all players and observers of a new player move
    */
-  private void broadcastPlayerMove(Move move) {
-    game.players().forEach(p -> p.notifyPlayerMove(move));
-    nonPlayerObservers.forEach(o -> o.notifyPlayerMove(move));
+  private void broadcastPlayerMove(Move move, Card newCard) {
+    game.players().forEach(p -> p.notifyPlayerMove(move, newCard));
+    nonPlayerObservers.forEach(o -> o.notifyPlayerMove(move, newCard));
   }
 
   /**
@@ -438,6 +452,15 @@ public class GameLogicController {
    * @return number of saboteurs in the current game
    */
   public final int numSaboteurs() { return game.numSaboteurs(); }
+
+  /**
+   * Returns the remaining deck size
+   *
+   * @return the remaining deck size
+   */
+  public final int drawPileSize() {
+    return game.deck().size();
+  }
 
   /**
    * Returns the current game board
