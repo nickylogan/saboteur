@@ -5,6 +5,8 @@ import com.sun.istack.internal.Nullable;
 import model.cards.Card;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The {@link GameObserver} interface represents an observer for
@@ -12,23 +14,25 @@ import java.util.ArrayList;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class GameObserver {
   /** A reference to the game state */
-  private GameLogicController state;
+  private GameLogicController game;
   /** The move history */
   private final History history = new History();
+  /** Known goal cards */
+  private final Map<Board.GoalPosition, GoalType> knownGoals = new HashMap<>();
 
   /**
    * Sets the game state reference of the player
    *
    * @param state the game state
    */
-  final void setState(GameLogicController state) { this.state = state; }
+  final void setGame(GameLogicController state) { this.game = state; }
 
   /**
    * Returns the game state reference
    *
    * @return the game state
    */
-  protected GameLogicController state() { return this.state; }
+  protected GameLogicController game() { return this.game; }
 
   /**
    * Returns the game move history
@@ -36,6 +40,15 @@ public abstract class GameObserver {
    * @return the game move history
    */
   protected History history() { return this.history; }
+
+  /**
+   * Returns the known goals
+   *
+   * @return the known goals
+   */
+  protected Map<Board.GoalPosition, GoalType> knownGoals() {
+    return knownGoals;
+  }
 
   /**
    * Implement this to do something when prompted with movement
@@ -76,6 +89,15 @@ public abstract class GameObserver {
   protected void onNextTurn(int player, ArrayList<Card> hand) { }
 
   /**
+   * Implement this to do something when a goal card is opened
+   *
+   * @param position  the goal position
+   * @param goalType  the opened goal card
+   * @param permanent marks if the goal card is opened permanently
+   */
+  protected void onGoalOpen(Board.GoalPosition position, GoalType goalType, boolean permanent) { }
+
+  /**
    * Notifies the observer of a movement prompt
    */
   final void notifyPromptMovement() { onMovementPrompt(); }
@@ -112,4 +134,16 @@ public abstract class GameObserver {
    * Notifies the observer that it is the next player's turn
    */
   final void notifyNextPlayer(int player, ArrayList<Card> hand) { onNextTurn(player, hand); }
+
+  /**
+   * Notifies the observer of an open goal card
+   *
+   * @param pos       the goal position
+   * @param goalType  the opened goal card
+   * @param permanent marks if the goal card is opened permanently
+   */
+  final void notifyGoalOpen(Board.GoalPosition pos, GoalType goalType, boolean permanent) {
+    this.knownGoals.put(pos, goalType);
+    onGoalOpen(pos, goalType, permanent);
+  }
 }

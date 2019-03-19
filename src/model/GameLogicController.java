@@ -1,15 +1,12 @@
 package model;
 
 import com.sun.istack.internal.NotNull;
-import javafx.util.Pair;
 import model.cards.BoardActionCard;
 import model.cards.Card;
 import model.cards.PathCard;
 import model.cards.PlayerActionCard;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /**
  * The {@link GameLogicController} class contains all the necessary logic
@@ -76,7 +73,7 @@ public class GameLogicController {
     game = state;
 
     ArrayList<Player> playerList = new ArrayList<>(Arrays.asList(players));
-    playerList.forEach(p -> p.setState(this));
+    playerList.forEach(p -> p.setGame(this));
     game.setPlayers(playerList);
     this.nonPlayerObservers = new ArrayList<>();
   }
@@ -143,6 +140,15 @@ public class GameLogicController {
    */
   public final void finalizeTurn() {
     Player.Role winner = this.checkEndGame();
+    if(board().isReachable(board().topGoalPosition())) {
+      broadcastGoalOpened(Board.GoalPosition.TOP);
+    }
+    if(board().isReachable(board().middleGoalPosition())) {
+      broadcastGoalOpened(Board.GoalPosition.MIDDLE);
+    }
+    if(board().isReachable(board().bottomGoalPosition())) {
+      broadcastGoalOpened(Board.GoalPosition.BOTTOM);
+    }
     if (winner != null) {
       game.setFinished(true);
       game.setStarted(false);
@@ -159,19 +165,16 @@ public class GameLogicController {
    * Applies a {@link Move} object, which represents a player's move on their turn
    *
    * @param move the move to be played
-   * @return result if any, e.g. peeking a goal card
    * @throws GameException when an invalid move is applied
    */
-  public final MoveResult playMove(@NotNull Move move) throws GameException {
-    if (move == null) return null;
+  public final void playMove(@NotNull Move move) throws GameException {
+    if (move == null) return;
     if (move.type() == Move.Type.DISCARD) {
       Card card = discardCard(move.playerIndex(), move.handIndex(), true);
       broadcastPlayerMove(move, card);
-      return new MoveResult(true);
     }
-    Pair<MoveResult, Card> res = playCard(move);
-    broadcastPlayerMove(move, res.getValue());
-    return res.getKey();
+    Card card = playCard(move);
+    broadcastPlayerMove(move, card);
   }
 
   /**
@@ -180,8 +183,8 @@ public class GameLogicController {
    * @param playerIndex the playing player
    * @param handIndex   the player hand index
    * @param move        marks whether it is purely the move
-   * @throws GameException when an invalid discard is invoked
    * @return the new added card
+   * @throws GameException when an invalid discard is invoked
    */
   private Card discardCard(int playerIndex, int handIndex, boolean move) throws GameException {
     // Check if invoker is correct
@@ -202,10 +205,10 @@ public class GameLogicController {
    * Plays a card
    *
    * @param move the move to be played
-   * @return result if any, e.g. peeking a goal card + the new card
+   * @return the new card
    * @throws GameException when an invalid move is applied
    */
-  private Pair<MoveResult, Card> playCard(Move move) throws GameException {
+  private Card playCard(Move move) throws GameException {
     int playerIndex = move.playerIndex();
     int handIndex = move.handIndex();
     int[] args = move.args();
@@ -216,7 +219,6 @@ public class GameLogicController {
     }
     // Get player's card
     Card card = playerAt(playerIndex).peekCardAt(handIndex);
-    MoveResult result = new MoveResult(true);
     switch (move.type()) {
       case PLAY_PATH:
         if (!(card instanceof PathCard)) {
@@ -236,7 +238,7 @@ public class GameLogicController {
           throw new GameException("Cannot open a goal card with a non map card");
         }
         Board.GoalPosition pos = Board.GoalPosition.values()[args[0]];
-        result = playMapCard(pos);
+        playMapCard(playerIndex, pos);
         break;
       case PLAY_ROCKFALL:
         if (card.type() != Card.Type.ROCKFALL) {
@@ -250,9 +252,7 @@ public class GameLogicController {
     // Set move card reference
     move.setCard(card.copy());
     // Discard the played card
-    Card newCard = discardCard(playerIndex, handIndex, false);
-
-    return new Pair<>(result, newCard);
+    return discardCard(playerIndex, handIndex, false);
   }
 
   /**
@@ -290,19 +290,18 @@ public class GameLogicController {
       }
       p.sabotageTool(card.effects()[0]);
     } else if (card.type() == Card.Type.REPAIR) {
-      p.repairTool(card.effects());
+      p.repairTools(card.effects());
     }
   }
 
   /**
    * Plays a map card on the specified goal position
    *
+   * @param playerIndex the playing player
    * @param goalPos the goal position
-   * @return a {@link MoveResult} containing the goal type
    */
-  private MoveResult playMapCard(Board.GoalPosition goalPos) {
-    GoalType type = game.board().peekGoal(goalPos);
-    return new MoveResult(type);
+  private void playMapCard(int playerIndex, Board.GoalPosition goalPos) {
+    sendGoalType(playerIndex, goalPos);
   }
 
   /**
@@ -346,7 +345,7 @@ public class GameLogicController {
    * @param observer the observer to be added
    */
   public void addObserver(@NotNull GameObserver observer) {
-    observer.setState(this);
+    observer.setGame(this);
     nonPlayerObservers.add(observer);
   }
 
@@ -418,11 +417,34 @@ public class GameLogicController {
   }
 
   /**
-   * Broadcast to all players and observers that
+   * Broadcast to all players and observers that the game has started
    */
   private void broadcastGameStarted() {
     game.players().forEach(GameObserver::notifyGameStarted);
     nonPlayerObservers.forEach(GameObserver::notifyGameStarted);
+  }
+
+  /**
+   * Broadcast to all players and observers that a goal card was opened
+   *
+   * @param position the opened goal position
+   */
+  private void broadcastGoalOpened(Board.GoalPosition position) {
+    GoalType type = board().peekGoal(position);
+    game.players().forEach(p -> p.notifyGoalOpen(position, type, true));
+    nonPlayerObservers.forEach(o -> o.notifyGoalOpen(position, type, true));
+  }
+
+  /**
+   * Sends the specified playerIndex, and all observers the specified goal
+   *
+   * @param playerIndex recipient player
+   * @param position    the opened goal position
+   */
+  private void sendGoalType(int playerIndex, Board.GoalPosition position) {
+    GoalType type = board().peekGoal(position);
+    playerAt(playerIndex).notifyGoalOpen(position, type, false);
+    nonPlayerObservers.forEach(o -> o.notifyGoalOpen(position, type, false));
   }
 
   /**

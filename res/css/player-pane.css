@@ -1,0 +1,8 @@
+.playerPane {
+    -fx-background-color: rgba(0,0,0,0.5);
+}
+
+.name {
+    -fx-font-family: Augusta;
+    -fx-font-size: 16px;
+}

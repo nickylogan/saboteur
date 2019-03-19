@@ -2,7 +2,6 @@ package ai;
 
 import model.GameException;
 import model.Move;
-import model.MoveResult;
 import model.Player;
 import model.cards.Card;
 
@@ -37,9 +36,6 @@ import java.util.concurrent.TimeoutException;
  */
 @SuppressWarnings("unused")
 public abstract class AI extends Player {
-  /** The result of the last move */
-  protected MoveResult lastResult;
-
   /**
    * Creates an {@link AI} object representing an AI for the game
    *
@@ -63,7 +59,7 @@ public abstract class AI extends Player {
     try {
       new Thread(task).start();
       Move move = task.get(5, TimeUnit.SECONDS);
-      lastResult = state().playMove(move);
+      game().playMove(move);
     } catch (InterruptedException e) {
       System.out.println("Decision making interrupted");
     } catch (TimeoutException e) {
@@ -73,8 +69,17 @@ public abstract class AI extends Player {
     }
   }
 
+  /**
+   * Implement this to do something when another player moves
+   *
+   * @param move the played move
+   */
+  protected void onOtherPlayerMove(Move move) { }
+
   @Override
-  protected final void onPlayerMove(Move move, Card newCard) {}
+  protected final void onPlayerMove(Move move, Card newCard) {
+    if(move.playerIndex() != index()) onOtherPlayerMove(move);
+  }
 
   @Override
   protected final void onGameStart() { }

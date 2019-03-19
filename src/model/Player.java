@@ -108,7 +108,7 @@ public abstract class Player extends GameObserver {
    * @param tools the tools to be repaired
    * @throws GameException when none of the given <code>tools</code> are sabotaged
    */
-  final void repairTool(Tool... tools) throws GameException {
+  final void repairTools(Tool... tools) throws GameException {
     // Prevent repairing intact tools
     if (!isRepairable(tools)) {
       String msgFormat = "%s's %s " + (tools.length > 1 ? "are" : "is") + " still intact";
@@ -116,7 +116,7 @@ public abstract class Player extends GameObserver {
       if (tools.length == 1) {
         toolSentence = tools[0].name().toLowerCase();
       } else if (tools.length == 2) {
-        toolSentence = tools[0].name().toLowerCase() + " and" + tools[1].name().toLowerCase();
+        toolSentence = tools[0].name().toLowerCase() + " and " + tools[1].name().toLowerCase();
       } else {
         String[] pre = Arrays
           .stream(Arrays.copyOfRange(tools, 0, tools.length - 1))
@@ -198,6 +198,15 @@ public abstract class Player extends GameObserver {
    * @return the player's index
    */
   public final int index() { return this.index; }
+
+  /**
+   * Returns the number of cards at the players hand
+   *
+   * @return the number of cards at the players hand
+   */
+  public final int handSize() {
+    return cards.size();
+  }
 
   /**
    * Returns all the cards at the player's hand

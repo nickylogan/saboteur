@@ -89,7 +89,10 @@ public class GameState {
    * Increments the current player index, and wraps around <code>numPlayers</code>
    */
   public final void incrementPlayerIndex() {
-    currentPlayerIndex = (currentPlayerIndex + 1) % numPlayers;
+    int i = 0;
+    do {
+      currentPlayerIndex = (currentPlayerIndex + 1) % numPlayers;
+    } while (currentPlayer().handSize() == 0 && ++i < numPlayers);
   }
 
   /**

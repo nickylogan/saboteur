@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="227.0" styleClass="playerPane" stylesheets="@../css/player.css" type="HBox" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox prefHeight="77.0" prefWidth="168.0" HBox.hgrow="ALWAYS">
+         <children>
+            <Label fx:id="name" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="104.0" styleClass="name" text="Label" textFill="WHITE" VBox.vgrow="ALWAYS">
+               <padding>
+                  <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+               </padding>
+            </Label>
+            <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" prefHeight="41.0" prefWidth="104.0" spacing="12.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <ImageView fx:id="pickIcon" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/icons/pick_intact.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="lanternIcon" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/icons/lantern_intact.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="cartIcon" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/icons/cart_intact.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+      <StackPane prefHeight="77.0" prefWidth="118.0">
+         <children>
+            <ImageView fitHeight="82.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/cards/playable_back.png" />
+               </image>
+            </ImageView>
+         </children>
+      </StackPane>
+   </children>
+</fx:root>
