@@ -1,0 +1,18 @@
+.main {
+    -fx-border-image-source: url('../img/ui/dark-pane.png');
+    -fx-border-image-slice: 124px fill;
+    -fx-border-image-width: 62px;
+}
+
+.header {
+    -fx-background-color: transparent;
+    -fx-border-image-source: url('../img/ui/dark-header.png');
+    -fx-border-image-slice: 80px fill;
+    -fx-border-image-width: 24px 28px;
+}
+
+.header-label {
+    -fx-font-family: Nevis;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+}
