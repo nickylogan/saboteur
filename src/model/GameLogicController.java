@@ -21,6 +21,13 @@ public class GameLogicController {
   /** The default card deck amount */
   public static HashMap<String, Integer> CARD_COMPOSITION = new HashMap<>();
 
+  /** Marks the top goal as opened */
+  private boolean topGoalOpened;
+  /** Marks the top goal as opened */
+  private boolean middleGoalOpened;
+  /** Marks the top goal as opened */
+  private boolean bottomGoalOpened;
+
   /* initialize {@link GameState#CARD_COMPOSITION} */
   static {
     CARD_COMPOSITION.put(PathCard.Type.CROSSROAD_PATH.name(), 5);
@@ -140,14 +147,17 @@ public class GameLogicController {
    */
   public final void finalizeTurn() {
     Player.Role winner = this.checkEndGame();
-    if(board().isReachable(board().topGoalPosition())) {
+    if (board().isReachable(board().topGoalPosition()) && !topGoalOpened) {
       broadcastGoalOpened(Board.GoalPosition.TOP);
+      topGoalOpened = true;
     }
-    if(board().isReachable(board().middleGoalPosition())) {
+    if (board().isReachable(board().middleGoalPosition()) && !middleGoalOpened) {
       broadcastGoalOpened(Board.GoalPosition.MIDDLE);
+      middleGoalOpened = true;
     }
-    if(board().isReachable(board().bottomGoalPosition())) {
+    if (board().isReachable(board().bottomGoalPosition()) && !bottomGoalOpened) {
       broadcastGoalOpened(Board.GoalPosition.BOTTOM);
+      bottomGoalOpened = true;
     }
     if (winner != null) {
       game.setFinished(true);
@@ -246,6 +256,8 @@ public class GameLogicController {
         }
         playRockfallCard(args[0], args[1]);
         break;
+      case DISCARD:
+        break;
       default:
         throw new GameException("Unknown move type");
     }
@@ -298,7 +310,7 @@ public class GameLogicController {
    * Plays a map card on the specified goal position
    *
    * @param playerIndex the playing player
-   * @param goalPos the goal position
+   * @param goalPos     the goal position
    */
   private void playMapCard(int playerIndex, Board.GoalPosition goalPos) {
     sendGoalType(playerIndex, goalPos);

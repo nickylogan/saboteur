@@ -149,28 +149,28 @@ public class PathCard extends Card {
    *
    * @return the top side value
    */
-  public final Side topSide() { return pathType.sides[0]; }
+  public final Side topSide() { return sides()[0]; }
 
   /**
    * Returns the right side value
    *
    * @return the right side value
    */
-  public final Side rightSide() { return pathType.sides[1]; }
+  public final Side rightSide() { return sides()[1]; }
 
   /**
    * Returns the bottom side value
    *
    * @return the bottom side value
    */
-  public final Side bottomSide() { return pathType.sides[2]; }
+  public final Side bottomSide() { return sides()[2]; }
 
   /**
    * Returns the left side value
    *
    * @return the left side value
    */
-  public final Side leftSide() { return pathType.sides[3]; }
+  public final Side leftSide() { return sides()[3]; }
 
   @Override
   public final String name() { return pathType.name(); }

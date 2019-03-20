@@ -59,6 +59,7 @@ public abstract class AI extends Player {
     try {
       new Thread(task).start();
       Move move = task.get(5, TimeUnit.SECONDS);
+      System.out.println(move);
       game().playMove(move);
     } catch (InterruptedException e) {
       System.out.println("Decision making interrupted");

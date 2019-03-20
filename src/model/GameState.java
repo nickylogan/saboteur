@@ -173,4 +173,11 @@ public class GameState {
    * @return the current game board
    */
   public final Board board() { return board; }
+
+  /**
+   * Returns the goal type
+   */
+  public final GoalType getGoal(Board.GoalPosition pos) {
+    return board().peekGoal(pos);
+  }
 }

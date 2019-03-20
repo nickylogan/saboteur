@@ -121,9 +121,8 @@ public class MockGame extends GameLogicController {
     return game;
   }
 
-  public MoveResult addMove(Move move) throws GameException {
-    MoveResult result = playMove(move);
+  public void addMove(Move move) throws GameException {
+    playMove(move);
     finalizeTurn();
-    return result;
   }
 }

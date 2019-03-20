@@ -239,12 +239,26 @@ public class Board {
     // Check target is not null
     if (target == null) return false;
     // Check if target is in board
-    if (!isInBoard(target)) return false;
+    if (!isInBoard(target)) {
+      System.out.println(target + " out of bounds");
+      return false;
+    }
     // Check if cell contains a card
-    if (cellAt(target).hasCard()) return false;
+    if (cellAt(target).hasCard()) {
+      System.out.println(target + " not empty");
+      System.out.println(Arrays.toString(cellAt(target).sides()));
+      return false;
+    }
     // Check if reachable
-    if (!isReachable(target)) return false;
+    if (!isReachable(target)) {
+      System.out.println(target + " unreachable");
+      System.out.println(getReachable());
+      return false;
+    }
 
+    if (!checkTouchingSides(card, target)) {
+      System.out.println(target + " invalid sides");
+    }
     return checkTouchingSides(card, target);
   }
 
@@ -333,6 +347,7 @@ public class Board {
    */
   @SuppressWarnings("RedundantIfStatement")
   private boolean checkTouchingSides(PathCard card, Position target) {
+    System.out.println(card);
     // Check target is not null
     if (target == null) return false;
     // Check if target is in board
@@ -343,25 +358,37 @@ public class Board {
       && cellAt(target.top()).bottomSide() != Cell.Side.EMPTY
       && cellAt(target.top()).bottomSide().val() != card.topSide().val()
       && cellAt(target.top()).bottomSide().val() + card.topSide().val() < 0
-    ) return false;
+    ) {
+      System.out.printf("cell(bottom: %s) vs card(top: %s)\n", cellAt(target.top()).bottomSide(), card.topSide());
+      return false;
+    }
     if (
       isInBoard(target.right())
       && cellAt(target.right()).leftSide() != Cell.Side.EMPTY
       && cellAt(target.right()).leftSide().val() != card.rightSide().val()
       && cellAt(target.right()).leftSide().val() + card.rightSide().val() < 0
-    ) return false;
+    ) {
+      System.out.printf("cell(left: %s) vs card(right: %s)\n", cellAt(target.right()).leftSide(), card.rightSide());
+      return false;
+    }
     if (
       isInBoard(target.bottom())
       && cellAt(target.bottom()).topSide() != Cell.Side.EMPTY
       && cellAt(target.bottom()).topSide().val() != card.bottomSide().val()
       && cellAt(target.bottom()).topSide().val() + card.bottomSide().val() < 0
-    ) return false;
+    ) {
+      System.out.printf("cell(top: %s) vs card(bottom: %s)\n", cellAt(target.bottom()).topSide(), card.bottomSide());
+      return false;
+    }
     if (
       isInBoard(target.left())
       && cellAt(target.left()).rightSide() != Cell.Side.EMPTY
       && cellAt(target.left()).rightSide().val() != card.leftSide().val()
       && cellAt(target.left()).rightSide().val() + card.leftSide().val() < 0
-    ) return false;
+    ) {
+      System.out.printf("cell(right: %s) vs card(left: %s)\n", cellAt(target.left()).rightSide(), card.leftSide());
+      return false;
+    }
 
     // Return true as default
     return true;
