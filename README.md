@@ -7,9 +7,10 @@ Final project for Game Theory/AI course.
 - [x] Model refactor
 - [x] Extensible AI model
 - [x] Runnable and tested model
-- [ ] JavaFX layout
-- [ ] JavaFX controller
-- [ ] Runnable GUI
+- [x] JavaFX layout
+- [x] JavaFX controller
+- [x] Runnable GUI
+- [ ] Human-playable game
 
 ## Usage
 
