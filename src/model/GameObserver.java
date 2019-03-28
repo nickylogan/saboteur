@@ -1,7 +1,5 @@
 package model;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import model.cards.Card;
 
 import java.util.ArrayList;
@@ -78,7 +76,7 @@ public abstract class GameObserver {
    *
    * @param move the player move
    */
-  protected void onPlayerMove(@NotNull Move move, @Nullable Card newCard) {}
+  protected void onPlayerMove(Move move,  Card newCard) {}
 
   /**
    * Implement this to do something when it is the next turn
@@ -118,7 +116,7 @@ public abstract class GameObserver {
    * @param move    the player move
    * @param newCard the player's new card
    */
-  final void notifyPlayerMove(@NotNull Move move, @Nullable Card newCard) {
+  final void notifyPlayerMove(Move move,  Card newCard) {
     history.appendMove(move);
     onPlayerMove(move, newCard);
   }

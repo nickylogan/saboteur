@@ -1,6 +1,5 @@
 package model;
 
-import com.sun.istack.internal.NotNull;
 import model.cards.BoardActionCard;
 import model.cards.Card;
 import model.cards.PathCard;
@@ -71,7 +70,7 @@ public class GameLogicController {
    * @param players all players in the game
    * @throws GameException when invalid range
    */
-  public GameLogicController(@NotNull GameState state, @NotNull Player... players) throws GameException {
+  public GameLogicController(GameState state, Player... players) throws GameException {
     if (players.length < MIN_PLAYER || players.length > MAX_PLAYER) {
       String msgFormat = "Invalid player amount, expected range: %d-%d, found: %d";
       throw new GameException(msgFormat, MIN_PLAYER, MAX_PLAYER, players.length);
@@ -165,6 +164,9 @@ public class GameLogicController {
       broadcastGameFinished(winner);
       return;
     }
+    currentPlayer().hand().forEach(c -> {
+      if (c instanceof PathCard) ((PathCard) c).setRotated(false);
+    });
     game.incrementPlayerIndex();
     broadcastStateChanged();
     broadcastNextTurn();
@@ -177,7 +179,7 @@ public class GameLogicController {
    * @param move the move to be played
    * @throws GameException when an invalid move is applied
    */
-  public final void playMove(@NotNull Move move) throws GameException {
+  public final void playMove(Move move) throws GameException {
     if (move == null) return;
     if (move.type() == Move.Type.DISCARD) {
       Card card = discardCard(move.playerIndex(), move.handIndex(), true);
@@ -356,7 +358,7 @@ public class GameLogicController {
    *
    * @param observer the observer to be added
    */
-  public void addObserver(@NotNull GameObserver observer) {
+  public void addObserver(GameObserver observer) {
     observer.setGame(this);
     nonPlayerObservers.add(observer);
   }
@@ -366,7 +368,7 @@ public class GameLogicController {
    *
    * @param observer the observer to be removed
    */
-  public void removeObserver(@NotNull GameObserver observer) {
+  public void removeObserver(GameObserver observer) {
     nonPlayerObservers.remove(observer);
   }
 

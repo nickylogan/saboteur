@@ -1,11 +1,9 @@
 package model;
 
-import com.sun.istack.internal.NotNull;
 import model.cards.Card;
 import model.cards.PathCard;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +57,7 @@ public class Cell implements Cloneable {
    *
    * @param card the {@link PathCard} to be placed
    */
-  final void placePathCard(@NotNull PathCard card) {
+  final void placePathCard(PathCard card) {
     PathCard cardCopy = card.copy();
     List<Side> newSides;
     if (cardCopy.type() == Card.Type.PATHWAY) {

@@ -1,6 +1,5 @@
 package model;
 
-import com.sun.istack.internal.NotNull;
 import model.cards.PathCard;
 
 import java.util.Arrays;
@@ -65,7 +64,7 @@ public class Board {
    * @param midGoal the middle goal
    * @param botGoal the bottom goal
    */
-  final void initialize(@NotNull GoalType topGoal, @NotNull GoalType midGoal, @NotNull GoalType botGoal) {
+  final void initialize(GoalType topGoal, GoalType midGoal, GoalType botGoal) {
     // Open starting cell sides
     this.cells[0][this.height / 2].openAllSides();
 
@@ -88,7 +87,7 @@ public class Board {
    * @param y    the y position to be placed on
    * @throws GameException when card is not placeable at the specified position
    */
-  final void placePathCardAt(@NotNull PathCard card, int x, int y) throws GameException {
+  final void placePathCardAt(PathCard card, int x, int y) throws GameException {
     if (!isInBoard(x, y)) {
       String msgFormat = "Position (%d, %d) is out of bounds";
       throw new GameException(msgFormat, x, y);
@@ -108,7 +107,7 @@ public class Board {
    * @param target the position to be placed on
    * @throws GameException when card is not placeable at the specified position
    */
-  final void placePathCardAt(@NotNull PathCard card, @NotNull Position target) throws GameException {
+  final void placePathCardAt(PathCard card, Position target) throws GameException {
     this.placePathCardAt(card, target.x, target.y);
   }
 
@@ -129,7 +128,7 @@ public class Board {
    * @param target the targeted position
    * @throws GameException when position is out of bounds, equals start/goal, or has empty cell
    */
-  final void removeCardAt(@NotNull Position target) throws GameException {
+  final void removeCardAt(Position target) throws GameException {
     // Check if not out of bounds
     if (!isInBoard(target)) {
       String msgFormat = "Position (%d, %d) is out of bounds";
@@ -216,6 +215,31 @@ public class Board {
   }
 
   /**
+   * Checks whether the specified <code>(x, y)</code> position is destroyable
+   *
+   * @param x the targeted x position
+   * @param y the targeted y position
+   * @return a boolean representing whether the targeted position is destroyable
+   */
+  public final boolean isDestroyable(int x, int y){
+    return this.isDestroyable(new Position(x, y));
+  }
+
+  /**
+   * Checks whether the specified <code>target</code> is destroyable
+   *
+   * @param target the targeted position
+   * @return a boolean representing whether the targeted position is destroyable
+   */
+  public final boolean isDestroyable(Position target) {
+    return !target.equals(startPosition())
+           && !target.equals(topGoalPosition())
+           && !target.equals(middleGoalPosition())
+           && !target.equals(bottomGoalPosition())
+           && cellAt(target).hasCard();
+  }
+
+  /**
    * Checks whether the specified path card is placeable at the specified
    * <code>(x, y)</code> position
    *
@@ -224,7 +248,7 @@ public class Board {
    * @param y    the target y position
    * @return a boolean representing a card's placeability
    */
-  public final boolean isCardPlaceableAt(@NotNull PathCard card, int x, int y) {
+  public final boolean isCardPlaceableAt(PathCard card, int x, int y) {
     return this.isCardPlaceableAt(card, new Position(x, y));
   }
 
@@ -235,7 +259,7 @@ public class Board {
    * @param target the target position
    * @return a boolean representing a card's placeability
    */
-  public final boolean isCardPlaceableAt(@NotNull PathCard card, Position target) {
+  public final boolean isCardPlaceableAt(PathCard card, Position target) {
     // Check target is not null
     if (target == null) return false;
     // Check if target is in board
@@ -345,7 +369,6 @@ public class Board {
    * @param target the target position
    * @return a boolean representing a card's placeability
    */
-  @SuppressWarnings("RedundantIfStatement")
   private boolean checkTouchingSides(PathCard card, Position target) {
     System.out.println(card);
     // Check target is not null
@@ -480,7 +503,7 @@ public class Board {
    * @param goalPosition the goal position
    * @return the goal type
    */
-  final GoalType peekGoal(@NotNull GoalPosition goalPosition) {
+  final GoalType peekGoal(GoalPosition goalPosition) {
     switch (goalPosition) {
       case TOP:
         return topGoal;

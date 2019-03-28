@@ -64,8 +64,10 @@ public abstract class AI extends Player {
     } catch (InterruptedException e) {
       System.out.println("Decision making interrupted");
     } catch (TimeoutException e) {
+      // TODO: Add failsafe
       System.out.println("Decision timeout");
     } catch (GameException | ExecutionException e) {
+      // TODO: Add failsafe
       System.out.println(e.getMessage());
     }
   }
