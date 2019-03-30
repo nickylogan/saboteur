@@ -56,19 +56,25 @@ public abstract class AI extends Player {
   @Override
   protected final void onMovementPrompt() {
     FutureTask<Move> task = new FutureTask<>(this::makeDecision);
+    Move move = null;
     try {
       new Thread(task).start();
-      Move move = task.get(5, TimeUnit.SECONDS);
+      move = task.get(5, TimeUnit.SECONDS);
       System.out.println(move);
       game().playMove(move);
     } catch (InterruptedException e) {
       System.out.println("Decision making interrupted");
     } catch (TimeoutException e) {
-      // TODO: Add failsafe
-      System.out.println("Decision timeout");
+      System.out.println("Decision timeout. Defaulting to discarding the first card");
+      move = Move.NewDiscardMove(index(), 0);
+      try { game().playMove(move); } catch (GameException ignored) {}
     } catch (GameException | ExecutionException e) {
-      // TODO: Add failsafe
-      System.out.println(e.getMessage());
+      System.out.println("Unallowed decision: " + e.getMessage());
+      if (move != null) {
+        System.out.println("Defaulting to discarding the played card");
+        move = Move.NewDiscardMove(index(), move.handIndex());
+        try { game().playMove(move); } catch (GameException ignored) {}
+      }
     }
   }
 
@@ -81,7 +87,7 @@ public abstract class AI extends Player {
 
   @Override
   protected final void onPlayerMove(Move move, Card newCard) {
-    if(move.playerIndex() != index()) onOtherPlayerMove(move);
+    if (move.playerIndex() != index()) onOtherPlayerMove(move);
   }
 
   @Override
