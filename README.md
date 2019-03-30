@@ -2,17 +2,6 @@
 
 Final project for Game Theory/AI course.
 
-## Progress
-
-- [x] Model refactor
-- [x] Extensible AI model
-- [x] Runnable and tested model
-- [x] JavaFX layout
-- [x] JavaFX controller
-- [x] Runnable GUI
-- [x] Human-playable game
-- [ ] Current player info + status
-
 ## Usage
 
 ### Setting up
@@ -25,13 +14,13 @@ Final project for Game Theory/AI course.
 
 ### Making your own AI class
 
-Create a new package for your AI class. The package **must** contain at least one class, which is your custom AI. 
+**Create a new package** for your AI class. The package **must** contain at least one class, which is your custom AI. 
 
 Your AI class must extend `AI`, and you only need to implement the `makeDecision` method, which will be called automatically when the game prompts you to move. 
 
 > The `makeDecision` method is set to timeout after `5` seconds.
 
-See [src/example/ExampleAI.java](https://github.com/nickylogan/saboteur/blob/master/src/example/ExampleAI.java) for an example implementation.
+See [src/example/ExampleAI.java](https://github.com/nickylogan/saboteur/blob/master/src/example/ExampleAI.java) or [src/main/TestAI.java](https://github.com/nickylogan/saboteur/blob/master/src/main/TestAI.java) for an example implementation.
 
 ## Documentation
 

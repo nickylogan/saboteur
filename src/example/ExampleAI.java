@@ -17,6 +17,7 @@ public class ExampleAI extends AI {
 
   private void foo() {
     // role() is used to get your current role (either SABOTEUR/GOLD_MINER)
+    // see Player.Role in the model package
     Role role = role();
 
     // history() is used to get the game move history
@@ -25,7 +26,7 @@ public class ExampleAI extends AI {
     // discarded() is used to see cards you have previously discarded
     ArrayList<Card> discarded = discarded();
 
-    // isSabotaged() is used to check if a player is sabotaged
+    // isSabotaged() is used to check if your player is sabotaged
     boolean sabotaged = isSabotaged();
 
     // knownGoals() is used to get opened goals, whether by a map card, or path-reachable
@@ -42,7 +43,7 @@ public class ExampleAI extends AI {
     // Prepare move to be returned
     Move move = null;
 
-    // hand() is used to get the card at your hand.
+    // hand() is used to get all cards currently in your hand
     ArrayList<Card> cards = hand();
 
     // game() is used to get the game state
@@ -119,7 +120,7 @@ public class ExampleAI extends AI {
   /**
    * @param position  the goal position
    * @param goalType  the opened goal card
-   * @param permanent marks if the goal card is opened permanently
+   * @param permanent marks if the goal card is opened permanently (a path connects to it)
    * @see GameObserver#onGoalOpen(Board.GoalPosition, GoalType, boolean)
    */
   @Override
