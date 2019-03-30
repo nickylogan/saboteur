@@ -2,6 +2,7 @@ package gui;
 
 import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -32,6 +33,11 @@ public class PlayerStatusPane extends AnchorPane implements Initializable {
 
   static final String TARGETED_CLASS = "targeted";
   static final String CURRENT_CLASS = "current";
+  static final String AVAILABLE_CLASS = "available";
+
+  private boolean current;
+  private boolean targeted;
+  private boolean available;
 
   PlayerStatusPane(Player player) {
     this.player = player;
@@ -117,5 +123,53 @@ public class PlayerStatusPane extends AnchorPane implements Initializable {
       }
     }
     animateTools(tools);
+  }
+
+  /**
+   * Toggles that the player pane is the current player
+   * @param current mark if current
+   */
+  void setCurrent(boolean current) {
+    if (this.current != current) {
+      if (current) getStyleClass().add(CURRENT_CLASS);
+      else getStyleClass().remove(CURRENT_CLASS);
+    }
+    this.current = current;
+  }
+
+  /**
+   * Toggles that the player pane is the targeted player
+   * @param targeted mark if targeted
+   */
+  void setTargeted(boolean targeted) {
+    if (this.targeted != targeted) {
+      if (targeted) getStyleClass().add(TARGETED_CLASS);
+      else getStyleClass().remove(TARGETED_CLASS);
+    }
+    this.targeted = targeted;
+  }
+
+  /**
+   * Toggles that the player pane is available to be played on
+   * @param available mark if available
+   */
+  void setAvailable(boolean available) {
+    if (this.available != available) {
+      if (available) getStyleClass().add(AVAILABLE_CLASS);
+      else getStyleClass().remove(AVAILABLE_CLASS);
+    }
+    this.available = available;
+  }
+
+  public boolean isTargeted() {
+    return targeted;
+  }
+
+  boolean isAvailable() {
+    return available;
+  }
+
+  public boolean isCurrent() {
+    return current;
   }
 }

@@ -1,15 +1,25 @@
 package gui;
 
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
+import javafx.scene.Cursor;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 import model.cards.Card;
 
 import java.util.ArrayList;
 
 public class CardPane extends ImageView {
   private static final ArrayList<String> imagePaths = new ArrayList<>();
-  public static double HEIGHT = 140-32;
+  public static double HEIGHT = 140 - 32;
   public static double WIDTH = 120.0 / 195 * (140 - 32);
+
+  private boolean selected = false;
+  private boolean rotated = false;
 
   static {
     imagePaths.add("path_crossroad_1");
@@ -101,4 +111,33 @@ public class CardPane extends ImageView {
   }
 
   Card card() { return this.card; }
+
+  void setSelected(boolean selected) {
+    if (selected != this.selected) {
+      TranslateTransition t = new TranslateTransition();
+      t.setByY(selected ? -15 : 15);
+      t.setDuration(Duration.millis(250));
+      t.setInterpolator(Interpolator.EASE_IN);
+      t.setNode(this);
+      t.play();
+    }
+    this.selected = selected;
+  }
+
+  void rotate() {
+    RotateTransition r1 = new RotateTransition();
+    r1.setToAngle(rotated ? 10: 190);
+    r1.setDuration(Duration.millis(125));
+    r1.setInterpolator(Interpolator.EASE_OUT);
+
+    RotateTransition r2 = new RotateTransition();
+    r2.setToAngle(rotated ? 0: 180);
+    r2.setDuration(Duration.millis(50));
+    r2.setInterpolator(Interpolator.EASE_BOTH);
+
+    SequentialTransition s = new SequentialTransition(r1, r2);
+    s.setNode(this);
+    s.play();
+    rotated = !rotated;
+  }
 }

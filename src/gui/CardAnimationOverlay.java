@@ -1,19 +1,17 @@
 package gui;
 
-import com.sun.istack.internal.Nullable;
 import javafx.animation.*;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point3D;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import model.cards.Card;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
 
 /**
  * The {@link CardAnimationOverlay} class is a pane that is used to store
@@ -42,8 +40,8 @@ public class CardAnimationOverlay extends Pane {
    * @param handler  a handler to be run when the animation finishes playing
    */
   void playCardMoveAnimation(CardPane cardPane, double targetX, double targetY, boolean rotated,
-                             @Nullable Callable<Void> callable,
-                             @Nullable EventHandler<ActionEvent> handler
+                             Callable<Void> callable,
+                             EventHandler<ActionEvent> handler
   ) {
     getChildren().add(cardPane);
     Animation animation = generateCardMoveAnimation(cardPane, targetX, targetY, rotated);
@@ -59,17 +57,17 @@ public class CardAnimationOverlay extends Pane {
    * @param handler  a handler to be run when the animation finishes playing
    */
   void playCardMoveAnimation(CardPane cardPane, double targetX, double targetY,
-                             @Nullable Callable<Void> callable,
-                             @Nullable EventHandler<ActionEvent> handler
+                             Callable<Void> callable,
+                             EventHandler<ActionEvent> handler
   ) {
     playCardMoveAnimation(cardPane, targetX, targetY, false, callable, handler);
   }
 
-  private Animation generateCardMoveAnimation(CardPane cardPane, double deltaX, double deltaY, boolean rotated) {
+  private Animation generateCardMoveAnimation(CardPane cardPane, double targetX, double targetY, boolean rotated) {
     ParallelTransition p = new ParallelTransition();
     TranslateTransition t = new TranslateTransition();
-    t.setToX(deltaX);
-    t.setToY(deltaY);
+    t.setToX(targetX);
+    t.setToY(targetY);
     t.setDuration(Duration.millis(500));
     t.setInterpolator(Interpolator.EASE_BOTH);
     t.setNode(cardPane);
@@ -96,8 +94,8 @@ public class CardAnimationOverlay extends Pane {
   }
 
   private void dispatchCardAnimation(Animation animation,
-                                     @Nullable Callable<Void> callable,
-                                     @Nullable EventHandler<ActionEvent> handler) {
+                                     Callable<Void> callable,
+                                     EventHandler<ActionEvent> handler) {
     animation.setOnFinished(e -> {
       getChildren().clear();
       if (handler != null) handler.handle(e);

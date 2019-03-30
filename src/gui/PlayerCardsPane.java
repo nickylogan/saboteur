@@ -1,21 +1,25 @@
 package gui;
 
-import com.sun.istack.internal.Nullable;
 import javafx.animation.*;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import model.cards.Card;
+import model.cards.PathCard;
 
 import java.io.IOException;
 import java.net.URL;
@@ -33,6 +37,13 @@ public class PlayerCardsPane extends GridPane implements Initializable {
   private final static double PADDING = 16;
 
   private GameGUIController controller;
+
+  private int selectedIndex = -1;
+
+  boolean interactive = false;
+  boolean sabotaged = false;
+
+  private List<CardPane> panes;
 
   PlayerCardsPane(GameGUIController controller) {
     this.controller = controller;
@@ -55,7 +66,7 @@ public class PlayerCardsPane extends GridPane implements Initializable {
 
     DropShadow shadow = new DropShadow();
     shadow.setBlurType(BlurType.GAUSSIAN);
-    shadow.setColor(new Color(0,0,0,0.5));
+    shadow.setColor(new Color(0, 0, 0, 0.5));
     shadow.setHeight(100);
     shadow.setWidth(100);
     shadow.setRadius(100);
@@ -73,16 +84,25 @@ public class PlayerCardsPane extends GridPane implements Initializable {
    * @param callable a callable to be run when the animation plays
    * @param handler  a handler to be run when the animation finishes playing
    */
-  void playChangeHandAnimation(String name, ArrayList<Card> newCards,
-                               @Nullable Callable<Void> callable,
-                               @Nullable EventHandler<ActionEvent> handler) {
+  void playChangeHandAnimation(String name, ArrayList<Card> newCards, boolean sabotaged,
+                               Callable<Void> callable,
+                               EventHandler<ActionEvent> handler) {
+    playHideAnimation(callable, e -> playShowAnimation(name, newCards, sabotaged,null, handler));
+  }
+
+  void playHideAnimation(Callable<Void> callable, EventHandler<ActionEvent> handler) {
     if (callable != null) try { callable.call(); } catch (Exception ignored) {}
-    toggle(e -> {
-      nameLabel.setVisible(true);
-      nameLabel.setText(name);
-      renderCards(newCards);
-      toggle(handler, true);
-    }, false);
+    toggle(handler, false);
+  }
+
+  void playShowAnimation(String name, ArrayList<Card> newCards, boolean sabotaged,
+                         Callable<Void> callable,
+                         EventHandler<ActionEvent> handler) {
+    if (callable != null) try { callable.call(); } catch (Exception ignored) {}
+    nameLabel.setVisible(true);
+    nameLabel.setText(name);
+    renderCards(sabotaged, newCards);
+    toggle(handler, true);
   }
 
   /**
@@ -94,8 +114,8 @@ public class PlayerCardsPane extends GridPane implements Initializable {
    * @param handler   a handler to be run when the animation finishes playing
    */
   void playReplaceAnimation(int handIndex, Card newCard,
-                            @Nullable Callable<Void> callable,
-                            @Nullable EventHandler<ActionEvent> handler) {
+                            Callable<Void> callable,
+                            EventHandler<ActionEvent> handler) {
     Animation replace = generateReplaceAnimation(handIndex, newCard, true);
     if (handler != null) {
       replace.setOnFinished(e -> {
@@ -117,8 +137,8 @@ public class PlayerCardsPane extends GridPane implements Initializable {
    */
   void playDiscardAnimation(
     int handIndex, Card newCard,
-    @Nullable Callable<Void> callable,
-    @Nullable EventHandler<ActionEvent> handler
+    Callable<Void> callable,
+    EventHandler<ActionEvent> handler
   ) {
     SequentialTransition animation = new SequentialTransition();
     Animation discard = generateDiscardAnimation(handIndex);
@@ -158,7 +178,7 @@ public class PlayerCardsPane extends GridPane implements Initializable {
       FadeTransition ft = new FadeTransition();
       ft.setDuration(Duration.millis(250));
       ft.setFromValue(0.0);
-      ft.setToValue(1.0);
+      ft.setToValue(sabotaged && newCard instanceof PathCard ? 0.25 : 1.0);
       ft.setNode(cardPane);
 
       TranslateTransition tt = new TranslateTransition();
@@ -197,22 +217,42 @@ public class PlayerCardsPane extends GridPane implements Initializable {
    *
    * @param cards new card list
    */
-  private void renderCards(ArrayList<Card> cards) {
+  private void renderCards(boolean sabotaged, ArrayList<Card> cards) {
+    selectedIndex = -1;
+    this.sabotaged = sabotaged;
     cardArea.getChildren().clear();
-    List<CardPane> panes = new ArrayList<>();
+    if (cards.isEmpty()) return;
+
+    panes = new ArrayList<>();
     for (Card card : cards) {
       panes.add(new CardPane(card));
     }
     int n = cards.size();
     double c = panes.get(0).getFitWidth();
     for (int i = 0; i < n; ++i) {
+      int curr = i;
+      if(sabotaged && panes.get(i).card() instanceof PathCard) {
+        panes.get(i).setOpacity(0.25);
+      }
       panes.get(i).setLayoutY(PADDING);
       panes.get(i).setLayoutX(PADDING + i * (c + PADDING));
+      panes.get(i).setCursor(Cursor.HAND);
+      panes.get(i).setOnMouseClicked(e -> {
+        if (e.getButton() == MouseButton.PRIMARY) {
+          setSelectedIndex(curr);
+        }
+      });
     }
     cardArea.getChildren().addAll(panes);
     setPrefWidth((PADDING + c) * n + PADDING);
   }
 
+  /**
+   * Toggles the pane with the specified <code>show</code> variable
+   *
+   * @param handler a handler to be run when the animation finishes playing
+   * @param show    <code>true</code> to show pane, <code>false</code> to hide pane
+   */
   private void toggle(EventHandler<ActionEvent> handler, boolean show) {
     TranslateTransition t = new TranslateTransition();
     t.setByY(show ? -196 : 196);
@@ -221,6 +261,58 @@ public class PlayerCardsPane extends GridPane implements Initializable {
     if (handler != null) t.setOnFinished(handler);
     t.setNode(this);
     t.play();
+  }
+
+  void setInteractive(boolean interactive) {
+    this.interactive = interactive;
+    TranslateTransition t1 = new TranslateTransition();
+    t1.setByY(-10);
+    t1.setDuration(Duration.millis(125));
+    t1.setInterpolator(Interpolator.EASE_OUT);
+    t1.setNode(this);
+
+    TranslateTransition t2 = new TranslateTransition();
+    t2.setByY(10);
+    t2.setDuration(Duration.millis(125));
+    t2.setInterpolator(Interpolator.EASE_BOTH);
+    t2.setNode(this);
+
+    SequentialTransition s = new SequentialTransition(t1, t2);
+    s.play();
+  }
+
+  /**
+   * Sets the selected card
+   *
+   * @param index the selected card index
+   */
+  private void setSelectedIndex(int index) {
+    if (!interactive) return;
+    if (selectedIndex != -1) {
+      panes.get(selectedIndex).setSelected(false);
+    }
+    if (selectedIndex == index) return;
+
+    // Reject if player is sabotaged and tries to play path card
+    if(sabotaged && panes.get(index).card() instanceof PathCard) {
+      GameGUIController.playSound("error");
+      return;
+    }
+    // highlight correct pane
+    panes.get(index).setSelected(true);
+    GameGUIController.playSound("select_card");
+    selectedIndex = index;
+    // send event to controller
+    controller.handleCardSelected(index);
+  }
+
+  /**
+   * Rotates the specified card
+   *
+   * @param index the rotated card index
+   */
+  void rotateCardAt(int index) {
+    panes.get(index).rotate();
   }
 
   CardPane getCard(int index) {

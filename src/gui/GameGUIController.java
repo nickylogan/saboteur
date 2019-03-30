@@ -2,6 +2,9 @@ package gui;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
@@ -9,11 +12,15 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.*;
+import model.cards.BoardActionCard;
 import model.cards.Card;
+import model.cards.PathCard;
 import model.cards.PlayerActionCard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The {@link GameGUIController} class controls the main game GUI
@@ -55,6 +62,16 @@ public class GameGUIController extends Stage {
     }
   }
 
+  /**
+   * The {@link GUIGamePlayer} class allows a human player to
+   * interact with the game
+   */
+  public static class GUIGamePlayer extends Player {
+    public GUIGamePlayer(String name) {
+      super(name);
+    }
+  }
+
   //=========================
   // GUI components
   //=========================
@@ -76,6 +93,62 @@ public class GameGUIController extends Stage {
   BoardPane boardPane;
   /** The background music */
   private static MediaPlayer player;
+  private static Map<String, AudioClip> audioClips = new HashMap<>();
+
+  static {
+    audioClips.put("block_cart",
+      new AudioClip(GameGUIController.class.getResource("../audio/block_cart.wav").toExternalForm())
+    );
+    audioClips.put("block_lantern",
+      new AudioClip(GameGUIController.class.getResource("../audio/block_lantern.wav").toExternalForm())
+    );
+    audioClips.put("block_pick",
+      new AudioClip(GameGUIController.class.getResource("../audio/block_pick.wav").toExternalForm())
+    );
+    audioClips.put("card",
+      new AudioClip(GameGUIController.class.getResource("../audio/card.wav").toExternalForm())
+    );
+    audioClips.put("discard",
+      new AudioClip(GameGUIController.class.getResource("../audio/discard.wav").toExternalForm())
+    );
+    audioClips.put("error",
+      new AudioClip(GameGUIController.class.getResource("../audio/error.wav").toExternalForm())
+    );
+    audioClips.put("gold",
+      new AudioClip(GameGUIController.class.getResource("../audio/gold.wav").toExternalForm())
+    );
+    audioClips.put("map",
+      new AudioClip(GameGUIController.class.getResource("../audio/map.wav").toExternalForm())
+    );
+    audioClips.put("start",
+      new AudioClip(GameGUIController.class.getResource("../audio/start.wav").toExternalForm())
+    );
+    audioClips.put("pass_turn",
+      new AudioClip(GameGUIController.class.getResource("../audio/pass_turn.wav").toExternalForm())
+    );
+    audioClips.put("path",
+      new AudioClip(GameGUIController.class.getResource("../audio/path.wav").toExternalForm())
+    );
+    audioClips.put("repair_cart",
+      new AudioClip(GameGUIController.class.getResource("../audio/repair_cart.wav").toExternalForm())
+    );
+    audioClips.put("repair_lantern",
+      new AudioClip(GameGUIController.class.getResource("../audio/repair_lantern.wav").toExternalForm())
+    );
+    audioClips.put("repair_pick",
+      new AudioClip(GameGUIController.class.getResource("../audio/repair_pick.wav").toExternalForm())
+    );
+    audioClips.put("rockfall",
+      new AudioClip(GameGUIController.class.getResource("../audio/rockfall.wav").toExternalForm())
+    );
+    audioClips.put("select_card",
+      new AudioClip(GameGUIController.class.getResource("../audio/select_card.wav").toExternalForm())
+    );
+    audioClips.put("win",
+      new AudioClip(GameGUIController.class.getResource("../audio/win.wav").toExternalForm())
+    );
+  }
+
 
   //=========================
   // Game logic components
@@ -93,6 +166,9 @@ public class GameGUIController extends Stage {
   /** Stores a reference to the last player hand */
   private ArrayList<Card> lastHand;
 
+  private Card selectedCard;
+  private int selectedIndex;
+
   /**
    * Creates a game window
    *
@@ -104,7 +180,7 @@ public class GameGUIController extends Stage {
     window.setResizable(false);
     window.show();
 
-    window.boardPane.focusAt(0, 2);
+    window.boardPane.focusAt(4, 2);
 
     return window;
   }
@@ -157,6 +233,10 @@ public class GameGUIController extends Stage {
     nextButton.setOnMouseClicked(e -> nextPlayer());
     layers.getChildren().addAll(boardPane, playerCardsPane, playerSidebar, animationOverlay, log, nextButton);
 
+    // Add event handlers
+    this.scene.setOnKeyReleased(this::handleKeyReleased);
+    this.scene.setOnMouseMoved(this::handleMouseMoved);
+
     // Start audio
     startBackgroundMusic();
   }
@@ -165,6 +245,10 @@ public class GameGUIController extends Stage {
    * Commits the played move to the GUI
    */
   private void applyMoveToGUI() {
+    // Resets overlays
+    boardPane.resetOverlays();
+    playerSidebar.resetAvailable();
+
     // Delegates move to correct handler
     Move move = lastMove;
     Card newCard = lastCard;
@@ -208,14 +292,37 @@ public class GameGUIController extends Stage {
    */
   private void handleNextTurn(int player, ArrayList<Card> hand) {
     String fmt = "It is %s's turn";
-    String msg = String.format(fmt, state.playerAt(player).name());
+    Player p = state.playerAt(player);
+    String msg = String.format(fmt, p.name());
     log.appendMessage(msg, HistorySidebar.TYPE_INFO, false);
 
-    // TODO: add alert
-    // TODO: change callable to play shuffle
+    lastHand = hand;
     playerSidebar.setCurrent(player);
     playerSidebar.clearTarget();
-    playerCardsPane.playChangeHandAnimation(state.playerAt(player).name(), hand, null, e -> applyMoveToGUI());
+
+    // Reset selected card
+    selectedCard = null;
+    selectedIndex = -1;
+
+    if (game.playerAt(player) instanceof GUIGamePlayer) {
+      playerCardsPane.playHideAnimation(
+        () -> {
+          boardPane.focusAt(4, 2);
+          return null;
+        }, e -> {
+          // TODO: add alert if current player is not an AI
+          // new alert
+          // show and wait
+          playerCardsPane.playShowAnimation(p.name(), hand, p.isSabotaged(), null, e2 -> {
+            playerCardsPane.setInteractive(true);
+          });
+        }
+      );
+      nextButton.setDisable(true);
+    } else {
+      playerCardsPane.setInteractive(false);
+      playerCardsPane.playChangeHandAnimation(state.playerAt(player).name(), hand, p.isSabotaged(), null, e -> applyMoveToGUI());
+    }
   }
 
   /**
@@ -244,6 +351,12 @@ public class GameGUIController extends Stage {
       e -> nextButton.setDisable(false));
   }
 
+  /**
+   * Handles path cards
+   *
+   * @param move    the played path move
+   * @param newCard the card taken from the deck
+   */
   private void handlePath(Move move, Card newCard) {
     playSound("card");
 
@@ -270,6 +383,12 @@ public class GameGUIController extends Stage {
     );
   }
 
+  /**
+   * Handles map cards
+   *
+   * @param move    the played map move
+   * @param newCard the card taken from the deck
+   */
   private void handleMap(Move move, Card newCard) {
     playSound("card");
 
@@ -309,6 +428,12 @@ public class GameGUIController extends Stage {
     );
   }
 
+  /**
+   * Handles rockfall cards
+   *
+   * @param move    the played rockfall move
+   * @param newCard the card taken from the deck
+   */
   private void handleRockfall(Move move, Card newCard) {
     playSound("card");
 
@@ -399,6 +524,8 @@ public class GameGUIController extends Stage {
     playSound("win");
     // TODO: add alert and animation
     log.appendMessage("The " + role.name().toLowerCase() + "s won the game", HistorySidebar.TYPE_WARNING, true);
+    nextButton.setDisable(true);
+    nextButton.setText("FINISHED");
   }
 
   private void handleGoalOpen(Board.GoalPosition pos) {
@@ -407,15 +534,118 @@ public class GameGUIController extends Stage {
     if (goal == GoalType.GOLD) playSound("gold");
   }
 
+  void handleCardSelected(int index) {
+    // mark a card as selected
+    selectedIndex = index;
+    // set selected card variable
+    selectedCard = lastHand.get(index);
+    // reset all panes' overlays
+    boardPane.resetOverlays();
+    playerSidebar.resetAvailable();
+    // apply overlay to card animation overlay
+    // delegate to appropriate handler
+    if (selectedCard instanceof PathCard || selectedCard instanceof BoardActionCard) {
+      boardPane.highlightAvailable(selectedCard);
+    } else if (selectedCard instanceof PlayerActionCard) {
+      playerSidebar.highlightAvailable((PlayerActionCard) selectedCard);
+    }
+  }
+
+  void applyManualPathMove(int x, int y) {
+    nextButton.setDisable(false);
+    playerCardsPane.setInteractive(false);
+    PathCard path = (PathCard) selectedCard;
+    Move move = Move.NewPathMove(game.currentPlayerIndex(), selectedIndex, x, y, path.rotated());
+    try {
+      game.playMove(move);
+    } catch (GameException e) {
+      System.out.println("Manual: " + e.getMessage());
+    }
+    applyMoveToGUI();
+  }
+
+  void applyManualRockfallMove(int x, int y) {
+    nextButton.setDisable(false);
+    playerCardsPane.setInteractive(false);
+    Move move = Move.NewRockfallMove(game.currentPlayerIndex(), selectedIndex, x, y);
+    try {
+      game.playMove(move);
+    } catch (GameException e) {
+      System.out.println("Manual: " + e.getMessage());
+    }
+    applyMoveToGUI();
+  }
+
+  void applyManualMapMove(Board.GoalPosition pos) {
+    nextButton.setDisable(false);
+    playerCardsPane.setInteractive(false);
+    Move move = Move.NewMapMove(game.currentPlayerIndex(), selectedIndex, pos);
+    try {
+      game.playMove(move);
+    } catch (GameException e) {
+      System.out.println("Manual: " + e.getMessage());
+    }
+    applyMoveToGUI();
+  }
+
+  void applyManualPlayerActionMove(int targetPlayer) {
+    nextButton.setDisable(false);
+    playerCardsPane.setInteractive(false);
+    Move move = Move.NewPlayerActionMove(game.currentPlayerIndex(), selectedIndex, targetPlayer);
+    try {
+      game.playMove(move);
+    } catch (GameException e) {
+      System.out.println("Manual: " + e.getMessage());
+    }
+    applyMoveToGUI();
+  }
+
+  private void applyManualDiscardMove(int index) {
+    nextButton.setDisable(false);
+    playerCardsPane.setInteractive(false);
+    Move move = Move.NewDiscardMove(game.currentPlayerIndex(), index);
+    try {
+      game.playMove(move);
+    } catch (GameException e) {
+      System.out.println("Manual: " + e.getMessage());
+    }
+    applyMoveToGUI();
+  }
+
   private void nextPlayer() {
     if (!game.started()) {
+      playSound("start");
       try {
         game.initializeRound();
         game.startRound();
         nextButton.setStarted();
       } catch (GameException ignored) {}
     } else {
+      playSound("pass_turn");
       game.finalizeTurn();
+    }
+  }
+
+  private void handleMouseMoved(MouseEvent e) {
+    if (!playerCardsPane.interactive) return;
+    if (!(selectedCard instanceof PlayerActionCard)) {
+      boardPane.handleMoved(e);
+    }
+  }
+
+  private void handleKeyReleased(KeyEvent e) {
+    if (!playerCardsPane.interactive) return;
+    // press R to rotate
+    // press delete or backspace to discard
+    if (e.getCode() == KeyCode.R && selectedCard instanceof PathCard) {
+      playerCardsPane.rotateCardAt(selectedIndex);
+      boardPane.resetCellOverlays();
+      boardPane.rotateOverlay();
+      ((PathCard) selectedCard).rotate();
+      boardPane.highlightAvailable(selectedCard);
+    }
+    if (e.getCode() == KeyCode.DELETE) {
+      applyManualDiscardMove(selectedIndex);
     }
   }
 
@@ -443,11 +673,8 @@ public class GameGUIController extends Stage {
    *
    * @param name the sound file name
    */
-  private static void playSound(String name) {
-    Thread thread = new Thread(() -> {
-      AudioClip clip = new AudioClip(GameGUIController.class.getResource(String.format("../audio/%s.wav", name)).toExternalForm());
-      clip.play(1f);
-    });
-    thread.start();
+  static void playSound(String name) {
+    AudioClip clip = audioClips.get(name);
+    if (clip != null) clip.play(1f);
   }
 }

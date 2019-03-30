@@ -19,3 +19,8 @@
     -fx-border-color: #ff3333;
     -fx-border-width: 2px;
 }
+
+.available {
+    -fx-border-color: #11ff80;
+    -fx-border-width: 2px;
+}
