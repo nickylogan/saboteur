@@ -350,13 +350,7 @@ public class Board {
     for (int x = 0; x < width; ++x) {
       for (int y = 0; y < height; ++y) {
         Position p = new Position(x, y);
-        if (p.equals(startPosition())
-            || p.equals(topGoalPosition())
-            || p.equals(middleGoalPosition())
-            || p.equals(bottomGoalPosition())
-            || !cellAt(p).hasCard()
-        ) continue;
-        destroyable.add(p);
+        if (isDestroyable(p)) destroyable.add(p);
       }
     }
     return destroyable;
