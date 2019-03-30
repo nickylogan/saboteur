@@ -22,6 +22,14 @@ Your AI class must extend `AI`, and you only need to implement the `makeDecision
 
 See [src/example/ExampleAI.java](https://github.com/nickylogan/saboteur/blob/master/src/example/ExampleAI.java) or [src/main/TestAI.java](https://github.com/nickylogan/saboteur/blob/master/src/main/TestAI.java) for an example implementation.
 
+## Controls
+
+* To select a card, left-click on any of the card on the bottom pane
+* To place a card on the board, right-click on the desired position
+* To target a player (repair/block), click on the player name on the right pane
+* To rotate a path card, press `R`
+* To discard the selected card, press `D`
+
 ## Documentation
 
 Please read the javadoc
