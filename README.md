@@ -10,7 +10,8 @@ Final project for Game Theory/AI course.
 - [x] JavaFX layout
 - [x] JavaFX controller
 - [x] Runnable GUI
-- [ ] Human-playable game
+- [x] Human-playable game
+- [ ] Current player info + status
 
 ## Usage
 
