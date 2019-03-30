@@ -42,8 +42,8 @@ public class GameGUIController extends Stage {
     }
 
     @Override
-    protected void onNextTurn(int player, ArrayList<Card> hand) {
-      GameGUIController.this.handleNextTurn(player, hand);
+    protected void onNextTurn(int player, Player.Role role, ArrayList<Card> hand) {
+      GameGUIController.this.handleNextTurn(player, role, hand);
     }
 
     @Override
@@ -83,6 +83,8 @@ public class GameGUIController extends Stage {
   private HistorySidebar log;
   /** The player info sidebar panel */
   private PlayerSidebar playerSidebar;
+  /** The current player info */
+  private PlayerInfoPane playerInfoPane;
   /** The player hand panel */
   private PlayerCardsPane playerCardsPane;
   /** The card animation overlay */
@@ -93,6 +95,7 @@ public class GameGUIController extends Stage {
   BoardPane boardPane;
   /** The background music */
   private static MediaPlayer player;
+  /** List of audio clips */
   private static Map<String, AudioClip> audioClips = new HashMap<>();
 
   static {
@@ -227,11 +230,12 @@ public class GameGUIController extends Stage {
     boardPane.initialize();
     playerCardsPane = new PlayerCardsPane(this);
     playerSidebar = new PlayerSidebar(this, players);
+    playerInfoPane = new PlayerInfoPane(this);
     animationOverlay = new CardAnimationOverlay(this);
     log = new HistorySidebar(this);
     nextButton = new NextButton();
     nextButton.setOnMouseClicked(e -> nextPlayer());
-    layers.getChildren().addAll(boardPane, playerCardsPane, playerSidebar, animationOverlay, log, nextButton);
+    layers.getChildren().addAll(boardPane, playerCardsPane, playerSidebar, playerInfoPane, animationOverlay, log, nextButton);
 
     // Add event handlers
     this.scene.setOnKeyReleased(this::handleKeyReleased);
@@ -287,10 +291,11 @@ public class GameGUIController extends Stage {
    * Handles the next turn event
    *
    * @param player the new player index
+   * @param role   the role of the new player
    * @param hand   the respective player's card
-   * @see GUIGameObserver#onNextTurn(int, ArrayList)
+   * @see GUIGameObserver#onNextTurn(int, Player.Role, ArrayList)
    */
-  private void handleNextTurn(int player, ArrayList<Card> hand) {
+  private void handleNextTurn(int player, Player.Role role, ArrayList<Card> hand) {
     String fmt = "It is %s's turn";
     Player p = state.playerAt(player);
     String msg = String.format(fmt, p.name());
@@ -299,6 +304,7 @@ public class GameGUIController extends Stage {
     lastHand = hand;
     playerSidebar.setCurrent(player);
     playerSidebar.clearTarget();
+    playerInfoPane.change(role, p.sabotaged());
 
     // Reset selected card
     selectedCard = null;
@@ -644,7 +650,7 @@ public class GameGUIController extends Stage {
       ((PathCard) selectedCard).rotate();
       boardPane.highlightAvailable(selectedCard);
     }
-    if (e.getCode() == KeyCode.DELETE) {
+    if (e.getCode() == KeyCode.D) {
       applyManualDiscardMove(selectedIndex);
     }
   }

@@ -1,4 +1,7 @@
 package main;
 
-public class CLIMain {
+import model.GameObserver;
+
+public class CLIMain extends GameObserver {
+  // TODO: implement CLI
 }

@@ -1,0 +1,5 @@
+.main {
+    -fx-border-image-source: url('../img/ui/dark-pane.png');
+    -fx-border-image-slice: 124px fill;
+    -fx-border-image-width: 45px;
+}

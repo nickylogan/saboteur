@@ -94,5 +94,5 @@ public abstract class AI extends Player {
   protected final void onGameStart() { }
 
   @Override
-  protected final void onNextTurn(int player, ArrayList<Card> hand) { }
+  protected final void onNextTurn(int player, Role role, ArrayList<Card> hand) { }
 }

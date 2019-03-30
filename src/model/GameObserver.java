@@ -76,7 +76,7 @@ public abstract class GameObserver {
    *
    * @param move the player move
    */
-  protected void onPlayerMove(Move move,  Card newCard) {}
+  protected void onPlayerMove(Move move, Card newCard) {}
 
   /**
    * Implement this to do something when it is the next turn
@@ -84,7 +84,7 @@ public abstract class GameObserver {
    * @param player the next player
    * @param hand   the next player's hand
    */
-  protected void onNextTurn(int player, ArrayList<Card> hand) { }
+  protected void onNextTurn(int player, Player.Role role, ArrayList<Card> hand) { }
 
   /**
    * Implement this to do something when a goal card is opened
@@ -116,7 +116,7 @@ public abstract class GameObserver {
    * @param move    the player move
    * @param newCard the player's new card
    */
-  final void notifyPlayerMove(Move move,  Card newCard) {
+  final void notifyPlayerMove(Move move, Card newCard) {
     history.appendMove(move);
     onPlayerMove(move, newCard);
   }
@@ -131,7 +131,7 @@ public abstract class GameObserver {
   /**
    * Notifies the observer that it is the next player's turn
    */
-  final void notifyNextPlayer(int player, ArrayList<Card> hand) { onNextTurn(player, hand); }
+  final void notifyNextPlayer(int player, Player.Role role, ArrayList<Card> hand) { onNextTurn(player, role, hand); }
 
   /**
    * Notifies the observer of an open goal card

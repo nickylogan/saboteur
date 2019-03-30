@@ -403,7 +403,7 @@ public class GameLogicController {
    */
   private void broadcastNextTurn() {
     ArrayList<Card> hand = new ArrayList<>(currentPlayer().hand());
-    nonPlayerObservers.forEach(o -> o.notifyNextPlayer(currentPlayerIndex(), hand));
+    nonPlayerObservers.forEach(o -> o.notifyNextPlayer(currentPlayerIndex(), currentPlayer().role(), hand));
   }
 
   /**
