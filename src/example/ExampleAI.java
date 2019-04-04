@@ -131,4 +131,11 @@ public class ExampleAI extends AI {
     // - you played a map card
     // - a path card is placed so that a goal card is reached
   }
+
+  @Override
+  public void initialize() {
+    // Implement this to initialize the AI when the game starts
+
+    // e.g. set this constant to some value, initialize all predictors
+  }
 }

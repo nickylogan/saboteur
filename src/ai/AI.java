@@ -53,6 +53,11 @@ public abstract class AI extends Player {
    */
   protected abstract Move makeDecision();
 
+  /**
+   * Implement this to do something when the game is first initialized
+   */
+  public void initialize() {}
+
   @Override
   protected final void onMovementPrompt() {
     FutureTask<Move> task = new FutureTask<>(this::makeDecision);

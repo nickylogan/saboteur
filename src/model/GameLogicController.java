@@ -1,5 +1,6 @@
 package model;
 
+import ai.AI;
 import model.cards.BoardActionCard;
 import model.cards.Card;
 import model.cards.PathCard;
@@ -80,6 +81,10 @@ public class GameLogicController {
 
     ArrayList<Player> playerList = new ArrayList<>(Arrays.asList(players));
     playerList.forEach(p -> p.setGame(this));
+    playerList.forEach(p -> {
+      if(p instanceof AI) ((AI) p).initialize();
+    });
+
     game.setPlayers(playerList);
     this.nonPlayerObservers = new ArrayList<>();
   }
