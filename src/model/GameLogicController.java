@@ -81,9 +81,6 @@ public class GameLogicController {
 
     ArrayList<Player> playerList = new ArrayList<>(Arrays.asList(players));
     playerList.forEach(p -> p.setGame(this));
-    playerList.forEach(p -> {
-      if(p instanceof AI) ((AI) p).initialize();
-    });
 
     game.setPlayers(playerList);
     this.nonPlayerObservers = new ArrayList<>();
@@ -127,6 +124,10 @@ public class GameLogicController {
       cardDistribution.forEach(h -> h.add(deck.pop()));
     for (int i = 0; i < numPlayers; ++i)
       game.playerAt(i).initialize(i, roles.get(i), cardDistribution.get(i));
+
+    game.players().forEach(p -> {
+      if(p instanceof AI) ((AI) p).initialize();
+    });
   }
 
   /**

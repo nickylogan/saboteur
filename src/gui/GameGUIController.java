@@ -37,11 +37,6 @@ public class GameGUIController extends Stage {
     }
 
     @Override
-    public GameLogicController game() {
-      return super.game();
-    }
-
-    @Override
     protected void onNextTurn(int player, Player.Role role, ArrayList<Card> hand) {
       GameGUIController.this.handleNextTurn(player, role, hand);
     }
@@ -319,15 +314,16 @@ public class GameGUIController extends Stage {
           // TODO: add alert if current player is not an AI
           // new alert
           // show and wait
-          playerCardsPane.playShowAnimation(p.name(), hand, p.isSabotaged(), null, e2 -> {
+          playerCardsPane.playShowAnimation(p.name(), hand,null, e2 -> {
             playerCardsPane.setInteractive(true);
+            boardPane.sabotaged = state.playerAt(player).isSabotaged();
           });
         }
       );
       nextButton.setDisable(true);
     } else {
       playerCardsPane.setInteractive(false);
-      playerCardsPane.playChangeHandAnimation(state.playerAt(player).name(), hand, p.isSabotaged(), null, e -> applyMoveToGUI());
+      playerCardsPane.playChangeHandAnimation(state.playerAt(player).name(), hand,null, e -> applyMoveToGUI());
     }
   }
 

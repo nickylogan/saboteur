@@ -39,6 +39,7 @@ public class BoardPane extends Pane {
 
   private double lastX, lastY;
   private boolean dragged;
+  boolean sabotaged = false;
 
   public BoardPane(GameGUIController controller) {
     this.controller = controller;
@@ -101,7 +102,7 @@ public class BoardPane extends Pane {
     Blend color;
     boolean valid = true;
     if (card instanceof PathCard) {
-      valid = board.isCardPlaceableAt((PathCard) card, x, y);
+      valid = !this.sabotaged && board.isCardPlaceableAt((PathCard) card, x, y);
     } else if (card.type() == Card.Type.ROCKFALL) {
       valid = board.isDestroyable(x, y);
     } else if (card.type() == Card.Type.MAP) {
@@ -127,7 +128,7 @@ public class BoardPane extends Pane {
     Board board = controller.game().board();
     selected = card;
     Set<Position> available = new HashSet<>();
-    if (card instanceof PathCard) {
+    if (card instanceof PathCard && !this.sabotaged) {
       available = board.getPlaceable((PathCard) card);
     } else if (card.type() == Card.Type.ROCKFALL) {
       available = board.getDestroyable();
