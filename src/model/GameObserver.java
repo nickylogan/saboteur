@@ -30,21 +30,21 @@ public abstract class GameObserver {
    *
    * @return the game state
    */
-  protected GameLogicController game() { return this.game; }
+  protected final GameLogicController game() { return this.game; }
 
   /**
    * Returns the game move history
    *
    * @return the game move history
    */
-  protected History history() { return this.history; }
+  protected final History history() { return this.history; }
 
   /**
    * Returns the known goals
    *
    * @return the known goals
    */
-  protected Map<Board.GoalPosition, GoalType> knownGoals() {
+  protected final Map<Board.GoalPosition, GoalType> knownGoals() {
     return knownGoals;
   }
 
