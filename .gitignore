@@ -22,3 +22,6 @@
 
 # IntelliJ
 out/
+
+# Custom AI
+**/customAI/
