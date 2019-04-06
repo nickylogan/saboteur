@@ -14,8 +14,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import model.Board;
+import model.Board.InternalGoalType;
 import model.GoalType;
 import model.Position;
 import model.cards.Card;
@@ -181,8 +185,15 @@ public class BoardPane extends Pane {
   }
 
   private Animation generateToggleGoalCardAnimation(Board.GoalPosition pos, boolean open) {
-    GoalType goal = controller.state().getGoal(pos);
-    String name = open ? goal == GoalType.GOLD ? "goal_gold" : "goal_rock_1" : "goal_back";
+    Pair<InternalGoalType, Boolean> internalGoal = controller.state().getInternalGoal(pos);
+    InternalGoalType type = internalGoal.getKey();
+    String name = open ?
+      type == InternalGoalType.GOLD ?
+        "goal_gold" :
+        type == InternalGoalType.ROCK1 ?
+          "goal_rock_1" :
+          "goal_rock_2"
+      : "goal_back";
     CardPane opened = new CardPane(name);
 
     CardPane closed = pos == Board.GoalPosition.TOP ?
@@ -192,8 +203,17 @@ public class BoardPane extends Pane {
 
     // System.out.println("closed: " + closed);
 
-    closed.setRotationAxis(new Point3D(0, 1, 0));
-    opened.setRotationAxis(new Point3D(0, 1, 0));
+    closed.setRotationAxis(Rotate.Y_AXIS);
+    if (!name.equals("goal_back") && internalGoal.getValue()) {
+      Rotate rotate = new Rotate();
+      rotate.setAxis(Rotate.Z_AXIS);
+      rotate.setAngle(180);
+      Translate translate = new Translate();
+      translate.setX(-CardPane.WIDTH);
+      translate.setY(-CardPane.HEIGHT);
+      opened.getTransforms().addAll(rotate, translate);
+    }
+    opened.setRotationAxis(Rotate.Y_AXIS);
     opened.setRotate(90);
     opened.setLayoutX(closed.getLayoutX());
     opened.setLayoutY(closed.getLayoutY());

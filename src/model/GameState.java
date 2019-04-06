@@ -1,5 +1,6 @@
 package model;
 
+import javafx.util.Pair;
 import model.cards.Card;
 
 import java.util.ArrayList;
@@ -179,5 +180,12 @@ public class GameState {
    */
   public final GoalType getGoal(Board.GoalPosition pos) {
     return board().peekGoal(pos);
+  }
+
+  /**
+   * Returns the internal goal type
+   */
+  public final Pair<Board.InternalGoalType, Boolean> getInternalGoal(Board.GoalPosition pos) {
+    return board().peekInternalGoal(pos);
   }
 }

@@ -98,7 +98,8 @@ public class GameLogicController {
 
     // Create new board and initialize goals
     game.setBoard(new Board());
-    List<GoalType> goals = Arrays.asList(GoalType.GOLD, GoalType.ROCK, GoalType.ROCK);
+    List<Board.InternalGoalType> goals =
+      Arrays.asList(Board.InternalGoalType.GOLD, Board.InternalGoalType.ROCK1, Board.InternalGoalType.ROCK2);
     Collections.shuffle(goals);
     game.board().initialize(goals.get(0), goals.get(1), goals.get(2));
 
@@ -126,7 +127,7 @@ public class GameLogicController {
       game.playerAt(i).initialize(i, roles.get(i), cardDistribution.get(i));
 
     game.players().forEach(p -> {
-      if(p instanceof AI) ((AI) p).initialize();
+      if (p instanceof AI) ((AI) p).initialize();
     });
   }
 
@@ -308,7 +309,7 @@ public class GameLogicController {
    */
   private PlayerDelta playPlayerActionCard(int playerIndex, PlayerActionCard card, int targetIndex)
     throws GameException {
-    if (playerIndex < 0 || playerIndex >= numPlayers()) {
+    if (targetIndex < 0 || targetIndex >= numPlayers()) {
       throw new GameException("Invalid target player");
     }
     Player p = game.players().get(targetIndex);
@@ -464,7 +465,7 @@ public class GameLogicController {
    * @param position the opened goal position
    */
   private void broadcastGoalOpened(Board.GoalPosition position) {
-    GoalType type = board().peekGoal(position);
+    GoalType type = board().openGoal(position);
     game.players().forEach(p -> p.notifyGoalOpen(position, type, true));
     nonPlayerObservers.forEach(o -> o.notifyGoalOpen(position, type, true));
   }

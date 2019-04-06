@@ -39,7 +39,7 @@ public class MockGame extends GameLogicController {
 
     // Create new board
     Board board = new Board();
-    board.initialize(GoalType.ROCK, GoalType.GOLD, GoalType.ROCK);
+    board.initialize(Board.InternalGoalType.ROCK1, Board.InternalGoalType.GOLD, Board.InternalGoalType.ROCK2);
     state.setBoard(board);
 
     // Distribute roles

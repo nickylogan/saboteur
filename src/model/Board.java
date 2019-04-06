@@ -1,5 +1,6 @@
 package model;
 
+import javafx.util.Pair;
 import model.cards.PathCard;
 
 import java.util.Arrays;
@@ -17,6 +18,15 @@ public class Board {
   /** The {@link GoalPosition} enum represents every valid goal position in the game */
   public enum GoalPosition {TOP, MIDDLE, BOTTOM}
 
+  public enum InternalGoalType {
+    GOLD(GoalType.GOLD),
+    ROCK1(GoalType.ROCK),
+    ROCK2(GoalType.ROCK);
+    private GoalType actualType;
+
+    InternalGoalType(GoalType actualType) { this.actualType = actualType; }
+  }
+
   /** The default board width specified in the game rule */
   public static final int DEFAULT_WIDTH = 9;
   /** The default board height specified in the game rule */
@@ -29,11 +39,14 @@ public class Board {
   /** Cells in the board */
   private final Cell[][] cells;
   /** The top goal card */
-  private GoalType topGoal;
+  private InternalGoalType topGoal;
+  private boolean topRotated;
   /** The middle goal card */
-  private GoalType middleGoal;
+  private InternalGoalType middleGoal;
+  private boolean middleRotated;
   /** The bottom goal card */
-  private GoalType bottomGoal;
+  private InternalGoalType bottomGoal;
+  private boolean bottomRotated;
   /** Marks the top goal as opened */
   private boolean topGoalOpened;
 
@@ -64,7 +77,7 @@ public class Board {
    * @param midGoal the middle goal
    * @param botGoal the bottom goal
    */
-  final void initialize(GoalType topGoal, GoalType midGoal, GoalType botGoal) {
+  final void initialize(InternalGoalType topGoal, InternalGoalType midGoal, InternalGoalType botGoal) {
     // Open starting cell sides
     this.cells[0][this.height / 2].openAllSides();
 
@@ -180,9 +193,9 @@ public class Board {
    * @return a boolean indicating if the gold is reached
    */
   public final boolean isGoldReached() {
-    return (isReachable(topGoalPosition()) && topGoal == GoalType.GOLD)
-           || (isReachable(middleGoalPosition()) && middleGoal == GoalType.GOLD)
-           || (isReachable(bottomGoalPosition()) && bottomGoal == GoalType.GOLD);
+    return (isReachable(topGoalPosition()) && topGoal.actualType == GoalType.GOLD)
+           || (isReachable(middleGoalPosition()) && middleGoal.actualType == GoalType.GOLD)
+           || (isReachable(bottomGoalPosition()) && bottomGoal.actualType == GoalType.GOLD);
   }
 
   /**
@@ -221,7 +234,7 @@ public class Board {
    * @param y the targeted y position
    * @return a boolean representing whether the targeted position is destroyable
    */
-  public final boolean isDestroyable(int x, int y){
+  public final boolean isDestroyable(int x, int y) {
     return this.isDestroyable(new Position(x, y));
   }
 
@@ -500,13 +513,77 @@ public class Board {
   final GoalType peekGoal(GoalPosition goalPosition) {
     switch (goalPosition) {
       case TOP:
-        return topGoal;
+        return topGoal.actualType;
       case MIDDLE:
-        return middleGoal;
+        return middleGoal.actualType;
       case BOTTOM:
-        return bottomGoal;
+        return bottomGoal.actualType;
       default:
         return null;
     }
+  }
+
+  /**
+   * Returns the internal foal type on the specified goal position
+   *
+   * @param goalPosition the goal position
+   * @return the goal type
+   */
+  final Pair<InternalGoalType, Boolean> peekInternalGoal(GoalPosition goalPosition) {
+    switch (goalPosition) {
+      case TOP:
+        return new Pair<>(topGoal, topRotated);
+      case MIDDLE:
+        return new Pair<>(middleGoal, middleRotated);
+      default:
+        return new Pair<>(bottomGoal, bottomRotated);
+    }
+  }
+
+  /**
+   * Opens the goal type on the specified goal position
+   *
+   * @param goalPosition the goal position
+   * @return the goal type
+   */
+  final GoalType openGoal(GoalPosition goalPosition) {
+    InternalGoalType type = peekInternalGoal(goalPosition).getKey();
+    // path: 7 or _|
+    if (type == InternalGoalType.ROCK1) {
+      PathCard left = new PathCard(-1, PathCard.Type.LEFT_TURN_PATH);
+      Position p = topGoalPosition();
+      if (goalPosition == GoalPosition.MIDDLE) {
+        p = middleGoalPosition();
+      } else if (goalPosition == GoalPosition.BOTTOM) {
+        p = bottomGoalPosition();
+      }
+      if (goalPosition == GoalPosition.MIDDLE && cellAt(p.top()).bottomSide() == Cell.Side.PATH) {
+        left.rotate();
+        middleRotated = true;
+      }
+      if (goalPosition == GoalPosition.BOTTOM && cellAt(p.top()).bottomSide() == Cell.Side.PATH) {
+        left.rotate();
+        bottomRotated = true;
+      }
+      this.cells[p.x][p.y].placePathCard(left);
+    } else if (type == InternalGoalType.ROCK2) {
+      PathCard right = new PathCard(-1, PathCard.Type.RIGHT_TURN_PATH);
+      Position p = bottomGoalPosition();
+      if (goalPosition == GoalPosition.MIDDLE) {
+        p = middleGoalPosition();
+      } else if (goalPosition == GoalPosition.TOP) {
+        p = topGoalPosition();
+      }
+      if (goalPosition == GoalPosition.TOP && cellAt(p.bottom()).topSide() == Cell.Side.PATH) {
+        right.rotate();
+        topRotated = true;
+      }
+      if (goalPosition == GoalPosition.MIDDLE && cellAt(p.bottom()).topSide() == Cell.Side.PATH) {
+        right.rotate();
+        middleRotated = true;
+      }
+      this.cells[p.x][p.y].placePathCard(right);
+    }
+    return type.actualType;
   }
 }
