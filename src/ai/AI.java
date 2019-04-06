@@ -78,8 +78,10 @@ public abstract class AI extends Player {
       if (move != null) {
         System.out.println("Defaulting to discarding the played card");
         move = Move.NewDiscardMove(index(), move.handIndex());
-        try { game().playMove(move); } catch (GameException ignored) {}
+      } else {
+        move = Move.NewDiscardMove(index(), 0);
       }
+      try { game().playMove(move); } catch (GameException ignored) {}
     }
   }
 
