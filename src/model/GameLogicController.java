@@ -190,6 +190,7 @@ public class GameLogicController {
     if (move.type() == Move.Type.DISCARD) {
       Card card = discardCard(move.playerIndex(), move.handIndex(), true);
       broadcastPlayerMove(move, card);
+      return;
     }
     Card card = playCard(move);
     broadcastPlayerMove(move, card);
