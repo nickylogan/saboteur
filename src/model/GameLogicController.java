@@ -170,7 +170,7 @@ public class GameLogicController {
       broadcastGameFinished(winner);
       return;
     }
-    currentPlayer().hand().forEach(c -> {
+    currentPlayer().handShallowCopy().forEach(c -> {
       if (c instanceof PathCard) ((PathCard) c).setRotated(false);
     });
     game.incrementPlayerIndex();
@@ -344,7 +344,7 @@ public class GameLogicController {
   public final Player.Role checkEndGame() {
     if (game.board().isGoldReached())
       return Player.Role.GOLD_MINER;
-    if (game.deck().isEmpty() && game.players().stream().allMatch(player -> player.hand().isEmpty()))
+    if (game.deck().isEmpty() && game.players().stream().allMatch(player -> player.handSize() == 0))
       return Player.Role.SABOTEUR;
     return null;
   }
@@ -408,7 +408,7 @@ public class GameLogicController {
    * Broadcast to all observers that it is the next turn
    */
   private void broadcastNextTurn() {
-    ArrayList<Card> hand = new ArrayList<>(currentPlayer().hand());
+    ArrayList<Card> hand = currentPlayer().hand();
     nonPlayerObservers.forEach(o -> o.notifyNextPlayer(currentPlayerIndex(), currentPlayer().role(), hand));
   }
 

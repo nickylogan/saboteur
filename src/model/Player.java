@@ -213,7 +213,18 @@ public abstract class Player extends GameObserver {
    *
    * @return the player's hand
    */
-  protected final ArrayList<Card> hand() { return cards; }
+  protected final ArrayList<Card> hand() {
+    return new ArrayList<>(cards);
+  }
+
+  /**
+   * Returns a shallow copy of the player's hand
+   *
+   * @return the player's hand shallow copy
+   */
+  final ArrayList<Card> handShallowCopy() {
+    return cards;
+  }
 
   /**
    * Returns the role of the player
