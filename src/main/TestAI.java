@@ -30,9 +30,9 @@ public class TestAI extends AI {
     Set<Position> posRotated = game().board().getPlaceable(card);
     posRotated.forEach(p -> possibleMoves.add(Move.NewPathMove(index(), cardIndex, p.x, p.y, true)));
 
-    System.out.print(card + " => ");
-    System.out.print(posNormal);
-    System.out.println(posRotated);
+    // System.out.print(card + " => ");
+    // System.out.print(posNormal);
+    // System.out.println(posRotated);
     return possibleMoves;
   }
 
