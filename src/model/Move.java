@@ -40,6 +40,8 @@ public class Move {
   private int[] args;
   /** The played card, if any */
   private Card card;
+  /** The game state change, if any */
+  private StateDelta delta;
 
   /**
    * Creates a {@link Move} object based on the specified parameters. Do not use this constructor
@@ -127,6 +129,13 @@ public class Move {
   final void setCard(Card card) { this.card = card.copy(); }
 
   /**
+   * Sets the changes to the game state
+   *
+   * @param delta the game state change
+   */
+  final void setDelta(StateDelta delta) { this.delta = delta; }
+
+  /**
    * Returns the movement type
    *
    * @return the movement type
@@ -160,6 +169,13 @@ public class Move {
    * @return the played card
    */
   public final Card card() { return this.card; }
+
+  /**
+   * Returns the state delta from the move
+   *
+   * @return the state delta
+   */
+  public final StateDelta delta() { return this.delta; }
 
   @Override
   public String toString() {
