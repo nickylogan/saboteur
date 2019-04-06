@@ -646,7 +646,7 @@ public class GameGUIController extends Stage {
       ((PathCard) selectedCard).rotate();
       boardPane.highlightAvailable(selectedCard);
     }
-    if (e.getCode() == KeyCode.D) {
+    if (e.getCode() == KeyCode.D && selectedIndex != -1) {
       applyManualDiscardMove(selectedIndex);
     }
   }
