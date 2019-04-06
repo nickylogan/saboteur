@@ -70,6 +70,7 @@ public class Cell implements Cloneable {
         .collect(Collectors.toList());
     }
     this.sides = newSides.toArray(new Side[0]);
+    this.card = cardCopy;
   }
 
   /**

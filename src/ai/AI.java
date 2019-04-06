@@ -95,7 +95,13 @@ public abstract class AI extends Player {
 
   @Override
   protected final void onPlayerMove(Move move, Card newCard) {
-    if (move.playerIndex() != index()) onOtherPlayerMove(move);
+    if (move.playerIndex() != index()) {
+      try {
+        onOtherPlayerMove(move);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   @Override

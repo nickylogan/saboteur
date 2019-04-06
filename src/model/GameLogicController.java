@@ -308,6 +308,9 @@ public class GameLogicController {
    */
   private PlayerDelta playPlayerActionCard(int playerIndex, PlayerActionCard card, int targetIndex)
     throws GameException {
+    if (playerIndex < 0 || playerIndex >= numPlayers()) {
+      throw new GameException("Invalid target player");
+    }
     Player p = game.players().get(targetIndex);
     Tool[] oldSabotaged = p.sabotaged();
     if (card.type() == Card.Type.BLOCK) {
