@@ -336,7 +336,7 @@ public class GameGUIController extends Stage {
    */
   private void handleMove(Move move, Card newCard) {
     nextButton.setDisable(true);
-    System.out.println(move);
+    // System.out.println(move);
     this.lastMove = move;
     this.lastCard = newCard;
   }

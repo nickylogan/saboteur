@@ -65,7 +65,6 @@ public abstract class AI extends Player {
     try {
       new Thread(task).start();
       move = task.get(5, TimeUnit.SECONDS);
-      System.out.println(move);
       game().playMove(move);
     } catch (InterruptedException e) {
       System.out.println("Decision making interrupted");
@@ -74,11 +73,13 @@ public abstract class AI extends Player {
       move = Move.NewDiscardMove(index(), 0);
       try { game().playMove(move); } catch (GameException ignored) {}
     } catch (GameException | ExecutionException e) {
+      e.printStackTrace();
       System.out.println("Unallowed decision: " + e.getMessage());
       if (move != null) {
         System.out.println("Defaulting to discarding the played card");
         move = Move.NewDiscardMove(index(), move.handIndex());
       } else {
+        System.out.println("Defaulting to discarding the first card");
         move = Move.NewDiscardMove(index(), 0);
       }
       try { game().playMove(move); } catch (GameException ignored) {}

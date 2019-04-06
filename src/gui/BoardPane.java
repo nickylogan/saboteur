@@ -190,14 +190,14 @@ public class BoardPane extends Pane {
       middleGoal : pos == Board.GoalPosition.BOTTOM ?
       bottomGoal : topGoal;
 
-    System.out.println("closed: " + closed);
+    // System.out.println("closed: " + closed);
 
     closed.setRotationAxis(new Point3D(0, 1, 0));
     opened.setRotationAxis(new Point3D(0, 1, 0));
     opened.setRotate(90);
     opened.setLayoutX(closed.getLayoutX());
     opened.setLayoutY(closed.getLayoutY());
-    System.out.println("added: " + opened);
+    // System.out.println("added: " + opened);
     getChildren().add(opened);
 
     RotateTransition closeTransition = new RotateTransition();
@@ -205,7 +205,7 @@ public class BoardPane extends Pane {
     closeTransition.setToAngle(90);
     closeTransition.setDuration(Duration.millis(250));
     closeTransition.setOnFinished(e -> {
-      System.out.println("removed: " + closed);
+      // System.out.println("removed: " + closed);
       getChildren().remove(closed);
     });
 
@@ -214,7 +214,7 @@ public class BoardPane extends Pane {
     openTransition.setToAngle(0);
     openTransition.setDuration(Duration.millis(250));
     openTransition.setOnFinished(e -> {
-      System.out.println("set: " + opened);
+      // System.out.println("set: " + opened);
       switch (pos) {
         case TOP: topGoal = opened; break;
         case MIDDLE: middleGoal = opened; break;
@@ -247,8 +247,8 @@ public class BoardPane extends Pane {
 
   private void handlePlace(int x, int y) {
     Board board = controller.game().board();
-    System.out.println("PLACE: " + selected.type());
-    System.out.println(board.getDestroyable());
+    // System.out.println("PLACE: " + selected.type());
+    // System.out.println(board.getDestroyable());
     if (selected instanceof PathCard && board.isCardPlaceableAt((PathCard) selected, x, y)) {
       controller.applyManualPathMove(x, y);
     } else if (selected.type() == Card.Type.ROCKFALL && board.isDestroyable(x, y)) {
@@ -261,12 +261,12 @@ public class BoardPane extends Pane {
       } else if (y == board.bottomGoalPosition().y) {
         controller.applyManualMapMove(Board.GoalPosition.BOTTOM);
       } else {
-        System.out.printf("Invalid: %d, %d\n", x, y);
+        // System.out.printf("Invalid: %d, %d\n", x, y);
         GameGUIController.playSound("error");
       }
     } else {
       GameGUIController.playSound("error");
-      System.out.printf("Invalid: %d, %d\n", x, y);
+      // System.out.printf("Invalid: %d, %d\n", x, y);
     }
   }
 
@@ -279,7 +279,7 @@ public class BoardPane extends Pane {
     } else if (event.isSecondaryButtonDown()) {
       double posX = event.getX();
       double posY = event.getY();
-      System.out.println(posX + ", "+ posY);
+      // System.out.println(posX + ", "+ posY);
       int x = (int) (posX / CardPane.WIDTH);
       int y = (int) (posY / CardPane.HEIGHT);
       handlePlace(x, y);
