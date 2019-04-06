@@ -1,6 +1,5 @@
 package main;
 
-import customAI.nicky.AINicky;
 import gui.GameGUIController;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -16,12 +15,12 @@ public class Main extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    AINicky aiNicky = new AINicky();
-    TestAI testAI2 = new TestAI("Bob");
-    TestAI testAI3 = new TestAI("Charlie");
-    TestAI testAI4 = new TestAI("Daisy");
-    // GUIGamePlayer testAI5 = new GUIGamePlayer("Eve");
+    TestAI testAI1 = new TestAI("Alice");
+    GUIGamePlayer testAI2 = new GUIGamePlayer("Bob");
+    GUIGamePlayer testAI3 = new GUIGamePlayer("Charlie");
+    GUIGamePlayer testAI4 = new GUIGamePlayer("Daisy");
+    GUIGamePlayer testAI5 = new GUIGamePlayer("Eve");
     setUserAgentStylesheet(STYLESHEET_MODENA);
-    window = GameGUIController.NewGameSession(testAI2, testAI3, testAI4, aiNicky);
+    window = GameGUIController.NewGameSession(testAI1, testAI2, testAI3, testAI4, testAI5);
   }
 }
