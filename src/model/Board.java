@@ -47,8 +47,6 @@ public class Board {
   /** The bottom goal card */
   private InternalGoalType bottomGoal;
   private boolean bottomRotated;
-  /** Marks the top goal as opened */
-  private boolean topGoalOpened;
 
   /**
    * Creates a {@link Board} object.
@@ -585,5 +583,61 @@ public class Board {
       this.cells[p.x][p.y].placePathCard(right);
     }
     return type.actualType;
+  }
+
+  /**
+   * Simulates placing a card on the board at the specified position
+   *
+   * @param card the path card to be placed
+   * @param x    the x position
+   * @param y    the y position
+   * @return a simulated board result if valid, otherwise null is returned
+   */
+  public final Board simulatePlaceCardAt(PathCard card, int x, int y) {
+    Board board = this.copy();
+    try {
+      board.placePathCardAt(card, x, y);
+    } catch (GameException e) {
+      return null;
+    }
+    return board;
+  }
+
+  /**
+   * Simulates removing a card on the board at the specified position
+   *
+   * @param x the x position
+   * @param y the y position
+   * @return a simulated board result if valid, otherwise null is returned
+   */
+  public final Board simulateRemoveCardAt(int x, int y) {
+    Board board = this.copy();
+    try {
+      board.removeCardAt(x, y);
+    } catch (GameException e) {
+      return null;
+    }
+    return board;
+  }
+
+  /**
+   * Copies a board state
+   *
+   * @return board
+   */
+  public final Board copy() {
+    Board board = new Board();
+    board.topGoal = this.topGoal;
+    board.middleGoal = this.middleGoal;
+    board.bottomGoal = this.bottomGoal;
+    board.topRotated = this.topRotated;
+    board.middleRotated = this.middleRotated;
+    board.bottomRotated = this.bottomRotated;
+    for (int x = 0; x < board.width; ++x) {
+      for (int y = 0; y < board.height; ++y) {
+        board.cells[x][y] = this.cells[x][y].copy();
+      }
+    }
+    return board;
   }
 }

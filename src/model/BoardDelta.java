@@ -12,11 +12,17 @@ public class BoardDelta extends StateDelta {
   private final Card before;
   /** The new card value of the given position */
   private final Card after;
+  /** The old board state */
+  private final Board boardBefore;
+  /** The new board state */
+  private final Board boardAfter;
 
-  BoardDelta(Position affected, Card before, Card after) {
+  BoardDelta(Position affected, Card before, Card after, Board bBefore, Board bAfter) {
     this.affected = affected;
     this.before = before;
     this.after = after;
+    this.boardBefore = bBefore.copy();
+    this.boardAfter = bAfter.copy();
   }
 
   /**
@@ -44,5 +50,23 @@ public class BoardDelta extends StateDelta {
    */
   public final Card after() {
     return after;
+  }
+
+  /**
+   * Returns the old board state
+   *
+   * @return the old board state
+   */
+  public Board boardBefore() {
+    return boardBefore;
+  }
+
+  /**
+   * Returns the new board state
+   *
+   * @return the new board state
+   */
+  public Board boardAfter() {
+    return boardAfter;
   }
 }

@@ -295,8 +295,10 @@ public class GameLogicController {
       String name = p.name();
       throw new GameException("%s is sabotaged and cannot place a path card", name);
     }
+    Board before = board().copy();
     game.board().placePathCardAt(card, x, y);
-    return new BoardDelta(new Position(x, y), null, card);
+    Board after = board().copy();
+    return new BoardDelta(new Position(x, y), null, card, before, after);
   }
 
   /**
@@ -346,8 +348,10 @@ public class GameLogicController {
   private BoardDelta playRockfallCard(int x, int y) throws GameException {
     Cell cell = game.board().cellAt(x, y);
     Card oldCard = cell == null ? null : cell.card();
+    Board before = board().copy();
     game.board().removeCardAt(x, y);
-    return new BoardDelta(new Position(x, y), oldCard, null);
+    Board after = board().copy();
+    return new BoardDelta(new Position(x, y), oldCard, null, before, after);
   }
 
   /**
