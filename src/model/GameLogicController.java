@@ -187,7 +187,7 @@ public class GameLogicController {
    * @throws GameException when an invalid move is applied
    */
   public final void playMove(Move move) throws GameException {
-    if (move == null) return;
+    if (move == null) throw new GameException("Cannot execute null move");
     if (move.type() == Move.Type.DISCARD) {
       Card card = discardCard(move.playerIndex(), move.handIndex(), true);
       broadcastPlayerMove(move, card);
