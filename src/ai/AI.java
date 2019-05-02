@@ -1,8 +1,6 @@
 package ai;
 
-import model.GameException;
-import model.Move;
-import model.Player;
+import model.*;
 import model.cards.Card;
 
 import java.util.ArrayList;
@@ -67,19 +65,24 @@ public abstract class AI extends Player {
       move = task.get(5, TimeUnit.SECONDS);
       game().playMove(move);
     } catch (InterruptedException e) {
-      System.out.println("Decision making interrupted");
+      // System.out.println("Decision making interrupted");
     } catch (TimeoutException e) {
-      System.out.println("Decision timeout. Defaulting to discarding the first card");
+      // System.out.println("Decision timeout. Defaulting to discarding the first card");
       move = Move.NewDiscardMove(index(), 0);
       try { game().playMove(move); } catch (GameException ignored) {}
     } catch (GameException | ExecutionException e) {
-      e.printStackTrace();
-      System.out.println("Unallowed decision: " + e.getMessage());
+      // e.printStackTrace();
+      // System.out.println("Unallowed decision: " + e.getMessage());
       if (move != null) {
-        System.out.println("Defaulting to discarding the played card");
-        move = Move.NewDiscardMove(index(), move.handIndex());
+        if (move.handIndex() < 0 || move.handIndex() >= handSize()) {
+          // System.out.println("Defaulting to discarding the first card");
+          move = Move.NewDiscardMove(index(), 0);
+        } else {
+          // System.out.println("Defaulting to discarding the played card");
+          move = Move.NewDiscardMove(index(), move.handIndex());
+        }
       } else {
-        System.out.println("Defaulting to discarding the first card");
+        // System.out.println("Defaulting to discarding the first card");
         move = Move.NewDiscardMove(index(), 0);
       }
       try { game().playMove(move); } catch (GameException ignored) {}
@@ -98,9 +101,7 @@ public abstract class AI extends Player {
     if (move.playerIndex() != index()) {
       try {
         onOtherPlayerMove(move);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      } catch (Exception ignored) {}
     }
   }
 
