@@ -142,6 +142,8 @@ public abstract class GameObserver {
    */
   final void notifyGoalOpen(Board.GoalPosition pos, GoalType goalType, boolean permanent) {
     this.knownGoals.put(pos, goalType);
-    onGoalOpen(pos, goalType, permanent);
+    try {
+      onGoalOpen(pos, goalType, permanent);
+    } catch (Exception ignored) {}
   }
 }

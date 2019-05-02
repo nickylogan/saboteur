@@ -243,6 +243,7 @@ public class Board {
    * @return a boolean representing whether the targeted position is destroyable
    */
   public final boolean isDestroyable(Position target) {
+    if (cellAt(target) == null) return false;
     return !target.equals(startPosition())
            && !target.equals(topGoalPosition())
            && !target.equals(middleGoalPosition())

@@ -8,12 +8,17 @@ import model.cards.PlayerActionCard;
 
 import java.util.*;
 
+import static model.Player.Role.GOLD_MINER;
+import static model.Player.Role.SABOTEUR;
+
 /**
  * The {@link GameLogicController} class contains all the necessary logic
  * and flow of the game. It provides a way to control a {@link GameState} from the
  * given methods
  */
 public class GameLogicController {
+  public static int COMPETITION_MODE = -1;
+
   /** The default minimum players allowed in the game rules */
   private static final int MIN_PLAYER = 4;
   /** The default maximum players allowed in the game rules */
@@ -107,12 +112,34 @@ public class GameLogicController {
     int numPlayers = game.numPlayers();
     int numSaboteurs = deriveNumSaboteurs(numPlayers);
     ArrayList<Player.Role> roles = new ArrayList<>();
-    for (int i = 0; i < numSaboteurs; ++i) roles.add(Player.Role.SABOTEUR);
-    for (int i = 0; i < numPlayers - numSaboteurs; ++i) roles.add(Player.Role.GOLD_MINER);
+    for (int i = 0; i < numSaboteurs; ++i) roles.add(SABOTEUR);
+    for (int i = 0; i < numPlayers - numSaboteurs; ++i) roles.add(GOLD_MINER);
     Collections.shuffle(roles);
+
+    // USE THIS ONLY FOR TESTING MODE. Roles may not match the number of players directly.
+    // Make sure all variables are compatible with each other.
+    // This is disabled by default (COMPETITION_MODE == -1)
+    if (COMPETITION_MODE != -1) {
+      Player.Role[][] combination = new Player.Role[][]{
+        {SABOTEUR, GOLD_MINER, GOLD_MINER, GOLD_MINER},
+        {SABOTEUR, GOLD_MINER, GOLD_MINER, GOLD_MINER, GOLD_MINER},
+        {SABOTEUR, SABOTEUR, GOLD_MINER, GOLD_MINER, GOLD_MINER},
+        {SABOTEUR, SABOTEUR, GOLD_MINER, GOLD_MINER, GOLD_MINER, GOLD_MINER},
+        {SABOTEUR, SABOTEUR, GOLD_MINER, GOLD_MINER, GOLD_MINER, GOLD_MINER, GOLD_MINER},
+        {SABOTEUR, SABOTEUR, GOLD_MINER, GOLD_MINER, GOLD_MINER, GOLD_MINER, GOLD_MINER, GOLD_MINER},
+      };
+      Player.Role[] distr = combination[COMPETITION_MODE];
+      roles.clear();
+      roles.addAll(Arrays.asList(distr));
+    }
 
     // Shuffle cards
     Stack<Card> deck = generateDeck();
+    Collections.shuffle(deck);
+    Collections.shuffle(deck);
+    Collections.shuffle(deck);
+    Collections.shuffle(deck);
+    Collections.shuffle(deck);
     Collections.shuffle(deck);
     game.setDeck(deck);
 
@@ -211,6 +238,9 @@ public class GameLogicController {
     if (playerIndex != game.currentPlayerIndex()) {
       String name = game.playerAt(playerIndex).name();
       throw new GameException("It is not %s's turn", name);
+    }
+    if (handIndex < 0 || handIndex >= playerAt(playerIndex).handSize()) {
+      throw new GameException("Chosen card out of bounds");
     }
     // Take and give card from player
     Player p = game.playerAt(playerIndex);
@@ -362,9 +392,9 @@ public class GameLogicController {
    */
   public final Player.Role checkEndGame() {
     if (game.board().isGoldReached())
-      return Player.Role.GOLD_MINER;
+      return GOLD_MINER;
     if (game.deck().isEmpty() && game.players().stream().allMatch(player -> player.handSize() == 0))
-      return Player.Role.SABOTEUR;
+      return SABOTEUR;
     return null;
   }
 
