@@ -24,4 +24,4 @@
 out/
 
 # Custom AI
-**/customAI/
+# **/customAI/

@@ -90,15 +90,21 @@ public class TestAI extends AI {
     }
 //    System.out.println(hand());
 //    System.out.println(pathMoves);
-    if (new Random().nextInt(10) < 8 && !pathMoves.isEmpty()) {
-      Collections.shuffle(pathMoves);
-      return pathMoves.get(0);
-    } else if (new Random().nextInt(10) < 7 && !playMoves.isEmpty()) {
-      Collections.shuffle(playMoves);
-      return playMoves.get(0);
-    } else {
-      Collections.shuffle(discardMoves);
-      return discardMoves.get(0);
-    }
+    pathMoves.addAll(playMoves);
+    pathMoves.addAll(discardMoves);
+    Collections.shuffle(pathMoves);
+    Collections.shuffle(pathMoves);
+    Collections.shuffle(pathMoves);
+    return pathMoves.get(0);
+    // if (new Random().nextInt(10) < 5 && !pathMoves.isEmpty()) {
+    //   Collections.shuffle(pathMoves);
+    //   return pathMoves.get(0);
+    // } else if (new Random().nextInt(10) < 7 && !playMoves.isEmpty()) {
+    //   Collections.shuffle(playMoves);
+    //   return playMoves.get(0);
+    // } else {
+    //   Collections.shuffle(discardMoves);
+    //   return discardMoves.get(0);
+    // }
   }
 }
