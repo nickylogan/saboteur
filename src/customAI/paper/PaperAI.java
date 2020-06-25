@@ -135,7 +135,7 @@ public class PaperAI extends AI {
         break;
       case PLAY_ROCKFALL:
         rolePredictor.updateFromRockfallMove(move);
-        break;g
+        break;
       case PLAY_MAP:
         rolePredictor.updateFromMapMove(move);
         break;
