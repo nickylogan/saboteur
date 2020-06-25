@@ -3,7 +3,7 @@
  * Nicky (https://github.com/nickylogan)
  */
 
-package customAI.paper;
+package ai.original;
 
 import javafx.util.Pair;
 import model.*;
@@ -12,8 +12,8 @@ import model.cards.PathCard;
 
 import java.util.*;
 
-import static customAI.paper.PaperAI.EPS;
-import static customAI.paper.PaperAI.k0;
+import static ai.original.SaboteurAI.EPS;
+import static ai.original.SaboteurAI.k0;
 
 @SuppressWarnings("Duplicates")
 class PathMovePredictor {

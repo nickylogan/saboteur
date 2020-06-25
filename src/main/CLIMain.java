@@ -1,8 +1,7 @@
 package main;
 
 import ai.AI;
-import customAI.nn.CustomAI;
-import customAI.paper.PaperAI;
+import ai.proposed.SaboteurAI;
 import model.*;
 import model.cards.Card;
 
@@ -45,14 +44,14 @@ public class CLIMain extends GameObserver {
     for (int i = 0; i < 18000; ++i) {
       GameLogicController.COMPETITION_MODE = i / 3000;
       GameState state = new GameState();
-      CustomAI sai1 = new CustomAI("sai1");
-      CustomAI sai2 = new CustomAI("sai2");
-      CustomAI mai1 = new CustomAI("mai1");
-      CustomAI mai2 = new CustomAI("mai2");
-      CustomAI mai3 = new CustomAI("mai3");
-      CustomAI mai4 = new CustomAI("mai4");
-      CustomAI mai5 = new CustomAI("mai5");
-      CustomAI mai6 = new CustomAI("mai6");
+      SaboteurAI sai1 = new SaboteurAI("sai1");
+      SaboteurAI sai2 = new SaboteurAI("sai2");
+      SaboteurAI mai1 = new SaboteurAI("mai1");
+      SaboteurAI mai2 = new SaboteurAI("mai2");
+      SaboteurAI mai3 = new SaboteurAI("mai3");
+      SaboteurAI mai4 = new SaboteurAI("mai4");
+      SaboteurAI mai5 = new SaboteurAI("mai5");
+      SaboteurAI mai6 = new SaboteurAI("mai6");
       AI[][] players = new AI[][]{
         {sai1, mai1, mai2, mai3},
         {sai1, mai1, mai2, mai3, mai4},

@@ -4,7 +4,7 @@
  * Nadya (https://github.com/Ao-Re)
  */
 
-package customAI.nn;
+package ai.proposed;
 
 import model.*;
 import model.cards.Card;
@@ -12,7 +12,7 @@ import model.cards.PathCard;
 
 import java.util.*;
 
-import static customAI.nn.CustomAI.EPS;
+import static ai.proposed.SaboteurAI.EPS;
 
 public class RockfallMovePredictor {
   static final double BASE_MULTIPLIER = 50;
@@ -21,9 +21,9 @@ public class RockfallMovePredictor {
   private final int playerIndex;
   private final Player.Role role;
   private double rockfallMultiplier;
-  private final CustomAI ai;
+  private final SaboteurAI ai;
 
-  RockfallMovePredictor(GameLogicController game, int playerIndex, Player.Role role, CustomAI ai) {
+  RockfallMovePredictor(GameLogicController game, int playerIndex, Player.Role role, SaboteurAI ai) {
     this.game = game;
     this.playerIndex = playerIndex;
     this.role = role;

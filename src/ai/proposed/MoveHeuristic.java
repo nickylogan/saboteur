@@ -1,9 +1,10 @@
 /*
  * Authors:
  * Nicky (https://github.com/nickylogan)
+ * Nadya (https://github.com/Ao-Re)
  */
 
-package customAI.paper;
+package ai.proposed;
 
 import model.Move;
 

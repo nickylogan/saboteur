@@ -68,6 +68,7 @@ public abstract class AI extends Player {
       game().playMove(move);
     } catch (InterruptedException e) {
       System.out.println("Decision making interrupted");
+      System.exit(1);
     } catch (TimeoutException e) {
       System.out.println("Decision timeout. Defaulting to discarding the first card");
       move = Move.NewDiscardMove(index(), 0);

@@ -3,7 +3,7 @@
  * Nicky (https://github.com/nickylogan)
  */
 
-package customAI.paper;
+package ai.original;
 
 import model.Board;
 import model.GameLogicController;
@@ -11,9 +11,8 @@ import model.GoalType;
 import model.Move;
 
 import java.util.*;
-import java.util.function.ToDoubleFunction;
 
-import static customAI.paper.PaperAI.k1;
+import static ai.original.SaboteurAI.k1;
 
 public class MapMovePredictor {
   static final double BASE_HEURISTIC = k1;

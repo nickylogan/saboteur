@@ -1,9 +1,10 @@
 /*
  * Authors:
  * Nicky (https://github.com/nickylogan)
+ * Nadya (https://github.com/Ao-Re)
  */
 
-package customAI.paper;
+package ai.proposed;
 
 import model.GameLogicController;
 import model.Move;
@@ -14,31 +15,27 @@ import model.cards.PlayerActionCard;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static customAI.paper.PaperAI.k3;
-import static customAI.paper.PaperAI.k4;
-
-@SuppressWarnings("Duplicates")
 public class PlayerActionMovePredictor {
-  private static final double BASE_BLOCK_HEURISTIC = k3;
-  private static final double BASE_REPAIR_HEURISTIC = k4;
+  static final double BASE_BLOCK_HEURISTIC = PathMovePredictor.MAX_PATH_HEURISTIC - .1;
+  static final double BASE_REPAIR_HEURISTIC = PathMovePredictor.MAX_PATH_HEURISTIC - .1;
 
   private final GameLogicController game;
-  private final RolePredictor rolePredictor;
+  private final SaboteurAI ai;
   private final int playerIndex;
 
   private double blockHeuristic;
   private double repairHeuristic;
 
-  PlayerActionMovePredictor(GameLogicController game, int playerIndex, RolePredictor rolePredictor) {
+  PlayerActionMovePredictor(GameLogicController game, int playerIndex, SaboteurAI ai) {
     this.playerIndex = playerIndex;
     this.game = game;
-    this.rolePredictor = rolePredictor;
+    this.ai = ai;
     this.blockHeuristic = BASE_BLOCK_HEURISTIC;
     this.repairHeuristic = BASE_REPAIR_HEURISTIC;
   }
 
   MoveHeuristic generateBlockHeuristic(int cardIndex, PlayerActionCard card) {
-    Set<Integer> enemies = rolePredictor.getEnemies();
+    Set<Integer> enemies = ai.rolePredictor.getEnemies();
     Tool tool = card.effects()[0];
     enemies = enemies.stream().filter(i -> game.playerAt(i).isSabotageable(tool)).collect(Collectors.toSet());
     if (enemies.isEmpty()) {
@@ -69,7 +66,7 @@ public class PlayerActionMovePredictor {
   }
 
   MoveHeuristic generateRepairHeuristic(int cardIndex, PlayerActionCard card) {
-    Set<Integer> friends = rolePredictor.getFriends();
+    Set<Integer> friends = ai.rolePredictor.getFriends();
     Tool[] tools = card.effects();
     friends = friends.stream().filter(i -> game.playerAt(i).isRepairable(tools)).collect(Collectors.toSet());
     if (friends.isEmpty()) {
@@ -85,6 +82,7 @@ public class PlayerActionMovePredictor {
       for (Tool tool : card.effects()) {
         repairable += p.isRepairable(tool) ? 1 : 0;
       }
+      repairable *= i == playerIndex ? 2 : 1;
       if (repairable > maxRepairable) {
         friendChoices.clear();
         maxRepairable = repairable;
@@ -103,11 +101,11 @@ public class PlayerActionMovePredictor {
     return new MoveHeuristic(move, heuristic);
   }
 
-  public void setRepairHeuristic(double repairHeuristic) {
+  void setRepairHeuristic(double repairHeuristic) {
     this.repairHeuristic = repairHeuristic;
   }
 
-  public double getRepairHeuristic() {
+  double getRepairHeuristic() {
     return repairHeuristic;
   }
 }

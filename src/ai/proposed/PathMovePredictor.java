@@ -4,7 +4,7 @@
  * Nadya (https://github.com/Ao-Re)
  */
 
-package customAI.nn;
+package ai.proposed;
 
 import javafx.util.Pair;
 import model.*;
@@ -13,8 +13,8 @@ import model.cards.PathCard;
 
 import java.util.*;
 
-import static customAI.nn.CustomAI.EPS;
-import static customAI.nn.CustomAI.VERBOSE;
+import static ai.proposed.SaboteurAI.EPS;
+import static ai.proposed.SaboteurAI.VERBOSE;
 
 @SuppressWarnings("Duplicates")
 class PathMovePredictor {

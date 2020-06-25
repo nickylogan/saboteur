@@ -1,10 +1,9 @@
 /*
  * Authors:
  * Nicky (https://github.com/nickylogan)
- * Nadya (https://github.com/Ao-Re)
  */
 
-package customAI.nn;
+package ai.original;
 
 import model.Move;
 

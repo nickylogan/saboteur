@@ -1,34 +1,37 @@
 /*
  * Authors:
  * Nicky (https://github.com/nickylogan)
+ * Nadya (https://github.com/Ao-Re)
  */
 
-package customAI.paper;
+package ai.proposed;
 
 import model.*;
-import model.cards.Card;
-import model.cards.PathCard;
 
 import java.util.*;
 
+import static ai.proposed.SaboteurAI.EPS;
+
 class RolePredictor {
-  private final static double INITIAL_TRUST = PaperAI.c1;
-  private final static double BLOCK_CONSTANT = PaperAI.c2;
-  private final static double REPAIR_CONSTANT = PaperAI.c3;
-  private final static double DISCARD_CONSTANT = PaperAI.c4;
+  private final static double INITIAL_TRUST = 5 * PathMovePredictor.MAX_PATH_HEURISTIC;
+  private final static double BLOCK_CONSTANT = INITIAL_TRUST + .1;
+  private final static double REPAIR_CONSTANT = .5;
+  private final static double DISCARD_CONSTANT = .5;
 
   private final GameLogicController game;
   private Map<Integer, Double> playerTrust;
   private List<Set<Board.GoalPosition>> goalKnowledge;
   private final int playerIndex;
   private final Player.Role role;
+  private final SaboteurAI ai;
 
-  RolePredictor(GameLogicController game, int playerIndex, Player.Role role) {
+  RolePredictor(GameLogicController game, int playerIndex, Player.Role role, SaboteurAI ai) {
     this.game = game;
     this.playerTrust = new HashMap<>();
     this.goalKnowledge = new ArrayList<>();
     this.playerIndex = playerIndex;
     this.role = role;
+    this.ai = ai;
 
     int n = game.numPlayers();
     for (int i = 0; i < n; ++i) {
@@ -37,26 +40,58 @@ class RolePredictor {
       playerTrust.put(i, INITIAL_TRUST);
     }
   }
-  void updateFromPathMove(Move move, PathMovePredictor predictor, Map<Board.GoalPosition, GoalType> knownGoals) {
+
+  void updateFromPathMove(Move move, Map<Board.GoalPosition, GoalType> knownGoals) {
     BoardDelta delta = (BoardDelta) move.delta();
-    double z1 = predictor.generatePathHeuristic(-1, (PathCard) move.card(), delta.boardBefore(), knownGoals).heuristic;
-    double z2 = predictor.calculatePlacementHeuristic((PathCard) move.card(), new Position(move.args()[0], move.args()[1]), knownGoals);
-    double trust = playerTrust.get(move.playerIndex());
-    if (Math.abs(z1 - z2) <= PaperAI.EPS) {
-      trust += role == Player.Role.GOLD_MINER ? z1 : -z1;
-    } else if (z1 - z2 > PaperAI.EPS) {
-      trust -= role == Player.Role.GOLD_MINER ? (z1 - z2) : -(z1 - z2);
+
+    // TODO: intersect knownGoals
+
+    double oldMax = ai.boardPredictor.calculateMaxValue(delta.boardBefore(), knownGoals);
+    double oldAvg = ai.boardPredictor.calculateAverageValue(delta.boardBefore(), knownGoals);
+    double newMax = ai.boardPredictor.calculateMaxValue(delta.boardAfter(), knownGoals);
+    double newAvg = ai.boardPredictor.calculateAverageValue(delta.boardAfter(), knownGoals);
+
+    double value;
+    if (Math.abs(newMax - oldMax) <= EPS) {
+      value = newAvg - oldAvg;
+    } else {
+      value = newMax - oldMax;
     }
-    playerTrust.put(move.playerIndex(), trust);
+    // trust += value;
+    double trust = playerTrust.get(move.playerIndex());
+    playerTrust.put(move.playerIndex(), trust + value);
+    // BoardDelta delta = (BoardDelta) move.delta();
+    // double z1 = ai.pathMovePredictor.generatePathHeuristic(-1, (PathCard) move.card(), delta.boardBefore(), knownGoals).heuristic;
+    // double z2 = ai.pathMovePredictor.calculatePlacementHeuristic(delta.boardBefore(), (PathCard) move.card(), new Position(move.args()[0], move.args()[1]), knownGoals);
+    // double trust = playerTrust.get(move.playerIndex());
+    // if (Math.abs(z1 - z2) <= EPS) {
+    //   trust += role == Player.Role.GOLD_MINER ? z1 : -z1;
+    // } else if (z1 - z2 > EPS) {
+    //   trust -= role == Player.Role.GOLD_MINER ? (z1 - z2) : -(z1 - z2);
+    // }
+    // playerTrust.put(move.playerIndex(), trust);
   }
 
-  void updateFromRockfallMove(Move move) {
-    BoardDelta boardDelta = (BoardDelta) move.delta();
-    if (boardDelta.before().type() == Card.Type.PATHWAY) {
-      playerTrust.put(move.playerIndex(), 0.0);
-    } else if (boardDelta.before().type() == Card.Type.DEADEND) {
-      playerTrust.put(move.playerIndex(), Collections.max(playerTrust.values()));
+  void updateFromRockfallMove(Move move, Map<Board.GoalPosition, GoalType> knownGoals) {
+    BoardDelta delta = (BoardDelta) move.delta();
+    double mx1 = ai.boardPredictor.calculateMaxValue(delta.boardBefore(), knownGoals);
+    double mx2 = ai.boardPredictor.calculateMaxValue(delta.boardAfter(), knownGoals);
+    double avg1 = ai.boardPredictor.calculateAverageValue(delta.boardBefore(), knownGoals);
+    double avg2 = ai.boardPredictor.calculateAverageValue(delta.boardAfter(), knownGoals);
+
+    double trust = playerTrust.get(move.playerIndex());
+    if (Math.abs(mx2 - mx1) <= EPS) {
+      trust += avg2 - avg1;
+    } else {
+      trust += mx2 - mx1;
     }
+    playerTrust.put(move.playerIndex(), trust);
+
+    // if (delta.before().type() == Card.Type.PATHWAY) {
+    //   playerTrust.put(move.playerIndex(), 0.0);
+    // } else if (delta.before().type() == Card.Type.DEADEND) {
+    //   playerTrust.put(move.playerIndex(), Collections.max(playerTrust.values()));
+    // }
   }
 
   void updateFromBlockMove(Move move) {
@@ -111,9 +146,9 @@ class RolePredictor {
   }
 
   void updateFromDiscardMove(Move move) {
-    double trust = playerTrust.get(move.playerIndex());
-    trust -= role == Player.Role.GOLD_MINER ? DISCARD_CONSTANT : -DISCARD_CONSTANT;
-    playerTrust.put(move.playerIndex(), trust);
+    // double trust = playerTrust.get(move.playerIndex());
+    // trust -= role == Player.Role.GOLD_MINER ? DISCARD_CONSTANT : -DISCARD_CONSTANT;
+    // playerTrust.put(move.playerIndex(), trust);
   }
 
   Set<Integer> getFriends() {

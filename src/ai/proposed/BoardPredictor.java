@@ -4,7 +4,7 @@
  * Nadya (https://github.com/Ao-Re)
  */
 
-package customAI.nn;
+package ai.proposed;
 
 import model.*;
 
@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import static customAI.nn.CustomAI.VERBOSE;
+import static ai.proposed.SaboteurAI.VERBOSE;
 
 public class BoardPredictor {
   private static final int K = 5;
@@ -83,7 +83,7 @@ public class BoardPredictor {
     if (board.isReachable(board.bottomGoalPosition())) reachable.add(board.bottomGoalPosition());
     for (Position ps : reachable) {
       double val = calculateCellValue(ps, knownGoals);
-      if (val - max > CustomAI.EPS) max = val;
+      if (val - max > SaboteurAI.EPS) max = val;
     }
     if (VERBOSE > 1) System.out.println("max = " + max);
     return max;

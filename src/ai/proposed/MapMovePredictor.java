@@ -4,7 +4,7 @@
  * Nadya (https://github.com/Ao-Re)
  */
 
-package customAI.nn;
+package ai.proposed;
 
 import model.Board;
 import model.GameLogicController;

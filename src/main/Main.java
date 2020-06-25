@@ -1,6 +1,6 @@
 package main;
 
-import customAI.nn.CustomAI;
+import ai.proposed.SaboteurAI;
 import gui.GameGUIController;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -19,10 +19,10 @@ public class Main extends Application {
     // CustomAI.VERBOSE = 1;
     GameLogicController.COMPETITION_MODE = 0;
 
-    CustomAI customAi1 = new CustomAI("Alice");
-    CustomAI customAi2 = new CustomAI("Bob");
-    CustomAI customAi3 = new CustomAI("Charlie");
-    CustomAI customAi4 = new CustomAI("Daisy");
+    SaboteurAI saboteurAi1 = new SaboteurAI("Alice");
+    SaboteurAI saboteurAi2 = new SaboteurAI("Bob");
+    SaboteurAI saboteurAi3 = new SaboteurAI("Charlie");
+    SaboteurAI saboteurAi4 = new SaboteurAI("Daisy");
 
     // HeuristicsAI ray1 = new HeuristicsAI("Saboteur");
     // HeuristicsAI ray2 = new HeuristicsAI("Miner 2");
@@ -31,7 +31,7 @@ public class Main extends Application {
     // HeuristicsAI ray5 = new HeuristicsAI("Miner 5");
 
     Player[] players = new Player[]{
-        customAi1, customAi2, customAi3, customAi4
+        saboteurAi1, saboteurAi2, saboteurAi3, saboteurAi4
     };
 
     setUserAgentStylesheet(STYLESHEET_MODENA);
