@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import static org.fusesource.jansi.Ansi.ansi;
 
 @SuppressWarnings("unused")
-public class Logger {
+public class Log {
   public enum Level {
     ERROR,
     WARN,
@@ -118,6 +118,6 @@ public class Logger {
   }
 
   private static void setVerbosity(Level verbosity) {
-    Logger.verbosity = verbosity;
+    Log.verbosity = verbosity;
   }
 }

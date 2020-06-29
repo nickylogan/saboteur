@@ -1,5 +1,6 @@
 package ai;
 
+import ai.utils.Log;
 import model.GameException;
 import model.Move;
 import model.Player;
@@ -36,6 +37,8 @@ import java.util.concurrent.TimeoutException;
  */
 @SuppressWarnings("unused")
 public abstract class AI extends Player {
+  private static final int TIMEOUT_SECONDS = 5;
+
   /**
    * Creates an {@link AI} object representing an AI for the game
    *
@@ -64,27 +67,40 @@ public abstract class AI extends Player {
     Move move = null;
     try {
       new Thread(task).start();
-      move = task.get(5, TimeUnit.SECONDS);
+      move = task.get(TIMEOUT_SECONDS, TimeUnit.SECONDS);
       game().playMove(move);
     } catch (InterruptedException e) {
-      System.out.println("Decision making interrupted");
+      Log.errorln("Decision making interrupted");
       System.exit(1);
     } catch (TimeoutException e) {
-      System.out.println("Decision timeout. Defaulting to discarding the first card");
-      move = Move.NewDiscardMove(index(), 0);
-      try { game().playMove(move); } catch (GameException ignored) {}
+      Log.errorf("'%s' took too long to make a decision", this.name());
+      fallbackAndLog();
     } catch (GameException | ExecutionException e) {
       e.printStackTrace();
-      System.out.println("Unallowed decision: " + e.getMessage());
-      if (move != null) {
-        System.out.println("Defaulting to discarding the played card");
-        move = Move.NewDiscardMove(index(), move.handIndex());
-      } else {
-        System.out.println("Defaulting to discarding the first card");
-        move = Move.NewDiscardMove(index(), 0);
-      }
-      try { game().playMove(move); } catch (GameException ignored) {}
+      Log.errorf("'%s' made an illegal move: %s", this.name(), e.getMessage());
+      fallbackAndLog(move);
     }
+  }
+
+  private void fallbackAndLog(Move move) {
+    Move fallback;
+    if (move != null) {
+      Log.warnln("Falling back to discarding the played card.");
+      fallback = Move.NewDiscardMove(index(), move.handIndex());
+    } else {
+      Log.warnln("Falling back to discarding the first card.");
+      fallback = Move.NewDiscardMove(index(), 0);
+    }
+
+    try {
+      game().playMove(fallback);
+    } catch (GameException e) {
+      Log.errorf("Fallback failed: %s", e.getMessage());
+    }
+  }
+
+  private void fallbackAndLog() {
+    this.fallbackAndLog(null);
   }
 
   /**
@@ -96,12 +112,12 @@ public abstract class AI extends Player {
 
   @Override
   protected final void onPlayerMove(Move move, Card newCard) {
-    if (move.playerIndex() != index()) {
-      try {
-        onOtherPlayerMove(move);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+    if (move.playerIndex() == index()) return;
+
+    try {
+      onOtherPlayerMove(move);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 
