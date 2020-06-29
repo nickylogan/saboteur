@@ -36,6 +36,7 @@ public class GameLogicController {
   /* initialize {@link GameState#CARD_COMPOSITION} */
   static {
     CARD_COMPOSITION.put(PathCard.Type.CROSSROAD_PATH.name(), 5);
+    CARD_COMPOSITION.put(PathCard.Type.HORIZONTAL_T_PATH.name(), 5);
     CARD_COMPOSITION.put(PathCard.Type.VERTICAL_T_PATH.name(), 5);
     CARD_COMPOSITION.put(PathCard.Type.HORIZONTAL_PATH.name(), 3);
     CARD_COMPOSITION.put(PathCard.Type.VERTICAL_PATH.name(), 4);
