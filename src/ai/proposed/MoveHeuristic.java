@@ -10,7 +10,6 @@ import model.Move;
 
 class MoveHeuristic {
   final Move move;
-
   final double heuristic;
 
   MoveHeuristic(Move move, double heuristic) {

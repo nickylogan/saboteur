@@ -6,157 +6,150 @@
 
 package ai.proposed;
 
-import javafx.util.Pair;
-import model.*;
+import ai.proposed.utils.RandomUtils;
+import model.Board;
+import model.Move;
+import model.Player;
+import model.Position;
 import model.cards.Card;
 import model.cards.PathCard;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import static ai.proposed.SaboteurAI.EPS;
-import static ai.proposed.SaboteurAI.VERBOSE;
 
 @SuppressWarnings("Duplicates")
 class PathMovePredictor {
+  private static class PathPlacement {
+    private final Position pos;
+    private final boolean rotated;
+
+    PathPlacement(Position pos, boolean rotated) {
+      this.pos = pos;
+      this.rotated = rotated;
+    }
+  }
+
   static final double MAX_PATH_HEURISTIC = .5;
   static final double PATH_MULTIPLIER = 50;
 
-  private static Map<PathCard.Type, Double> BASE_HEURISTIC = new HashMap<>();
+  private static final Map<PathCard.Type, Double> BASE_HEURISTICS = new HashMap<>();
 
   static {
-    BASE_HEURISTIC.put(PathCard.Type.CROSSROAD_PATH, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.HORIZONTAL_T_PATH, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.VERTICAL_T_PATH, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.HORIZONTAL_PATH, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.VERTICAL_PATH, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.LEFT_TURN_PATH, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.RIGHT_TURN_PATH, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.CROSSROAD_DEADEND, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.HORIZONTAL_T_DEADEND, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.VERTICAL_T_DEADEND, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.BOTH_HORIZONTAL_DEADEND, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.BOTH_VERTICAL_DEADEND, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.SINGLE_HORIZONTAL_DEADEND, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.SINGLE_VERTICAL_DEADEND, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.LEFT_TURN_DEADEND, MAX_PATH_HEURISTIC);
-    BASE_HEURISTIC.put(PathCard.Type.RIGHT_TURN_DEADEND, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.CROSSROAD_PATH, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.HORIZONTAL_T_PATH, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.VERTICAL_T_PATH, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.HORIZONTAL_PATH, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.VERTICAL_PATH, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.LEFT_TURN_PATH, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.RIGHT_TURN_PATH, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.CROSSROAD_DEADEND, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.HORIZONTAL_T_DEADEND, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.VERTICAL_T_DEADEND, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.BOTH_HORIZONTAL_DEADEND, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.BOTH_VERTICAL_DEADEND, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.SINGLE_HORIZONTAL_DEADEND, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.SINGLE_VERTICAL_DEADEND, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.LEFT_TURN_DEADEND, MAX_PATH_HEURISTIC);
+    BASE_HEURISTICS.put(PathCard.Type.RIGHT_TURN_DEADEND, MAX_PATH_HEURISTIC);
   }
 
-  private final GameLogicController game;
   private final int playerIndex;
   private final Player.Role role;
   private final BoardPredictor boardPredictor;
 
-  private final Map<PathCard.Type, Double> pathHeuristic;
+  private final Map<PathCard.Type, Double> pathHeuristics;
+  private final double pathMultiplier;
 
-  private double pathMultiplier;
-
-  PathMovePredictor(GameLogicController game, int playerIndex, Player.Role role, BoardPredictor boardPredictor) {
-    this.game = game;
+  PathMovePredictor(int playerIndex, Player.Role role, BoardPredictor boardPredictor) {
     this.playerIndex = playerIndex;
     this.role = role;
-    this.pathHeuristic = BASE_HEURISTIC;
     this.boardPredictor = boardPredictor;
+    this.pathHeuristics = BASE_HEURISTICS;
     this.pathMultiplier = PATH_MULTIPLIER;
   }
 
-  MoveHeuristic generatePathHeuristic(
-    int cardIndex, PathCard card,
-    Board board, Map<Board.GoalPosition, GoalType> knownGoals
-  ) {
-    if (VERBOSE > 1) System.out.println(card);
-    if (VERBOSE > 1) System.out.println("not rotated:");
+  MoveHeuristic generatePathHeuristic(Board board, int cardIndex, PathCard card) {
+    Map<Position, Double> nonRotatedValues = getPositionValues(board, card, false);
+    Map<Position, Double> rotatedValues = getPositionValues(board, card, true);
 
-    Map<Position, Double> nonRotatedCellHeuristics = generatePlacementHeuristics(card, false, board, knownGoals);
-
-    if (VERBOSE > 1) System.out.println(nonRotatedCellHeuristics);
-    if (VERBOSE > 1) System.out.println("rotated:");
-
-    Map<Position, Double> rotatedCellHeuristics = generatePlacementHeuristics(card, true, board, knownGoals);
-
-    if (VERBOSE > 1) System.out.println(rotatedCellHeuristics);
-    if (VERBOSE > 1) System.out.println();
-
-    if (nonRotatedCellHeuristics.isEmpty() && rotatedCellHeuristics.isEmpty()) {
+    if (nonRotatedValues.isEmpty() && rotatedValues.isEmpty()) {
       Move move = Move.NewPathMove(playerIndex, cardIndex, -1, -1, false);
-      double heuristic = pathHeuristic.get(card.pathType());
-      return new MoveHeuristic(move, (role == Player.Role.GOLD_MINER ? heuristic : 1 - heuristic) / 2);
+      double base = pathHeuristics.get(card.pathType());
+      double heuristic = (role == Player.Role.GOLD_MINER ? base : 1 - base) / 2;
+      return new MoveHeuristic(move, heuristic);
     }
 
-    Map<Pair<Position, Boolean>, Double> possibleChoice = new HashMap<>();
-
-    possibleChoice.put(new Pair<>(new Position(-1, -1), false), Double.NEGATIVE_INFINITY);
+    Map<PathPlacement, Double> choices = new HashMap<>();
+    choices.put(new PathPlacement(new Position(-1, -1), false), Double.NEGATIVE_INFINITY);
 
     boolean path = card.type() == Card.Type.PATHWAY;
     boolean bRole = role == Player.Role.GOLD_MINER;
 
-    for (Map.Entry<Position, Double> e : nonRotatedCellHeuristics.entrySet()) {
+    for (Map.Entry<Position, Double> e : nonRotatedValues.entrySet()) {
       double best = path == bRole ?
-        Collections.max(possibleChoice.values()) :
-        Collections.min(possibleChoice.values());
+          Collections.max(choices.values()) :
+          Collections.min(choices.values());
       double val = e.getValue();
-      if (path == bRole && val - best > EPS) possibleChoice.clear();
-      if (path != bRole && best - val > EPS) possibleChoice.clear();
+      if (path == bRole && val - best > EPS)
+        choices.clear();
+      if (path != bRole && best - val > EPS)
+        choices.clear();
       if (path == bRole && val - best >= -EPS)
-        possibleChoice.put(new Pair<>(e.getKey(), false), e.getValue());
+        choices.put(new PathPlacement(e.getKey(), false), e.getValue());
       if (path != bRole && best - val >= -EPS)
-        possibleChoice.put(new Pair<>(e.getKey(), false), e.getValue());
+        choices.put(new PathPlacement(e.getKey(), false), e.getValue());
     }
 
-    for (Map.Entry<Position, Double> e : rotatedCellHeuristics.entrySet()) {
+    for (Map.Entry<Position, Double> e : rotatedValues.entrySet()) {
       double best = path == bRole ?
-        Collections.max(possibleChoice.values()) :
-        Collections.min(possibleChoice.values());
+          Collections.max(choices.values()) :
+          Collections.min(choices.values());
       double val = e.getValue();
-      if (path == bRole && val - best > EPS) possibleChoice.clear();
-      if (path != bRole && best - val > EPS) possibleChoice.clear();
+      if (path == bRole && val - best > EPS)
+        choices.clear();
+      if (path != bRole && best - val > EPS)
+        choices.clear();
       if (path == bRole && val - best >= -EPS)
-        possibleChoice.put(new Pair<>(e.getKey(), true), e.getValue());
+        choices.put(new PathPlacement(e.getKey(), true), e.getValue());
       if (path != bRole && best - val >= -EPS)
-        possibleChoice.put(new Pair<>(e.getKey(), true), e.getValue());
+        choices.put(new PathPlacement(e.getKey(), true), e.getValue());
     }
 
-    ArrayList<Pair<Position, Boolean>> choiceArray = new ArrayList<>(possibleChoice.keySet());
-    Random r = new Random();
-    Pair<Position, Boolean> chosen = choiceArray.get(r.nextInt(choiceArray.size()));
-    Position pos = chosen.getKey();
-    boolean willRotate = chosen.getValue();
+    PathPlacement chosen = RandomUtils.choose(choices.keySet())
+        .orElse(new PathPlacement(new Position(-1, -1), false));
+    Position pos = chosen.pos;
+    boolean willRotate = chosen.rotated;
 
     Move move = Move.NewPathMove(playerIndex, cardIndex, pos.x, pos.y, willRotate);
-    double heuristic = possibleChoice.get(chosen);
+    double heuristic = choices.get(chosen);
 
     return new MoveHeuristic(move, heuristic);
   }
 
-  Map<Position, Double> generatePlacementHeuristics(
-    PathCard card, boolean rotated,
-    Board board, Map<Board.GoalPosition, GoalType> knownGoals
-  ) {
+  private Map<Position, Double> getPositionValues(Board board, PathCard card, boolean rotated) {
     Map<Position, Double> cellHeuristics = new HashMap<>();
     card.setRotated(rotated);
+
     Set<Position> placeable = board.getPlaceable(card);
-    placeable.forEach(p -> {
-      double h = calculatePlacementHeuristic(board, card, p, knownGoals);
-      cellHeuristics.put(p, h);
-    });
+    for (Position p : placeable) {
+      cellHeuristics.put(p, valueOfPosition(board, card, p));
+    }
+
     return cellHeuristics;
   }
 
 
-  double calculatePlacementHeuristic(Board board, PathCard card, Position p, Map<Board.GoalPosition, GoalType> knownGoals) {
+  private double valueOfPosition(Board board, PathCard card, Position p) {
     Board simulated = board.simulatePlaceCardAt(card, p.x, p.y);
-    if (simulated == null) return 0;
-    if (VERBOSE > 1) System.out.println("p=" + p);
-    if (VERBOSE > 1) System.out.println("old: ");
-    double oldMax = boardPredictor.calculateMaxValue(board, knownGoals);
-    double oldAvg = boardPredictor.calculateAverageValue(board, knownGoals);
-    if (VERBOSE > 1) System.out.println("new: ");
-    double simMax = boardPredictor.calculateMaxValue(simulated, knownGoals);
-    double simAvg = boardPredictor.calculateAverageValue(simulated, knownGoals);
-    if (Math.abs(simMax - oldMax) <= EPS) {
-      return (simAvg - oldAvg) * pathMultiplier;
-    } else {
-      return (simMax - oldMax) * pathMultiplier;
+    if (simulated == null) {
+      return 0.0;
     }
+
+    double diff = boardPredictor.calcDiff(board, simulated);
+    return diff * pathMultiplier;
   }
 }

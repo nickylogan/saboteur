@@ -6,52 +6,60 @@
 
 package ai.proposed;
 
-import model.Board;
-import model.GameLogicController;
+import javafx.util.Pair;
+import model.Board.GoalPosition;
 import model.GoalType;
 import model.Move;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.Optional;
 
 public class MapMovePredictor {
   static final double BASE_HEURISTIC = PathMovePredictor.MAX_PATH_HEURISTIC + 2.5;
 
-  private final GameLogicController game;
   private final int playerIndex;
-  private double mapHeuristic;
+  private final double mapHeuristic;
+  private final GoalKnowledge goalKnowledge;
 
-  MapMovePredictor(GameLogicController game, int playerIndex) {
-    this.game = game;
+  MapMovePredictor(int playerIndex, GoalKnowledge goalKnowledge) {
     this.playerIndex = playerIndex;
     this.mapHeuristic = BASE_HEURISTIC;
+    this.goalKnowledge = goalKnowledge;
   }
 
-  MoveHeuristic generateMapHeuristic(int cardIndex, Map<Board.GoalPosition, GoalType> knownGoals) {
-    GoalType top = knownGoals.get(Board.GoalPosition.TOP);
-    GoalType mid = knownGoals.get(Board.GoalPosition.MIDDLE);
-    GoalType bot = knownGoals.get(Board.GoalPosition.BOTTOM);
-    Collection<GoalType> goals = knownGoals.values();
-    double htop = (1 + .5 * (goals.contains(GoalType.GOLD) || top != null ? -5 : 1)) * mapHeuristic;
-    double hmid = (1 + .5 * (goals.contains(GoalType.GOLD) || mid != null ? -5 : 1)) * mapHeuristic;
-    double hbot = (1 + .5 * (goals.contains(GoalType.GOLD) || bot != null ? -5 : 1)) * mapHeuristic;
-    Board.GoalPosition pos;
-    double heuristic;
-    if (htop >= hmid && htop >= hbot) {
-      pos = Board.GoalPosition.TOP;
-      heuristic = htop;
-    } else if (hmid >= htop && hmid >= hbot) {
-      pos = Board.GoalPosition.MIDDLE;
-      heuristic = hmid;
+  MoveHeuristic generateMapHeuristic(int cardIndex) {
+    double hTop, hMid, hBot;
+    if (goalKnowledge.containsGold()) {
+      hTop = hMid = hBot = (1 + .5 * -5) * mapHeuristic;
     } else {
-      pos = Board.GoalPosition.BOTTOM;
-      heuristic = hbot;
+      Optional<GoalType> top = goalKnowledge.top();
+      hTop = (1 + .5 * (top.isPresent() ? -5 : 1)) * mapHeuristic;
+
+      Optional<GoalType> mid = goalKnowledge.mid();
+      hMid = (1 + .5 * (mid.isPresent() ? -5 : 1)) * mapHeuristic;
+
+      Optional<GoalType> bot = goalKnowledge.bottom();
+      hBot = (1 + .5 * (bot.isPresent() ? -5 : 1)) * mapHeuristic;
     }
-    Move move = Move.NewMapMove(playerIndex, cardIndex, pos);
-    return new MoveHeuristic(move, heuristic);
+
+    Pair<GoalPosition, Double> bestPosition = getBestPosition(hTop, hMid, hBot);
+    Move move = Move.NewMapMove(playerIndex, cardIndex, bestPosition.getKey());
+    return new MoveHeuristic(move, bestPosition.getValue());
   }
 
-  public void setMapHeuristic(double mapHeuristic) {
-    this.mapHeuristic = mapHeuristic;
+  private Pair<GoalPosition, Double> getBestPosition(double hTop, double hMid, double hBot) {
+    GoalPosition pos;
+    double heuristic;
+    if (hTop >= hMid && hTop >= hBot) {
+      pos = GoalPosition.TOP;
+      heuristic = hTop;
+    } else if (hMid >= hTop && hMid >= hBot) {
+      pos = GoalPosition.MIDDLE;
+      heuristic = hMid;
+    } else {
+      pos = GoalPosition.BOTTOM;
+      heuristic = hBot;
+    }
+
+    return new Pair<>(pos, heuristic);
   }
 }

@@ -15,27 +15,28 @@ import model.cards.PlayerActionCard;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("DuplicatedCode")
 public class PlayerActionMovePredictor {
   static final double BASE_BLOCK_HEURISTIC = PathMovePredictor.MAX_PATH_HEURISTIC - .1;
   static final double BASE_REPAIR_HEURISTIC = PathMovePredictor.MAX_PATH_HEURISTIC - .1;
 
   private final GameLogicController game;
-  private final SaboteurAI ai;
+  private final RolePredictor rolePredictor;
   private final int playerIndex;
 
-  private double blockHeuristic;
+  private final double blockHeuristic;
   private double repairHeuristic;
 
-  PlayerActionMovePredictor(GameLogicController game, int playerIndex, SaboteurAI ai) {
+  PlayerActionMovePredictor(GameLogicController game, int playerIndex, RolePredictor rolePredictor) {
     this.playerIndex = playerIndex;
     this.game = game;
-    this.ai = ai;
+    this.rolePredictor = rolePredictor;
     this.blockHeuristic = BASE_BLOCK_HEURISTIC;
     this.repairHeuristic = BASE_REPAIR_HEURISTIC;
   }
 
   MoveHeuristic generateBlockHeuristic(int cardIndex, PlayerActionCard card) {
-    Set<Integer> enemies = ai.rolePredictor.getEnemies();
+    Set<Integer> enemies = rolePredictor.getEnemies();
     Tool tool = card.effects()[0];
     enemies = enemies.stream().filter(i -> game.playerAt(i).isSabotageable(tool)).collect(Collectors.toSet());
     if (enemies.isEmpty()) {
@@ -66,7 +67,7 @@ public class PlayerActionMovePredictor {
   }
 
   MoveHeuristic generateRepairHeuristic(int cardIndex, PlayerActionCard card) {
-    Set<Integer> friends = ai.rolePredictor.getFriends();
+    Set<Integer> friends = rolePredictor.getFriends();
     Tool[] tools = card.effects();
     friends = friends.stream().filter(i -> game.playerAt(i).isRepairable(tools)).collect(Collectors.toSet());
     if (friends.isEmpty()) {

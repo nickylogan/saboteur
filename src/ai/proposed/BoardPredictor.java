@@ -6,86 +6,144 @@
 
 package ai.proposed;
 
-import model.*;
+import ai.proposed.GoalKnowledge.Scenario;
+import ai.proposed.utils.DoubleUtils;
+import model.Board;
+import model.Cell;
+import model.Player;
+import model.Position;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-
-import static ai.proposed.SaboteurAI.VERBOSE;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BoardPredictor {
+  private final GoalKnowledge goalKnowledge;
   private static final int K = 5;
-  private final GameLogicController game;
   private final Player.Role role;
 
-  BoardPredictor(GameLogicController game, Player.Role role) {
-    this.game = game;
+  BoardPredictor(Player.Role role, GoalKnowledge goalKnowledge) {
     this.role = role;
+    this.goalKnowledge = goalKnowledge;
   }
 
-  private double calculateCellValue(Position p, Map<Board.GoalPosition, GoalType> knownGoals) {
-    int scenario = Utils.getGoalScenario(knownGoals);
+  double calcDiff(Board old, Board simulated) {
+    double maxOld = this.calcMaxValue(old);
+    double maxSimulated = this.calcMaxValue(simulated);
 
+    // prefer difference of max
+    if (DoubleUtils.compare(maxSimulated, maxOld) == 0) {
+      return maxSimulated - maxOld;
+    }
+
+    double avgOld = this.calcAvgValue(old);
+    double avgSimulated = this.calcAvgValue(simulated);
+
+    return avgSimulated - avgOld;
+  }
+
+  private double calcAvgValue(Board board) {
+    Set<Position> reachable = getReachable(board);
+    if (reachable.isEmpty()) return 0.0;
+
+    int k = role == Player.Role.GOLD_MINER ?
+        Math.min(reachable.size(), K) :
+        reachable.size();
+
+    List<Double> kMax = reachable.stream()
+        .map(this::calcCellValue)
+        .sorted(Comparator.reverseOrder())
+        .collect(Collectors.toList())
+        .subList(0, k);
+
+    OptionalDouble average = kMax.stream()
+        .mapToDouble(Double::doubleValue)
+        .average();
+
+    return average.orElse(0.0);
+  }
+
+  private double calcMaxValue(Board board) {
+    Set<Position> reachable = getReachable(board);
+    if (reachable.isEmpty()) return Double.NEGATIVE_INFINITY;
+
+    Optional<Double> max = reachable.stream()
+        .map(this::calcCellValue)
+        .max(Double::compareTo);
+
+    return max.get();
+  }
+
+  private double calcCellValue(Position p) {
+    Scenario scenario = goalKnowledge.getScenario();
+
+    double hy = calcYValue(p, scenario);
+    double hx = calcXValue(p, scenario);
+
+    return hx * hy;
+  }
+
+  private double calcYValue(Position p, Scenario scenario) {
     double hy = 1.0;
-    if (role == Player.Role.GOLD_MINER) {
-      switch (scenario) {
-        case 0: hy = Math.min(0.5 * p.y, 1); break;
-        case 1: hy = 1 - .25 * p.y; break;
-        case 2: hy = 1 - Math.abs(1 - .5 * p.y); break;
-        case 3: hy = .25 * p.y; break;
-      }
-    } else {
-      switch (scenario) {
-        case 0: hy = Math.max(1 - 0.5 * p.y, 0); break;
-        case 1: hy = 1 / 16.0 * p.y * p.y; break;
-        case 2: hy = Math.abs(1 - .5 * p.y); break;
-        case 3: hy = 1 / 16.0 * (p.y - 4) * (p.y - 4); break;
-      }
+
+    switch (scenario) {
+      case TOP_ROCK:
+        hy = role == Player.Role.GOLD_MINER ?
+            Math.min(0.5 * p.y, 1) :    // prefer mid-bottom area (miner)
+            Math.max(1 - 0.5 * p.y, 0); // prefer top area (saboteur)
+        break;
+      case TOP_GOLD:
+        hy = role == Player.Role.GOLD_MINER ?
+            1 - .25 * p.y :       // prefer top area (miner)
+            1 / 16.0 * p.y * p.y; // prefer bottom area (saboteur)
+        break;
+      case MID_GOLD:
+        hy = role == Player.Role.GOLD_MINER ?
+            1 - Math.abs(1 - .5 * p.y) : // prefer mid area (miner)
+            Math.abs(1 - .5 * p.y);      // prefer top/bottom area (saboteur)
+        break;
+      case BOT_GOLD:
+        hy = role == Player.Role.GOLD_MINER ?
+            .25 * p.y :                       // prefer bottom area (miner)
+            1 / 16.0 * (p.y - 4) * (p.y - 4); // prefer top area (saboteur)
+        break;
     }
-    double hx = 0.1 * (role == Player.Role.GOLD_MINER ? 1 + p.x : 9 - p.x) / (scenario == 0 ? 2 : 1);
-    double hxy = hx * hy;
-    if (VERBOSE > 1)
-      System.out.printf("h(%d)=%f, h(%d)=%f, h(%d,%d)=%f\n", p.x, hx, p.y, hy, p.x, p.y, hxy);
-    return hxy;
+
+    return hy;
   }
 
-  double calculateAverageValue(Board board, Map<Board.GoalPosition, GoalType> knownGoals) {
-    double sum = 0;
-    Set<Position> reachable = board.getReachable();
-    reachable.retainAll(Utils.getEmpty(board));
-    if (board.isReachable(board.topGoalPosition())) reachable.add(board.topGoalPosition());
-    if (board.isReachable(board.middleGoalPosition())) reachable.add(board.middleGoalPosition());
-    if (board.isReachable(board.bottomGoalPosition())) reachable.add(board.bottomGoalPosition());
+  private double calcXValue(Position p, Scenario scenario) {
+    // be more cautious in moving forward if information is incomplete
+    double strength = scenario == Scenario.UNKNOWN || scenario == Scenario.TOP_ROCK ? 0.5 : 1;
+    double baseValue = role == Player.Role.GOLD_MINER ?
+        1 + p.x : // prefer moving forward (miner)
+        9 - p.x;  // prefer moving backwards (saboteur)
 
-    ArrayList<Double> values = new ArrayList<>();
-    for (Position ps : reachable) {
-      values.add(calculateCellValue(ps, knownGoals));
-    }
-    values.sort(Collections.reverseOrder());
-    int k = role == Player.Role.GOLD_MINER ? Math.min(values.size(), K) : values.size();
-    for(int i = 0; i < k; ++i) {
-      sum += values.get(i);
-    }
-
-    double value = reachable.isEmpty() ? 0 : sum / values.size();
-    if (VERBOSE > 1) System.out.println("avg = " + value);
-    return value;
+    return 0.1 * baseValue * strength;
   }
 
-  double calculateMaxValue(Board board, Map<Board.GoalPosition, GoalType> knownGoals) {
-    double max = Double.NEGATIVE_INFINITY;
+  private static Set<Position> getReachable(Board board) {
     Set<Position> reachable = board.getReachable();
-    reachable.retainAll(Utils.getEmpty(board));
-    if (board.isReachable(board.topGoalPosition())) reachable.add(board.topGoalPosition());
-    if (board.isReachable(board.middleGoalPosition())) reachable.add(board.middleGoalPosition());
-    if (board.isReachable(board.bottomGoalPosition())) reachable.add(board.bottomGoalPosition());
-    for (Position ps : reachable) {
-      double val = calculateCellValue(ps, knownGoals);
-      if (val - max > SaboteurAI.EPS) max = val;
+    reachable.retainAll(getEmpty(board));
+
+    if (board.isReachable(board.topGoalPosition()))
+      reachable.add(board.topGoalPosition());
+    if (board.isReachable(board.middleGoalPosition()))
+      reachable.add(board.middleGoalPosition());
+    if (board.isReachable(board.bottomGoalPosition()))
+      reachable.add(board.bottomGoalPosition());
+
+    return reachable;
+  }
+
+  private static Set<Position> getEmpty(Board board) {
+    Set<Position> empty = new HashSet<>();
+    for (int x = 0; x < board.width(); x++) {
+      for (int y = 0; y < board.height(); y++) {
+        Cell cell = board.cellAt(x, y);
+        if (cell == null) continue;
+        if (!cell.hasCard()) empty.add(new Position(x, y));
+      }
     }
-    if (VERBOSE > 1) System.out.println("max = " + max);
-    return max;
+    return empty;
   }
 }
