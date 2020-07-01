@@ -26,19 +26,19 @@ public class BoardPredictor {
     this.goalKnowledge = goalKnowledge;
   }
 
-  double calcDiff(Board old, Board simulated) {
-    double maxOld = this.calcMaxValue(old);
-    double maxSimulated = this.calcMaxValue(simulated);
+  double calcDiff(Board before, Board after) {
+    double maxBefore = this.calcMaxValue(before);
+    double maxAfter = this.calcMaxValue(after);
 
     // prefer difference of max
-    if (DoubleUtils.compare(maxSimulated, maxOld) == 0) {
-      return maxSimulated - maxOld;
+    if (DoubleUtils.compare(maxAfter, maxBefore) != 0) {
+      return maxAfter - maxBefore;
     }
 
-    double avgOld = this.calcAvgValue(old);
-    double avgSimulated = this.calcAvgValue(simulated);
+    double avgBefore = this.calcAvgValue(before);
+    double avgAfter = this.calcAvgValue(after);
 
-    return avgSimulated - avgOld;
+    return avgAfter - avgBefore;
   }
 
   private double calcAvgValue(Board board) {
@@ -77,7 +77,7 @@ public class BoardPredictor {
     Scenario scenario = goalKnowledge.getScenario();
 
     double hy = calcYValue(p, scenario);
-    double hx = calcXValue(p, scenario);
+    double hx = calcXValue(p);
 
     return hx * hy;
   }
@@ -111,14 +111,12 @@ public class BoardPredictor {
     return hy;
   }
 
-  private double calcXValue(Position p, Scenario scenario) {
-    // be more cautious in moving forward if information is incomplete
-    double strength = scenario == Scenario.UNKNOWN || scenario == Scenario.TOP_ROCK ? 0.5 : 1;
+  private double calcXValue(Position pos) {
     double baseValue = role == Player.Role.GOLD_MINER ?
-        1 + p.x : // prefer moving forward (miner)
-        9 - p.x;  // prefer moving backwards (saboteur)
+        1 + pos.x : // prefer moving forward (miner)
+        9 - pos.x;  // prefer moving backwards (saboteur)
 
-    return 0.1 * baseValue * strength;
+    return 0.1 * baseValue;
   }
 
   private static Set<Position> getReachable(Board board) {
