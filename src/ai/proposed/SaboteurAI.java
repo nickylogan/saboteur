@@ -59,7 +59,7 @@ public class SaboteurAI extends AI {
     rolePredictor =
         new RolePredictor(game(), index(), role(), boardPredictor);
     rockfallMovePredictor =
-        new RockfallMovePredictor(game(), index(), role(), boardPredictor, pathMovePredictor);
+        new RockfallMovePredictor(game(), index(), role(), boardPredictor);
     playerActionMovePredictor =
         new PlayerActionMovePredictor(game(), index(), rolePredictor);
     mapMovePredictor =
@@ -122,7 +122,7 @@ public class SaboteurAI extends AI {
           moveHeuristic = playerActionMovePredictor.generateRepairHeuristic(i, (PlayerActionCard) card);
           break;
         case ROCKFALL:
-          moveHeuristic = rockfallMovePredictor.generateRockfallHeuristic(i, hand());
+          moveHeuristic = rockfallMovePredictor.generateRockfallHeuristic(i);
           break;
       }
 
