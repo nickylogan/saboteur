@@ -142,9 +142,7 @@ public class SaboteurAI extends AI {
   @Override
   protected void onOtherPlayerMove(Move move) {
     rolePredictor.updateFromMove(move);
-
-    double rh = playerActionMovePredictor.getRepairHeuristic();
-    playerActionMovePredictor.setRepairHeuristic(rh + .01);
+    playerActionMovePredictor.update();
   }
 
   @Override
