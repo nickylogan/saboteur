@@ -8,6 +8,7 @@ package ai.proposed;
 
 import ai.AI;
 import ai.proposed.utils.DoubleUtils;
+import ai.utils.Log;
 import model.Board;
 import model.GoalType;
 import model.Move;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SaboteurAI extends AI {
   public static int playAsMiner = 0;
@@ -28,14 +30,14 @@ public class SaboteurAI extends AI {
   static final double EPS = 1e-6;
   static final double MIN_HEURISTIC = -.5;
 
-  RolePredictor rolePredictor;
-  PathMovePredictor pathMovePredictor;
-  RockfallMovePredictor rockfallMovePredictor;
-  PlayerActionMovePredictor playerActionMovePredictor;
-  MapMovePredictor mapMovePredictor;
-  BoardPredictor boardPredictor;
-  MoveValidator moveValidator;
-  GoalKnowledge goalKnowledge;
+  private RolePredictor rolePredictor;
+  private PathMovePredictor pathMovePredictor;
+  private RockfallMovePredictor rockfallMovePredictor;
+  private PlayerActionMovePredictor playerActionMovePredictor;
+  private MapMovePredictor mapMovePredictor;
+  private BoardPredictor boardPredictor;
+  private MoveValidator moveValidator;
+  private GoalKnowledge goalKnowledge;
 
   /**
    * Creates an {@link AI} object representing an AI for the game
@@ -48,14 +50,22 @@ public class SaboteurAI extends AI {
   public void initialize() {
     DoubleUtils.setEpsilon(EPS);
 
-    goalKnowledge = new GoalKnowledge(knownGoals());
-    boardPredictor = new BoardPredictor(role(), goalKnowledge);
-    pathMovePredictor = new PathMovePredictor(index(), role(), boardPredictor);
-    rolePredictor = new RolePredictor(game(), index(), role(), boardPredictor);
-    rockfallMovePredictor = new RockfallMovePredictor(game(), index(), role(), boardPredictor, pathMovePredictor);
-    playerActionMovePredictor = new PlayerActionMovePredictor(game(), index(), rolePredictor);
-    mapMovePredictor = new MapMovePredictor(index(), goalKnowledge);
-    moveValidator = new MoveValidator(game(), this);
+    goalKnowledge =
+        new GoalKnowledge(knownGoals());
+    boardPredictor =
+        new BoardPredictor(role(), goalKnowledge);
+    pathMovePredictor =
+        new PathMovePredictor(index(), role(), boardPredictor);
+    rolePredictor =
+        new RolePredictor(game(), index(), role(), boardPredictor);
+    rockfallMovePredictor =
+        new RockfallMovePredictor(game(), index(), role(), boardPredictor, pathMovePredictor);
+    playerActionMovePredictor =
+        new PlayerActionMovePredictor(game(), index(), rolePredictor);
+    mapMovePredictor =
+        new MapMovePredictor(index(), goalKnowledge);
+    moveValidator =
+        new MoveValidator(game(), this);
 
     updatePlayStats();
   }
@@ -63,6 +73,11 @@ public class SaboteurAI extends AI {
   @Override
   protected Move makeDecision() {
     List<MoveHeuristic> possibleMoves = generateSortedMoves();
+    Log.debugln(
+        possibleMoves.stream()
+            .map(MoveHeuristic::toString)
+            .collect(Collectors.joining("\n"))
+    );
 
     Move move = null;
     for (MoveHeuristic mh : possibleMoves) {

@@ -8,21 +8,24 @@ package ai.proposed;
 
 import ai.proposed.utils.DoubleUtils;
 import ai.proposed.utils.RandomUtils;
-import model.*;
+import ai.utils.Log;
+import model.Board;
+import model.GameLogicController;
+import model.Move;
+import model.Player.Role;
+import model.Position;
 import model.cards.Card;
 import model.cards.PathCard;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ai.proposed.SaboteurAI.EPS;
-
 public class RockfallMovePredictor {
   static final double BASE_MULTIPLIER = 50;
 
   private final GameLogicController game;
   private final int playerIndex;
-  private final Player.Role role;
+  private final Role role;
   private final double rockfallMultiplier;
   private final BoardPredictor boardPredictor;
   private final PathMovePredictor pathMovePredictor;
@@ -30,7 +33,7 @@ public class RockfallMovePredictor {
   RockfallMovePredictor(
       GameLogicController game,
       int playerIndex,
-      Player.Role role,
+      Role role,
       BoardPredictor boardPredictor,
       PathMovePredictor pathMovePredictor
   ) {
@@ -51,7 +54,8 @@ public class RockfallMovePredictor {
     Map<Position, Double> choices = generateChoices(destroyable, hand);
     choices = extractBestChoices(choices);
 
-    Position pos = RandomUtils.choose(choices.keySet()).orElse(new Position(-1, -1));
+    Position pos = RandomUtils.choose(choices.keySet())
+        .orElse(getDefaultPosition());
     double heuristic = Math.abs(choices.get(pos));
 
     Move move = Move.NewRockfallMove(playerIndex, cardIndex, pos.x, pos.y);
@@ -77,18 +81,28 @@ public class RockfallMovePredictor {
 
   private Map<Position, Double> extractBestChoices(Map<Position, Double> choices) {
     Map<Position, Double> best = new HashMap<>();
-    best.put(getDefaultPosition(), Double.NEGATIVE_INFINITY);
+    best.put(
+        getDefaultPosition(),
+        role == Role.SABOTEUR ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY
+    );
 
     for (Map.Entry<Position, Double> e : choices.entrySet()) {
-      double currMax = Collections.max(best.values());
+      double currBest =
+          role == Role.GOLD_MINER
+              ? Collections.max(best.values())
+              : Collections.min(best.values());
 
-      if (DoubleUtils.compare(e.getValue(), currMax) == -1)
+      if (DoubleUtils.compare(e.getValue(), currBest) == -1)
         continue;
 
-      if (DoubleUtils.compare(e.getValue(), currMax) == 1)
+      if (DoubleUtils.compare(e.getValue(), currBest) == 1)
         best.clear();
 
       best.put(e.getKey(), e.getValue());
+    }
+
+    if (role == Role.GOLD_MINER) {
+      Log.debugln(best);
     }
 
     return best;
@@ -101,7 +115,7 @@ public class RockfallMovePredictor {
     double diff = boardPredictor.calcDiff(board, simulated);
     double valueIfDestroyed = diff * rockfallMultiplier;
 
-    if (role == Player.Role.SABOTEUR) {
+    if (role == Role.SABOTEUR) {
       return Optional.of(valueIfDestroyed);
     }
 

@@ -1,7 +1,9 @@
 package main;
 
 import ai.proposed.SaboteurAI;
+import ai.utils.Log;
 import gui.GameGUIController;
+import gui.GameGUIController.GUIGamePlayer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.GameLogicController;
@@ -16,8 +18,8 @@ public class Main extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    // CustomAI.VERBOSE = 1;
     GameLogicController.COMPETITION_MODE = 0;
+    Log.init(Log.Level.DEBUG);
 
     SaboteurAI saboteurAi1 = new SaboteurAI("Alice");
     SaboteurAI saboteurAi2 = new SaboteurAI("Bob");
