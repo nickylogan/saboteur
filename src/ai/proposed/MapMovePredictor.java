@@ -6,7 +6,6 @@
 
 package ai.proposed;
 
-import javafx.util.Pair;
 import model.Board.GoalPosition;
 import model.GoalType;
 import model.Move;
@@ -14,6 +13,16 @@ import model.Move;
 import java.util.Optional;
 
 public class MapMovePredictor {
+  private static class PositionValue {
+    private final GoalPosition pos;
+    private final double value;
+
+    private PositionValue(GoalPosition pos, double value) {
+      this.pos = pos;
+      this.value = value;
+    }
+  }
+
   static final double BASE_HEURISTIC = PathMovePredictor.MAX_PATH_HEURISTIC + 2.5;
 
   private final int playerIndex;
@@ -41,12 +50,12 @@ public class MapMovePredictor {
       hBot = (1 + .5 * (bot.isPresent() ? -5 : 1)) * mapHeuristic;
     }
 
-    Pair<GoalPosition, Double> bestPosition = getBestPosition(hTop, hMid, hBot);
-    Move move = Move.NewMapMove(playerIndex, cardIndex, bestPosition.getKey());
-    return new MoveHeuristic(move, bestPosition.getValue());
+    PositionValue best = getBestPosition(hTop, hMid, hBot);
+    Move move = Move.NewMapMove(playerIndex, cardIndex, best.pos);
+    return new MoveHeuristic(move, best.value);
   }
 
-  private Pair<GoalPosition, Double> getBestPosition(double hTop, double hMid, double hBot) {
+  private PositionValue getBestPosition(double hTop, double hMid, double hBot) {
     GoalPosition pos;
     double heuristic;
     if (hTop >= hMid && hTop >= hBot) {
@@ -60,6 +69,6 @@ public class MapMovePredictor {
       heuristic = hBot;
     }
 
-    return new Pair<>(pos, heuristic);
+    return new PositionValue(pos, heuristic);
   }
 }
