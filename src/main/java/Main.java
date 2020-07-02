@@ -1,9 +1,6 @@
-package main;
-
 import ai.proposed.SaboteurAI;
 import ai.utils.Log;
 import gui.GameGUIController;
-import gui.GameGUIController.GUIGamePlayer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import model.GameLogicController;
@@ -36,7 +33,6 @@ public class Main extends Application {
         saboteurAi1, saboteurAi2, saboteurAi3, saboteurAi4
     };
 
-    setUserAgentStylesheet(STYLESHEET_MODENA);
     window = GameGUIController.NewGameSession(players);
   }
 }

@@ -1,5 +1,3 @@
-package main;
-
 import ai.AI;
 import model.Board;
 import model.Move;
