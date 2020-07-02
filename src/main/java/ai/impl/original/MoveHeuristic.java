@@ -1,15 +1,15 @@
 /*
  * Authors:
  * Nicky (https://github.com/nickylogan)
- * Nadya (https://github.com/Ao-Re)
  */
 
-package ai.proposed;
+package ai.impl.original;
 
 import model.Move;
 
 class MoveHeuristic {
   final Move move;
+
   final double heuristic;
 
   MoveHeuristic(Move move, double heuristic) {

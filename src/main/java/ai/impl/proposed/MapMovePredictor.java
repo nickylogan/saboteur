@@ -4,7 +4,7 @@
  * Nadya (https://github.com/Ao-Re)
  */
 
-package ai.proposed;
+package ai.impl.proposed;
 
 import model.Board.GoalPosition;
 import model.GoalType;

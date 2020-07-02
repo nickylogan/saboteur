@@ -4,10 +4,10 @@
  * Nadya (https://github.com/Ao-Re)
  */
 
-package ai.proposed;
+package ai.impl.proposed;
 
-import ai.proposed.utils.DoubleUtils;
-import ai.proposed.utils.RandomUtils;
+import ai.impl.proposed.utils.DoubleUtils;
+import ai.impl.proposed.utils.RandomUtils;
 import model.*;
 import model.cards.PathCard;
 

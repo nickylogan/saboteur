@@ -1,4 +1,4 @@
-package example;
+package ai.impl.example;
 
 import ai.AI;
 import model.*;

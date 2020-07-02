@@ -4,10 +4,10 @@
  * Nadya (https://github.com/Ao-Re)
  */
 
-package ai.proposed;
+package ai.impl.proposed;
 
-import ai.proposed.GoalKnowledge.Scenario;
-import ai.proposed.utils.DoubleUtils;
+import ai.impl.proposed.GoalKnowledge.Scenario;
+import ai.impl.proposed.utils.DoubleUtils;
 import model.Board;
 import model.Cell;
 import model.Player;

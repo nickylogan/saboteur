@@ -3,7 +3,7 @@
  * Nicky (https://github.com/nickylogan)
  */
 
-package ai.original;
+package ai.impl.original;
 
 import model.GameLogicController;
 import model.Move;
@@ -14,8 +14,8 @@ import model.cards.PlayerActionCard;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ai.original.SaboteurAI.k3;
-import static ai.original.SaboteurAI.k4;
+import static ai.impl.original.SaboteurAI.k3;
+import static ai.impl.original.SaboteurAI.k4;
 
 @SuppressWarnings("Duplicates")
 public class PlayerActionMovePredictor {

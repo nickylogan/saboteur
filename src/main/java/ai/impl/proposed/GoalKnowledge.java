@@ -1,4 +1,4 @@
-package ai.proposed;
+package ai.impl.proposed;
 
 import model.Board;
 import model.GoalType;

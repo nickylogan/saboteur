@@ -1,3 +1,5 @@
+package ai.impl.random;
+
 import ai.AI;
 import model.Board;
 import model.Move;

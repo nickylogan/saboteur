@@ -3,7 +3,7 @@
  * Nicky (https://github.com/nickylogan)
  */
 
-package ai.original;
+package ai.impl.original;
 
 import model.*;
 import model.cards.Card;

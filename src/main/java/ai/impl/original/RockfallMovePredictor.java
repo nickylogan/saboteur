@@ -3,14 +3,14 @@
  * Nicky (https://github.com/nickylogan)
  */
 
-package ai.original;
+package ai.impl.original;
 
 import model.*;
 
 import java.util.*;
 
-import static ai.original.SaboteurAI.EPS;
-import static ai.original.SaboteurAI.k2;
+import static ai.impl.original.SaboteurAI.EPS;
+import static ai.impl.original.SaboteurAI.k2;
 
 public class RockfallMovePredictor {
   static final double BASE_HEURISTIC = k2;

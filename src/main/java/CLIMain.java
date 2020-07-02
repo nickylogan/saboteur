@@ -44,14 +44,14 @@ public class CLIMain extends GameObserver {
     for (int i = 0; i < 6 * epoch; ++i) {
       GameLogicController.COMPETITION_MODE = i / epoch;
       GameState state = new GameState();
-      ai.proposed.SaboteurAI sai1 = new ai.proposed.SaboteurAI("sai1");
-      ai.proposed.SaboteurAI sai2 = new ai.proposed.SaboteurAI("sai2");
-      ai.proposed.SaboteurAI mai1 = new ai.proposed.SaboteurAI("mai1");
-      ai.proposed.SaboteurAI mai2 = new ai.proposed.SaboteurAI("mai2");
-      ai.proposed.SaboteurAI mai3 = new ai.proposed.SaboteurAI("mai3");
-      ai.proposed.SaboteurAI mai4 = new ai.proposed.SaboteurAI("mai4");
-      ai.proposed.SaboteurAI mai5 = new ai.proposed.SaboteurAI("mai5");
-      ai.proposed.SaboteurAI mai6 = new ai.proposed.SaboteurAI("mai6");
+      ai.impl.proposed.SaboteurAI sai1 = new ai.impl.proposed.SaboteurAI("sai1");
+      ai.impl.proposed.SaboteurAI sai2 = new ai.impl.proposed.SaboteurAI("sai2");
+      ai.impl.proposed.SaboteurAI mai1 = new ai.impl.proposed.SaboteurAI("mai1");
+      ai.impl.proposed.SaboteurAI mai2 = new ai.impl.proposed.SaboteurAI("mai2");
+      ai.impl.proposed.SaboteurAI mai3 = new ai.impl.proposed.SaboteurAI("mai3");
+      ai.impl.proposed.SaboteurAI mai4 = new ai.impl.proposed.SaboteurAI("mai4");
+      ai.impl.proposed.SaboteurAI mai5 = new ai.impl.proposed.SaboteurAI("mai5");
+      ai.impl.proposed.SaboteurAI mai6 = new ai.impl.proposed.SaboteurAI("mai6");
       AI[][] players = new AI[][]{
           {sai1, mai1, mai2, mai3},
           {sai1, mai1, mai2, mai3, mai4},
