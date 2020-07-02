@@ -6,28 +6,20 @@
 
 package ai.proposed;
 
+import ai.proposed.utils.DoubleUtils;
 import ai.proposed.utils.RandomUtils;
-import model.Board;
-import model.Move;
-import model.Player;
-import model.Position;
-import model.cards.Card;
+import model.*;
 import model.cards.PathCard;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import static ai.proposed.SaboteurAI.EPS;
+import java.util.*;
 
 @SuppressWarnings("Duplicates")
 class PathMovePredictor {
-  private static class PathPlacement {
+  private static class Placement {
     private final Position pos;
     private final boolean rotated;
 
-    PathPlacement(Position pos, boolean rotated) {
+    Placement(Position pos, boolean rotated) {
       this.pos = pos;
       this.rotated = rotated;
     }
@@ -73,75 +65,51 @@ class PathMovePredictor {
   }
 
   MoveHeuristic generatePathHeuristic(Board board, int cardIndex, PathCard card) {
-    Map<Position, Double> nonRotatedValues = getPositionValues(board, card, false);
-    Map<Position, Double> rotatedValues = getPositionValues(board, card, true);
-
-    if (nonRotatedValues.isEmpty() && rotatedValues.isEmpty()) {
-      Move move = Move.NewPathMove(playerIndex, cardIndex, -1, -1, false);
-      double base = pathHeuristics.get(card.pathType());
-      double heuristic = (role == Player.Role.GOLD_MINER ? base : 1 - base) / 2;
-      return new MoveHeuristic(move, heuristic);
+    Map<Placement, Double> placementValues = getPlacementValues(board, card);
+    if (placementValues.isEmpty()) {
+      return getDefaultMove(cardIndex, card);
     }
 
-    Map<PathPlacement, Double> choices = new HashMap<>();
-    choices.put(new PathPlacement(new Position(-1, -1), false), Double.NEGATIVE_INFINITY);
+    Map<Placement, Double> bestPlacements = extractBestPlacements(placementValues);
+    Placement chosen = RandomUtils.choose(bestPlacements.keySet()).orElse(getDefaultPlacement());
 
-    boolean path = card.type() == Card.Type.PATHWAY;
-    boolean bRole = role == Player.Role.GOLD_MINER;
-
-    for (Map.Entry<Position, Double> e : nonRotatedValues.entrySet()) {
-      double best = path == bRole ?
-          Collections.max(choices.values()) :
-          Collections.min(choices.values());
-      double val = e.getValue();
-      if (path == bRole && val - best > EPS)
-        choices.clear();
-      if (path != bRole && best - val > EPS)
-        choices.clear();
-      if (path == bRole && val - best >= -EPS)
-        choices.put(new PathPlacement(e.getKey(), false), e.getValue());
-      if (path != bRole && best - val >= -EPS)
-        choices.put(new PathPlacement(e.getKey(), false), e.getValue());
-    }
-
-    for (Map.Entry<Position, Double> e : rotatedValues.entrySet()) {
-      double best = path == bRole ?
-          Collections.max(choices.values()) :
-          Collections.min(choices.values());
-      double val = e.getValue();
-      if (path == bRole && val - best > EPS)
-        choices.clear();
-      if (path != bRole && best - val > EPS)
-        choices.clear();
-      if (path == bRole && val - best >= -EPS)
-        choices.put(new PathPlacement(e.getKey(), true), e.getValue());
-      if (path != bRole && best - val >= -EPS)
-        choices.put(new PathPlacement(e.getKey(), true), e.getValue());
-    }
-
-    PathPlacement chosen = RandomUtils.choose(choices.keySet())
-        .orElse(new PathPlacement(new Position(-1, -1), false));
-    Position pos = chosen.pos;
-    boolean willRotate = chosen.rotated;
-
-    Move move = Move.NewPathMove(playerIndex, cardIndex, pos.x, pos.y, willRotate);
-    double heuristic = choices.get(chosen);
+    Move move = Move.NewPathMove(playerIndex, cardIndex, chosen.pos.x, chosen.pos.y, chosen.rotated);
+    double heuristic = bestPlacements.get(chosen);
 
     return new MoveHeuristic(move, heuristic);
   }
 
-  private Map<Position, Double> getPositionValues(Board board, PathCard card, boolean rotated) {
-    Map<Position, Double> cellHeuristics = new HashMap<>();
-    card.setRotated(rotated);
+  private Map<Placement, Double> getPlacementValues(Board board, PathCard card) {
+    Map<Placement, Double> placementValues = new HashMap<>();
 
-    Set<Position> placeable = board.getPlaceable(card);
-    for (Position p : placeable) {
-      cellHeuristics.put(p, valueOfPosition(board, card, p));
+    card.setRotated(false);
+    for (Position p : board.getPlaceable(card)) {
+      placementValues.put(new Placement(p, false), valueOfPosition(board, card, p));
     }
 
-    return cellHeuristics;
+    card.setRotated(true);
+    for (Position p : board.getPlaceable(card)) {
+      placementValues.put(new Placement(p, true), valueOfPosition(board, card, p));
+    }
+
+    return placementValues;
   }
 
+  private Map<Placement, Double> extractBestPlacements(Map<Placement, Double> placementValues) {
+    Map<Placement, Double> choices = new HashMap<>();
+    choices.put(getDefaultPlacement(), Double.NEGATIVE_INFINITY);
+    for (Map.Entry<Placement, Double> e : placementValues.entrySet()) {
+      double best = Collections.max(choices.values());
+      double val = e.getValue();
+      if (DoubleUtils.compare(val, best) < 0) continue;
+
+      if (DoubleUtils.compare(val, best) > 0)
+        choices.clear();
+      choices.put(e.getKey(), e.getValue());
+    }
+
+    return choices;
+  }
 
   private double valueOfPosition(Board board, PathCard card, Position p) {
     Board simulated = board.simulatePlaceCardAt(card, p.x, p.y);
@@ -151,5 +119,20 @@ class PathMovePredictor {
 
     double diff = boardPredictor.calcDiff(board, simulated);
     return diff * pathMultiplier;
+  }
+
+  private MoveHeuristic getDefaultMove(int cardIndex, PathCard card) {
+    Placement def = getDefaultPlacement();
+    Move move = Move.NewPathMove(playerIndex, cardIndex, def.pos.x, def.pos.y, def.rotated);
+
+    double value = pathHeuristics.get(card.pathType());
+    value = (role == Player.Role.GOLD_MINER ? value : 1 - value) / 2;
+
+    return new MoveHeuristic(move, value);
+  }
+
+  private Placement getDefaultPlacement() {
+    Position pos = new Position(-1, -1);
+    return new Placement(pos, false);
   }
 }
