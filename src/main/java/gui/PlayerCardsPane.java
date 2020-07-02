@@ -47,7 +47,7 @@ public class PlayerCardsPane extends GridPane implements Initializable {
   PlayerCardsPane(GameGUIController controller) {
     this.controller = controller;
 
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("../layouts/player-cards-pane.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/player-cards-pane.fxml"));
     loader.setRoot(this);
     loader.setController(this);
     try {

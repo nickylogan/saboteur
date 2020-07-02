@@ -29,12 +29,12 @@ import java.util.*;
 
 @SuppressWarnings("Duplicates")
 public class BoardPane extends Pane {
-  private GameGUIController controller;
+  private final GameGUIController controller;
 
-  private Map<Position, CardPane> cardPanes;
+  private final Map<Position, CardPane> cardPanes;
 
-  CardPane cardOverlay;
-  private ArrayList<ImageView> cellOverlays;
+  private final ArrayList<ImageView> cellOverlays;
+  private CardPane cardOverlay;
   private Card selected;
 
   private CardPane topGoal;
@@ -146,7 +146,7 @@ public class BoardPane extends Pane {
 
   private void showCellOverlay(int x, int y) {
     ImageView cell = new ImageView();
-    cell.setImage(new Image(getClass().getResource("../img/cell.png").toExternalForm()));
+    cell.setImage(new Image(getClass().getResource("/img/cell.png").toExternalForm()));
     cell.setFitHeight(CardPane.HEIGHT);
     cell.setFitWidth(CardPane.WIDTH);
     cell.setLayoutX(x * CardPane.WIDTH);

@@ -10,7 +10,7 @@ import javafx.scene.text.TextAlignment;
 
 public class NextButton extends Button {
   NextButton() {
-    getStylesheets().add(getClass().getResource("../css/next-button.css").toExternalForm());
+    getStylesheets().add(getClass().getResource("/css/next-button.css").toExternalForm());
     getStyleClass().add("next-button");
     setPrefWidth(300);
     setPrefHeight(100);

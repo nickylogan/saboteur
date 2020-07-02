@@ -33,7 +33,7 @@ public class PlayerInfoPane extends AnchorPane implements Initializable {
   public PlayerInfoPane(GameGUIController controller) {
     this.controller = controller;
 
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("../layouts/player-info.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/player-info.fxml"));
     loader.setRoot(this);
     loader.setController(this);
     try {
@@ -65,23 +65,23 @@ public class PlayerInfoPane extends AnchorPane implements Initializable {
 
   private void render(Player.Role role, Tool[] sabotaged) {
     if (role == Player.Role.GOLD_MINER) {
-      roleCard.setImage(new Image(getClass().getResource("../img/cards/miner.png").toExternalForm()));
+      roleCard.setImage(new Image(getClass().getResource("/img/cards/miner.png").toExternalForm()));
     } else {
-      roleCard.setImage(new Image(getClass().getResource("../img/cards/saboteur.png").toExternalForm()));
+      roleCard.setImage(new Image(getClass().getResource("/img/cards/saboteur.png").toExternalForm()));
     }
-    pickIcon.setImage(new Image(getClass().getResource("../img/icons/pick_intact.png").toExternalForm()));
-    lanternIcon.setImage(new Image(getClass().getResource("../img/icons/lantern_intact.png").toExternalForm()));
-    cartIcon.setImage(new Image(getClass().getResource("../img/icons/cart_intact.png").toExternalForm()));
+    pickIcon.setImage(new Image(getClass().getResource("/img/icons/pick_intact.png").toExternalForm()));
+    lanternIcon.setImage(new Image(getClass().getResource("/img/icons/lantern_intact.png").toExternalForm()));
+    cartIcon.setImage(new Image(getClass().getResource("/img/icons/cart_intact.png").toExternalForm()));
     for (Tool tool : sabotaged) {
       switch (tool) {
         case PICKAXE:
-          pickIcon.setImage(new Image(getClass().getResource("../img/icons/pick_blocked.png").toExternalForm()));
+          pickIcon.setImage(new Image(getClass().getResource("/img/icons/pick_blocked.png").toExternalForm()));
           break;
         case LANTERN:
-          lanternIcon.setImage(new Image(getClass().getResource("../img/icons/lantern_blocked.png").toExternalForm()));
+          lanternIcon.setImage(new Image(getClass().getResource("/img/icons/lantern_blocked.png").toExternalForm()));
           break;
         case CART:
-          cartIcon.setImage(new Image(getClass().getResource("../img/icons/cart_blocked.png").toExternalForm()));
+          cartIcon.setImage(new Image(getClass().getResource("/img/icons/cart_blocked.png").toExternalForm()));
           break;
       }
     }

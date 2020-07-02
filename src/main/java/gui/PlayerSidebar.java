@@ -44,7 +44,7 @@ public class PlayerSidebar extends ScrollPane implements Initializable {
     this.players = new ArrayList<>();
     this.players.addAll(Arrays.asList(players));
 
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("../layouts/player-sidebar.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/player-sidebar.fxml"));
     loader.setRoot(this);
     loader.setController(this);
     try {

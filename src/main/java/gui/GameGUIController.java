@@ -17,10 +17,7 @@ import model.cards.Card;
 import model.cards.PathCard;
 import model.cards.PlayerActionCard;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The {@link GameGUIController} class controls the main game GUI
@@ -71,92 +68,90 @@ public class GameGUIController extends Stage {
   // GUI components
   //=========================
   /** A reference to the current scene */
-  private Scene scene;
+  private final Scene scene;
   /** GUI layers */
-  private AnchorPane layers;
+  private final AnchorPane layers;
   /** The move history sidebar panel */
-  private HistorySidebar log;
+  private final HistorySidebar log;
   /** The player info sidebar panel */
-  private PlayerSidebar playerSidebar;
+  private final PlayerSidebar playerSidebar;
   /** The current player info */
-  private PlayerInfoPane playerInfoPane;
+  private final PlayerInfoPane playerInfoPane;
   /** The player hand panel */
-  private PlayerCardsPane playerCardsPane;
+  private final PlayerCardsPane playerCardsPane;
   /** The card animation overlay */
-  private CardAnimationOverlay animationOverlay;
+  private final CardAnimationOverlay animationOverlay;
   /** The next move button */
-  private NextButton nextButton;
+  private final NextButton nextButton;
   /** The board pane */
-  BoardPane boardPane;
+  private BoardPane boardPane;
   /** The background music */
   private static MediaPlayer player;
   /** List of audio clips */
-  private static Map<String, AudioClip> audioClips = new HashMap<>();
-
-  static {
-    audioClips.put("block_cart",
-      new AudioClip(GameGUIController.class.getResource("../audio/block_cart.wav").toExternalForm())
+  private static final Map<String, AudioClip> audioClips = new HashMap<>() {{
+    put("block_cart",
+        new AudioClip(GameGUIController.class.getResource("/audio/block_cart.wav").toExternalForm())
     );
-    audioClips.put("block_lantern",
-      new AudioClip(GameGUIController.class.getResource("../audio/block_lantern.wav").toExternalForm())
+    put("block_lantern",
+        new AudioClip(GameGUIController.class.getResource("/audio/block_lantern.wav").toExternalForm())
     );
-    audioClips.put("block_pick",
-      new AudioClip(GameGUIController.class.getResource("../audio/block_pick.wav").toExternalForm())
+    put("block_pick",
+        new AudioClip(GameGUIController.class.getResource("/audio/block_pick.wav").toExternalForm())
     );
-    audioClips.put("card",
-      new AudioClip(GameGUIController.class.getResource("../audio/card.wav").toExternalForm())
+    put("card",
+        new AudioClip(GameGUIController.class.getResource("/audio/card.wav").toExternalForm())
     );
-    audioClips.put("discard",
-      new AudioClip(GameGUIController.class.getResource("../audio/discard.wav").toExternalForm())
+    put("discard",
+        new AudioClip(GameGUIController.class.getResource("/audio/discard.wav").toExternalForm())
     );
-    audioClips.put("error",
-      new AudioClip(GameGUIController.class.getResource("../audio/error.wav").toExternalForm())
+    put("error",
+        new AudioClip(GameGUIController.class.getResource("/audio/error.wav").toExternalForm())
     );
-    audioClips.put("gold",
-      new AudioClip(GameGUIController.class.getResource("../audio/gold.wav").toExternalForm())
+    put("gold",
+        new AudioClip(GameGUIController.class.getResource("/audio/gold.wav").toExternalForm())
     );
-    audioClips.put("map",
-      new AudioClip(GameGUIController.class.getResource("../audio/map.wav").toExternalForm())
+    put("map",
+        new AudioClip(GameGUIController.class.getResource("/audio/map.wav").toExternalForm())
     );
-    audioClips.put("start",
-      new AudioClip(GameGUIController.class.getResource("../audio/start.wav").toExternalForm())
+    put("start",
+        new AudioClip(GameGUIController.class.getResource("/audio/start.wav").toExternalForm())
     );
-    audioClips.put("pass_turn",
-      new AudioClip(GameGUIController.class.getResource("../audio/pass_turn.wav").toExternalForm())
+    put("pass_turn",
+        new AudioClip(GameGUIController.class.getResource("/audio/pass_turn.wav").toExternalForm())
     );
-    audioClips.put("path",
-      new AudioClip(GameGUIController.class.getResource("../audio/path.wav").toExternalForm())
+    put("path",
+        new AudioClip(GameGUIController.class.getResource("/audio/path.wav").toExternalForm())
     );
-    audioClips.put("repair_cart",
-      new AudioClip(GameGUIController.class.getResource("../audio/repair_cart.wav").toExternalForm())
+    put("repair_cart",
+        new AudioClip(GameGUIController.class.getResource("/audio/repair_cart.wav").toExternalForm())
     );
-    audioClips.put("repair_lantern",
-      new AudioClip(GameGUIController.class.getResource("../audio/repair_lantern.wav").toExternalForm())
+    put("repair_lantern",
+        new AudioClip(GameGUIController.class.getResource("/audio/repair_lantern.wav").toExternalForm())
     );
-    audioClips.put("repair_pick",
-      new AudioClip(GameGUIController.class.getResource("../audio/repair_pick.wav").toExternalForm())
+    put("repair_pick",
+        new AudioClip(GameGUIController.class.getResource("/audio/repair_pick.wav").toExternalForm())
     );
-    audioClips.put("rockfall",
-      new AudioClip(GameGUIController.class.getResource("../audio/rockfall.wav").toExternalForm())
+    put("rockfall",
+        new AudioClip(GameGUIController.class.getResource("/audio/rockfall.wav").toExternalForm())
     );
-    audioClips.put("select_card",
-      new AudioClip(GameGUIController.class.getResource("../audio/select_card.wav").toExternalForm())
+    put("select_card",
+        new AudioClip(GameGUIController.class.getResource("/audio/select_card.wav").toExternalForm())
     );
-    audioClips.put("win",
-      new AudioClip(GameGUIController.class.getResource("../audio/win.wav").toExternalForm())
+    put("win",
+        new AudioClip(GameGUIController.class.getResource("/audio/win.wav").toExternalForm())
     );
-  }
+  }};
 
 
   //=========================
   // Game logic components
   //=========================
   /** Stores a reference to game logic controller */
-  private GameLogicController game;
+  private final GameLogicController game;
   /** Stores a reference to game state */
-  private GameState state;
+  private final GameState state;
   /** Allows the window to be an observer of the game */
-  private GUIGameObserver observer;
+  private final GUIGameObserver observer;
   /** Stores a reference to the last played move */
   private Move lastMove;
   /** Stores a reference to the last taken card from the deck */
@@ -192,16 +187,16 @@ public class GameGUIController extends Stage {
    */
   private GameGUIController(Player... players) throws GameException {
     // Initialize fonts
-    Font.loadFont(getClass().getResourceAsStream("../fonts/nevis.ttf"), 120);
-    Font.loadFont(getClass().getResourceAsStream("../fonts/WorkSans-Black.ttf"), 120);
-    Font.loadFont(getClass().getResourceAsStream("../fonts/WorkSans-Bold.ttf"), 120);
-    Font.loadFont(getClass().getResourceAsStream("../fonts/WorkSans-ExtraBold.ttf"), 120);
-    Font.loadFont(getClass().getResourceAsStream("../fonts/WorkSans-ExtraLight.ttf"), 120);
-    Font.loadFont(getClass().getResourceAsStream("../fonts/WorkSans-Light.ttf"), 120);
-    Font.loadFont(getClass().getResourceAsStream("../fonts/WorkSans-Medium.ttf"), 120);
-    Font.loadFont(getClass().getResourceAsStream("../fonts/WorkSans-Regular.ttf"), 120);
-    Font.loadFont(getClass().getResourceAsStream("../fonts/WorkSans-SemiBold.ttf"), 120);
-    Font.loadFont(getClass().getResourceAsStream("../fonts/WorkSans-Thin.ttf"), 120);
+    Font.loadFont(getClass().getResourceAsStream("/fonts/nevis.ttf"), 120);
+    Font.loadFont(getClass().getResourceAsStream("/fonts/WorkSans-Black.ttf"), 120);
+    Font.loadFont(getClass().getResourceAsStream("/fonts/WorkSans-Bold.ttf"), 120);
+    Font.loadFont(getClass().getResourceAsStream("/fonts/WorkSans-ExtraBold.ttf"), 120);
+    Font.loadFont(getClass().getResourceAsStream("/fonts/WorkSans-ExtraLight.ttf"), 120);
+    Font.loadFont(getClass().getResourceAsStream("/fonts/WorkSans-Light.ttf"), 120);
+    Font.loadFont(getClass().getResourceAsStream("/fonts/WorkSans-Medium.ttf"), 120);
+    Font.loadFont(getClass().getResourceAsStream("/fonts/WorkSans-Regular.ttf"), 120);
+    Font.loadFont(getClass().getResourceAsStream("/fonts/WorkSans-SemiBold.ttf"), 120);
+    Font.loadFont(getClass().getResourceAsStream("/fonts/WorkSans-Thin.ttf"), 120);
 
     // Initialize game state and logic
     this.state = new GameState();
@@ -663,7 +658,7 @@ public class GameGUIController extends Stage {
    * Plays the background music
    */
   private static void startBackgroundMusic() {
-    Media media = new Media(GameGUIController.class.getResource("../audio/background.wav").toExternalForm());
+    Media media = new Media(GameGUIController.class.getResource("/audio/background.wav").toExternalForm());
     player = new MediaPlayer(media);
     player.setVolume(0.5f);
     player.setCycleCount(MediaPlayer.INDEFINITE);

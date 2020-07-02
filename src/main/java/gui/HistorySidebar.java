@@ -54,14 +54,14 @@ public class HistorySidebar extends GridPane implements Initializable {
   @FXML
   private VBox pane;
 
-  private GameGUIController controller;
+  private final GameGUIController controller;
 
   private SimpleBooleanProperty collapsed;
 
   public HistorySidebar(GameGUIController controller) {
     this.controller = controller;
 
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("../layouts/history-sidebar.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/history-sidebar.fxml"));
     loader.setRoot(this);
     loader.setController(this);
     try {

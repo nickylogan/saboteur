@@ -95,7 +95,7 @@ public class CardPane extends ImageView {
 
   public CardPane(Card card) {
     this.card = card;
-    String pathFmt = "../img/cards/%s.png";
+    String pathFmt = "/img/cards/%s.png";
     String path = String.format(pathFmt, imagePaths.get(card.id() - 1));
     setImage(new Image(getClass().getResource(path).toExternalForm()));
     setFitHeight(HEIGHT);
@@ -103,7 +103,7 @@ public class CardPane extends ImageView {
   }
 
   public CardPane(String name) {
-    String pathFmt = "../img/cards/%s.png";
+    String pathFmt = "/img/cards/%s.png";
     String path = String.format(pathFmt, name);
     setImage(new Image(getClass().getResource(path).toExternalForm()));
     setFitHeight(HEIGHT);

@@ -42,7 +42,7 @@ public class PlayerStatusPane extends AnchorPane implements Initializable {
   PlayerStatusPane(Player player) {
     this.player = player;
 
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("../layouts/player-status-pane.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/player-status-pane.fxml"));
     loader.setRoot(this);
     loader.setController(this);
     try {
@@ -90,13 +90,13 @@ public class PlayerStatusPane extends AnchorPane implements Initializable {
     for (Tool tool : tools) {
       switch (tool) {
         case PICKAXE:
-          pickIcon.setImage(new Image(getClass().getResource("../img/icons/pick_blocked.png").toExternalForm()));
+          pickIcon.setImage(new Image(getClass().getResource("/img/icons/pick_blocked.png").toExternalForm()));
           break;
         case LANTERN:
-          lanternIcon.setImage(new Image(getClass().getResource("../img/icons/lantern_blocked.png").toExternalForm()));
+          lanternIcon.setImage(new Image(getClass().getResource("/img/icons/lantern_blocked.png").toExternalForm()));
           break;
         case CART:
-          cartIcon.setImage(new Image(getClass().getResource("../img/icons/cart_blocked.png").toExternalForm()));
+          cartIcon.setImage(new Image(getClass().getResource("/img/icons/cart_blocked.png").toExternalForm()));
           break;
       }
     }
@@ -112,13 +112,13 @@ public class PlayerStatusPane extends AnchorPane implements Initializable {
     for (Tool tool : tools) {
       switch (tool) {
         case PICKAXE:
-          pickIcon.setImage(new Image(getClass().getResource("../img/icons/pick_intact.png").toExternalForm()));
+          pickIcon.setImage(new Image(getClass().getResource("/img/icons/pick_intact.png").toExternalForm()));
           break;
         case LANTERN:
-          lanternIcon.setImage(new Image(getClass().getResource("../img/icons/lantern_intact.png").toExternalForm()));
+          lanternIcon.setImage(new Image(getClass().getResource("/img/icons/lantern_intact.png").toExternalForm()));
           break;
         case CART:
-          cartIcon.setImage(new Image(getClass().getResource("../img/icons/cart_intact.png").toExternalForm()));
+          cartIcon.setImage(new Image(getClass().getResource("/img/icons/cart_intact.png").toExternalForm()));
           break;
       }
     }

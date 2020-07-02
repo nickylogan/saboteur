@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 
 public class BaseLayer extends Pane implements Initializable {
   public BaseLayer() {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("../layouts/base-layer.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/layouts/base-layer.fxml"));
     loader.setRoot(this);
     loader.setController(this);
     try {
