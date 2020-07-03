@@ -59,7 +59,7 @@ public class RockfallMovePredictor {
     Map<Position, Double> choices = new HashMap<>();
     for (Position pos : destroyable) {
       Optional<Double> value = getCellValue(game.board(), pos);
-      if (!value.isPresent()) continue;
+      if (value.isEmpty()) continue;
 
       choices.put(pos, value.get());
     }

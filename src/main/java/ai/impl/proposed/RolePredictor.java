@@ -18,7 +18,6 @@ class RolePredictor {
   private final static double INITIAL_TRUST = 5 * PathMovePredictor.MAX_PATH_HEURISTIC;
   private final static double BLOCK_CONSTANT = INITIAL_TRUST + .1;
   private final static double REPAIR_CONSTANT = .5;
-  private final static double DISCARD_CONSTANT = .5;
 
   private final GameLogicController game;
   private final Map<Integer, Double> playerTrust;
@@ -78,7 +77,7 @@ class RolePredictor {
         }
         break;
       case DISCARD:
-        updateFromDiscardMove(move);
+        updateFromDiscardMove();
         break;
     }
   }
@@ -144,7 +143,7 @@ class RolePredictor {
     othersGoalKnowledge.get(move.playerIndex()).add(pos);
   }
 
-  private void updateFromDiscardMove(Move move) {
+  private void updateFromDiscardMove() {
     // TODO: no trust update for now
   }
 

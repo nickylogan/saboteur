@@ -8,10 +8,7 @@ package ai.impl.proposed;
 
 import ai.impl.proposed.GoalKnowledge.Scenario;
 import ai.impl.proposed.utils.DoubleUtils;
-import model.Board;
-import model.Cell;
-import model.Player;
-import model.Position;
+import model.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -83,32 +80,25 @@ public class BoardPredictor {
   }
 
   private double calcYValue(Position p, Scenario scenario) {
-    double hy = 1.0;
-
-    switch (scenario) {
-      case TOP_ROCK:
-        hy = role == Player.Role.GOLD_MINER ?
-            Math.min(0.5 * p.y, 1) :    // prefer mid-bottom area (miner)
-            Math.max(1 - 0.5 * p.y, 0); // prefer top area (saboteur)
-        break;
-      case TOP_GOLD:
-        hy = role == Player.Role.GOLD_MINER ?
-            1 - .25 * p.y :       // prefer top area (miner)
-            1 / 16.0 * p.y * p.y; // prefer bottom area (saboteur)
-        break;
-      case MID_GOLD:
-        hy = role == Player.Role.GOLD_MINER ?
-            1 - Math.abs(1 - .5 * p.y) : // prefer mid area (miner)
-            Math.abs(1 - .5 * p.y);      // prefer top/bottom area (saboteur)
-        break;
-      case BOT_GOLD:
-        hy = role == Player.Role.GOLD_MINER ?
-            .25 * p.y :                       // prefer bottom area (miner)
-            1 / 16.0 * (p.y - 4) * (p.y - 4); // prefer top area (saboteur)
-        break;
-    }
-
-    return hy;
+    return switch (scenario) {
+      // prefer top area (saboteur)
+      case TOP_ROCK -> role == Player.Role.GOLD_MINER ?
+          Math.min(0.5 * p.y, 1) :    // prefer mid-bottom area (miner)
+          Math.max(1 - 0.5 * p.y, 0);
+      // prefer bottom area (saboteur)
+      case TOP_GOLD -> role == Player.Role.GOLD_MINER ?
+          1 - .25 * p.y :       // prefer top area (miner)
+          1 / 16.0 * p.y * p.y;
+      // prefer top/bottom area (saboteur)
+      case MID_GOLD -> role == Player.Role.GOLD_MINER ?
+          1 - Math.abs(1 - .5 * p.y) : // prefer mid area (miner)
+          Math.abs(1 - .5 * p.y);
+      // prefer top area (saboteur)
+      case BOT_GOLD -> role == Player.Role.GOLD_MINER ?
+          .25 * p.y :                       // prefer bottom area (miner)
+          1 / 16.0 * (p.y - 4) * (p.y - 4);
+      default -> 1.0;
+    };
   }
 
   private double calcXValue(Position pos) {

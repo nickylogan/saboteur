@@ -1,11 +1,7 @@
 package ai.impl.proposed;
 
-import model.GameLogicController;
-import model.Move;
-import model.Player;
-import model.cards.Card;
-import model.cards.PathCard;
-import model.cards.PlayerActionCard;
+import model.*;
+import model.cards.*;
 
 class MoveValidator {
   private final GameLogicController game;
@@ -17,16 +13,16 @@ class MoveValidator {
   }
 
   boolean isLegal(Move move, Card card) {
-    switch (move.type()) {
-      case PLAY_PATH:
-        return isLegalPathMove(move, (PathCard) card);
-      case PLAY_PLAYER:
-        return isLegalPlayerActionMove(move, (PlayerActionCard) card);
-      case PLAY_ROCKFALL:
-        return isLegalRockfallMove(move);
-      default:
-        return true;
-    }
+    return switch (move.type()) {
+      case PLAY_PATH ->
+          isLegalPathMove(move, (PathCard) card);
+      case PLAY_PLAYER ->
+          isLegalPlayerActionMove(move, (PlayerActionCard) card);
+      case PLAY_ROCKFALL ->
+          isLegalRockfallMove(move);
+      default ->
+          true;
+    };
   }
 
   private boolean isLegalPathMove(Move move, PathCard card) {

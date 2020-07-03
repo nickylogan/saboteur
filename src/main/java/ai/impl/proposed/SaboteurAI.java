@@ -9,26 +9,16 @@ package ai.impl.proposed;
 import ai.AI;
 import ai.impl.proposed.utils.DoubleUtils;
 import ai.utils.Log;
-import model.Board;
-import model.GoalType;
-import model.Move;
-import model.cards.Card;
-import model.cards.PathCard;
-import model.cards.PlayerActionCard;
+import model.*;
+import model.cards.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SaboteurAI extends AI {
-  public static int playAsMiner = 0;
-  public static int playAsSaboteur = 0;
-  public static int winAsMiner = 0;
-  public static int winAsSaboteur = 0;
-  static final double EPS = 1e-6;
-  static final double MIN_HEURISTIC = -.5;
+  private static final Stats stats = new Stats();
+  private static final double EPS = 1e-6;
+  private static final double MIN_HEURISTIC = -.5;
 
   private RolePredictor rolePredictor;
   private PathMovePredictor pathMovePredictor;
@@ -67,7 +57,7 @@ public class SaboteurAI extends AI {
     moveValidator =
         new MoveValidator(game(), this);
 
-    updatePlayStats();
+    stats.incrementPlay(role());
   }
 
   @Override
@@ -104,27 +94,19 @@ public class SaboteurAI extends AI {
     List<MoveHeuristic> heuristics = new ArrayList<>();
 
     for (int i = 0; i < hand().size(); i++) {
-      MoveHeuristic moveHeuristic = null;
-
       Card card = hand().get(i);
-      switch (card.type()) {
-        case PATHWAY:
-        case DEADEND:
-          moveHeuristic = pathMovePredictor.generatePathHeuristic(game().board(), i, (PathCard) card);
-          break;
-        case MAP:
-          moveHeuristic = mapMovePredictor.generateMapHeuristic(i);
-          break;
-        case BLOCK:
-          moveHeuristic = playerActionMovePredictor.generateBlockHeuristic(i, (PlayerActionCard) card);
-          break;
-        case REPAIR:
-          moveHeuristic = playerActionMovePredictor.generateRepairHeuristic(i, (PlayerActionCard) card);
-          break;
-        case ROCKFALL:
-          moveHeuristic = rockfallMovePredictor.generateRockfallHeuristic(i);
-          break;
-      }
+      MoveHeuristic moveHeuristic = switch (card.type()) {
+        case PATHWAY, DEADEND ->
+            pathMovePredictor.generatePathHeuristic(game().board(), i, (PathCard) card);
+        case MAP ->
+            mapMovePredictor.generateMapHeuristic(i);
+        case BLOCK ->
+            playerActionMovePredictor.generateBlockHeuristic(i, (PlayerActionCard) card);
+        case REPAIR ->
+            playerActionMovePredictor.generateRepairHeuristic(i, (PlayerActionCard) card);
+        case ROCKFALL ->
+            rockfallMovePredictor.generateRockfallHeuristic(i);
+      };
 
       if (moveHeuristic == null) continue;
 
@@ -160,21 +142,13 @@ public class SaboteurAI extends AI {
     updateWinStats(role);
   }
 
-  private void updatePlayStats() {
-    playAsSaboteur += role() == Role.SABOTEUR ? 1 : 0;
-    playAsMiner += role() == Role.GOLD_MINER ? 1 : 0;
-  }
-
   private void updateWinStats(Role role) {
     if (role != role()) return;
 
-    switch (role) {
-      case SABOTEUR:
-        ++winAsSaboteur;
-        break;
-      case GOLD_MINER:
-        ++winAsMiner;
-        break;
-    }
+    stats.incrementWin(role);
+  }
+
+  public static Stats getStats() {
+    return stats;
   }
 }
