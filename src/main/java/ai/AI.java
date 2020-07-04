@@ -79,6 +79,8 @@ public abstract class AI extends Player {
       e.printStackTrace();
       Log.errorf("'%s' made an illegal move: %s", this.name(), e.getMessage());
       fallbackAndLog(move);
+    } finally {
+      task.cancel(true);
     }
   }
 
