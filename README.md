@@ -27,7 +27,7 @@ Final project for Game Theory/AI course.
 
 **`FooAI` must extend `AI`**, and the only method you **must** override is `makeDecision()`, which will be called automatically when the game prompts you to move.
 
-> **IMPORTANT**: The `makeDecision` method timeout after `5` seconds. Make sure your implementation doesn't take too long to finish.
+> **IMPORTANT**: The `makeDecision` method timeouts after `5` seconds. Make sure your implementation doesn't take too long to finish.
 
 Here's an example short snippet of `FooAI`:
 
