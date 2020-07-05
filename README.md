@@ -20,7 +20,7 @@ Your AI class must extend `AI`, and you only need to implement the `makeDecision
 
 > The `makeDecision` method is set to timeout after `5` seconds.
 
-See [src/example/ExampleAI.java](https://github.com/nickylogan/saboteur/blob/master/src/example/ExampleAI.java) or [src/main/TestAI.java](https://github.com/nickylogan/saboteur/blob/master/src/main/TestAI.java) for an example implementation.
+See [ai.impl.example](/src/main/java/ai/impl/example) or [ai.impl.random](/src/main/java/ai/impl/random) for an example implementation.
 
 ## Controls
 
