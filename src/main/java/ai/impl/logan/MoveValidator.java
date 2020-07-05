@@ -1,4 +1,4 @@
-package ai.impl.proposed;
+package ai.impl.logan;
 
 import model.*;
 import model.cards.*;

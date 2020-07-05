@@ -1,13 +1,7 @@
-/*
- * Authors:
- * Nicky (https://github.com/nickylogan)
- * Nadya (https://github.com/Ao-Re)
- */
+package ai.impl.logan;
 
-package ai.impl.proposed;
-
-import ai.impl.proposed.utils.DoubleUtils;
-import ai.impl.proposed.utils.RandomUtils;
+import ai.impl.logan.utils.DoubleUtils;
+import ai.impl.logan.utils.RandomUtils;
 import model.*;
 import model.Player.Role;
 

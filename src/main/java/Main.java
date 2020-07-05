@@ -1,4 +1,4 @@
-import ai.impl.proposed.SaboteurAI;
+import ai.impl.logan.SaboteurAI;
 import ai.utils.Log;
 import gui.GameGUIController;
 import javafx.application.Application;

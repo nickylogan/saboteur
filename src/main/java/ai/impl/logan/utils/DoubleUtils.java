@@ -1,4 +1,4 @@
-package ai.impl.proposed.utils;
+package ai.impl.logan.utils;
 
 public class DoubleUtils {
   private static double EPS;

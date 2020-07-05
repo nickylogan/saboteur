@@ -1,4 +1,4 @@
-package ai.impl.proposed.utils;
+package ai.impl.logan.utils;
 
 import java.util.*;
 

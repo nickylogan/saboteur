@@ -1,13 +1,7 @@
-/*
- * Authors:
- * Nicky (https://github.com/nickylogan)
- * Nadya (https://github.com/Ao-Re)
- */
-
-package ai.impl.proposed;
+package ai.impl.logan;
 
 import ai.AI;
-import ai.impl.proposed.utils.DoubleUtils;
+import ai.impl.logan.utils.DoubleUtils;
 import ai.utils.Log;
 import model.*;
 import model.cards.*;

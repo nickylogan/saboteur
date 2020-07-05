@@ -1,10 +1,4 @@
-/*
- * Authors:
- * Nicky (https://github.com/nickylogan)
- * Nadya (https://github.com/Ao-Re)
- */
-
-package ai.impl.proposed;
+package ai.impl.logan;
 
 import model.Board.GoalPosition;
 import model.GoalType;

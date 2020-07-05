@@ -1,13 +1,7 @@
-/*
- * Authors:
- * Nicky (https://github.com/nickylogan)
- * Nadya (https://github.com/Ao-Re)
- */
+package ai.impl.logan;
 
-package ai.impl.proposed;
-
-import ai.impl.proposed.GoalKnowledge.Scenario;
-import ai.impl.proposed.utils.DoubleUtils;
+import ai.impl.logan.GoalKnowledge.Scenario;
+import ai.impl.logan.utils.DoubleUtils;
 import model.*;
 
 import java.util.*;
